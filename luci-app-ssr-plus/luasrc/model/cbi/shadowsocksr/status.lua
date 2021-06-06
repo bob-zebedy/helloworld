@@ -155,11 +155,11 @@ if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') == '1' then
 	s.template = "shadowsocksr/cache"
 end
 
-s = m:field(DummyValue, "google", translate("Google Connectivity"))
+s = m:field(DummyValue, "baidu", translate("Baidu Connectivity"))
 s.value = translate("No Check")
 s.template = "shadowsocksr/check"
 
-s = m:field(DummyValue, "baidu", translate("Baidu Connectivity"))
+s = m:field(DummyValue, "google", translate("Google Connectivity"))
 s.value = translate("No Check")
 s.template = "shadowsocksr/check"
 
