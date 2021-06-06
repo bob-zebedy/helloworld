@@ -1,0 +1,560 @@
+msgid "ShadowSocksR Plus+"
+msgstr "科学上网"
+
+msgid "SSR Client"
+msgstr "基本设置"
+
+msgid "Severs Nodes"
+msgstr "节点设置"
+
+msgid "Access Control"
+msgstr "访问控制"
+
+msgid "Advanced settings"
+msgstr "高级设置"
+
+msgid "SSR Server"
+msgstr "服务设置"
+
+msgid "Status"
+msgstr "运行状态"
+
+msgid "Log"
+msgstr "查看日志"
+
+msgid "Main Server"
+msgstr "主服务器"
+
+msgid "Game Mode UDP Server"
+msgstr "游戏UDP 节点"
+
+msgid "Netflix Node"
+msgstr "Netflix 节点"
+
+msgid "External Proxy Mode"
+msgstr "Netflix 前置代理"
+
+msgid "Forward Netflix Proxy through Main Proxy"
+msgstr "通过主服务器连接 Netflix 节点"
+
+msgid "Multi Threads Option"
+msgstr "多线程并发"
+
+msgid "Auto Threads"
+msgstr "自动"
+
+msgid "1 Thread"
+msgstr "1 线程"
+
+msgid "2 Threads"
+msgstr "2 线程"
+
+msgid "4 Threads"
+msgstr "4 线程"
+
+msgid "8 Threads"
+msgstr "8 线程"
+
+msgid "16 Threads"
+msgstr "16 线程"
+
+msgid "32 Threads"
+msgstr "32 线程"
+
+msgid "64 Threads"
+msgstr "64 线程"
+
+msgid "128 Threads"
+msgstr "128 线程"
+
+msgid "Running Mode"
+msgstr "运行模式"
+
+msgid "GFW List Mode"
+msgstr "GFW代理模式"
+
+msgid "IP Route Mode"
+msgstr "绕过中国模式"
+
+msgid "Global Mode"
+msgstr "全局代理模式"
+
+msgid "Oversea Mode"
+msgstr "海外回国模式"
+
+msgid "Proxy Ports"
+msgstr "代理端口模式"
+
+msgid "All Ports"
+msgstr "所有端口"
+
+msgid "Only Common Ports"
+msgstr "仅常用端口"
+
+msgid "Resolve Dns Mode"
+msgstr "DNS解析方式"
+
+msgid "Use Pdnsd tcp query and cache"
+msgstr "使用 PDNSD TCP 查询并缓存"
+
+msgid "Use DNS2SOCKS query and cache"
+msgstr "使用 DNS2SOCKS 查询并缓存"
+
+msgid "Use Local DNS Service listen port 5335"
+msgstr "使用本地DNS服务器"
+
+msgid "DNS Server IP:Port"
+msgstr "DNS服务器 IP:Port"
+
+msgid "Anti-pollution DNS Server"
+msgstr "国外域名DNS服务器"
+
+msgid "Custom DNS Server format as IP:PORT"
+msgstr "自定义服务器(IP:Port)"
+
+msgid "Servers subscription and manage"
+msgstr "服务器节点与订阅管理"
+
+msgid "Auto Update"
+msgstr "自动更新"
+
+msgid "Auto Update Server subscription, GFW list and CHN route"
+msgstr "自动更新服务器节点,GFW列表,CHN路由表"
+
+msgid "Update time (every day)"
+msgstr "更新时间(每天)"
+
+msgid "Subscribe URL"
+msgstr "订阅URL"
+
+msgid "Subscribe Filter Words"
+msgstr "关键字过滤"
+
+msgid "Filter Words splited by |"
+msgstr "关键字用|分隔"
+
+msgid "Update Subscribe List"
+msgstr "更新订阅"
+
+msgid "Subscribe Default Auto-Switch"
+msgstr "新节点自动切换"
+
+msgid "Through proxy update"
+msgstr "通过代理更新"
+
+msgid "Update All Subscribe Severs"
+msgstr "更新所有服务器节点"
+
+msgid "Delete All Subscribe Severs"
+msgstr "删除所有服务器节点"
+
+msgid "Server Count"
+msgstr "节点数量"
+
+msgid "Node Type"
+msgstr "节点类型"
+
+msgid "None"
+msgstr "无"
+
+msgid "Node Alias"
+msgstr "别名"
+
+msgid "Server Port"
+msgstr "端口"
+
+msgid "Socket Connected"
+msgstr "连接测试"
+
+msgid "Ping Latency"
+msgstr "Ping"
+
+msgid "Apply"
+msgstr "应用"
+
+msgid "Auto Switch"
+msgstr "自动切换"
+
+msgid "Edit ShadowSocksR Server"
+msgstr "编辑配置"
+
+msgid "Server Node Type"
+msgstr "节点类型"
+
+msgid "Alias(optional)"
+msgstr "别名(可选)"
+
+msgid "Network interface to use"
+msgstr "使用此网络接口"
+
+msgid "Redirect traffic to this network interface"
+msgstr "分流到网络接口"
+
+msgid "V2Ray/XRay protocol"
+msgstr "V2Ray/XRay 协议"
+
+msgid "Server Address"
+msgstr "服务器地址"
+
+msgid "Enable Authentication"
+msgstr "启用认证"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Encrypt Method"
+msgstr "加密方式"
+
+msgid "Plugin opts"
+msgstr "插件参数"
+
+msgid "Protocol"
+msgstr "传输协议"
+
+msgid "Protocol param"
+msgstr "传输协议参数"
+
+msgid "obfs param"
+msgstr "混淆参数"
+
+msgid "VLESS Encryption"
+msgstr "VLESS 加密"
+
+msgid "Transport"
+msgstr "传输协议"
+
+msgid "Camouflage Type"
+msgstr "伪装类型"
+
+msgid "VideoCall(SRTP)"
+msgstr "视频通话(SRTP)"
+
+msgid "BitTorrent(uTP)"
+msgstr "BT下载(uTP)"
+
+msgid "WechatVideo"
+msgstr "微信视频通话"
+
+msgid "DTLS 1.2"
+msgstr "DTLS 1.2 数据包"
+
+msgid "WireGuard"
+msgstr "WireGuard 数据包"
+
+msgid "MTU"
+msgstr "最大传输单元(MTU)"
+
+msgid "TTI"
+msgstr "传输时间间隔(TTI)"
+
+msgid "Uplink Capacity"
+msgstr "上行链路容量"
+
+msgid "Downlink Capacity"
+msgstr "下行链路容量"
+
+msgid "Read Buffer Size"
+msgstr "读取缓冲区大小"
+
+msgid "Write Buffer Size"
+msgstr "写入缓冲区大小"
+
+msgid "obfuscate password(optional)"
+msgstr "混淆密码(可选)"
+
+msgid "Congestion"
+msgstr "拥塞控制"
+
+msgid "Flow"
+msgstr "流控(Flow)"
+
+msgid "Finger Print"
+msgstr "指纹伪造"
+
+msgid "allowInsecure"
+msgstr "允许不安全连接"
+
+msgid "If true, allowss insecure connection at TLS client, e.g., TLS server uses unverifiable certificates."
+msgstr "是否检查远端主机所提供的 TLS 证书的有效性。"
+
+msgid "Concurrency"
+msgstr "最大连接数"
+
+msgid "Self-signed Certificate"
+msgstr "自签证书"
+
+msgid "Upload"
+msgstr "上传"
+
+msgid "Create upload file error."
+msgstr "上传文件失败"
+
+msgid "No specify upload file."
+msgstr "没有上传证书"
+
+msgid "Current Certificate Path"
+msgstr "当前证书路径"
+
+msgid "Please confirm the current certificate path"
+msgstr "请选择确认所传证书"
+
+msgid "TCP Fast Open"
+msgstr "TCP快速打开(TFO)"
+
+msgid "KcpTun Enable"
+msgstr "启用 KcpTun"
+
+msgid "KcpTun Port"
+msgstr "KcpTun 端口"
+
+msgid "KcpTun Param"
+msgstr "KcpTun 参数"
+
+msgid "KcpTun Password"
+msgstr "KcpTun 密码"
+
+msgid "Interface control"
+msgstr "接口控制"
+
+msgid "WAN IP AC"
+msgstr "WAN 访问控制"
+
+msgid "LAN IP AC"
+msgstr "LAN 访问控制"
+
+msgid "Bypass Domain List"
+msgstr "强制绕过代理"
+
+msgid "Black Domain List"
+msgstr "强制代理"
+
+msgid "Deny Domain List"
+msgstr "域名黑名单"
+
+msgid "Netflix Domain List"
+msgstr "Netflix 域名"
+
+msgid "Interface"
+msgstr "接口"
+
+msgid "WAN White List IP"
+msgstr "不走代理的WAN"
+
+msgid "WAN Force Proxy IP"
+msgstr "全局代理的WAN"
+
+msgid "LAN Access Control"
+msgstr "LAN客户端控制模式"
+
+msgid "Allow listed only"
+msgstr "白名单模式"
+
+msgid "Allow all except listed"
+msgstr "黑名单模式"
+
+msgid "LAN Host List"
+msgstr "LAN 设备"
+
+msgid "LAN Bypassed Host List"
+msgstr "不走代理的LAN设备"
+
+msgid "LAN Force Proxy Host List"
+msgstr "全局代理的LAN设备"
+
+msgid "Game Mode Host List"
+msgstr "LAN游戏设备"
+
+msgid "Enable auto switch"
+msgstr "故障自动切换"
+
+msgid "Inspection cycle"
+msgstr "故障检查周期(秒)"
+
+msgid "Check timout"
+msgstr "故障超时时间(秒)"
+
+msgid "Check Try Count"
+msgstr "尝试次数"
+
+msgid "Enable adblock"
+msgstr "开启广告屏蔽"
+
+msgid "adblock_url"
+msgstr "广告屏蔽 订阅URL"
+
+msgid "gfwlist_url"
+msgstr "GFWList 订阅URL"
+
+msgid "chn_route_url"
+msgstr "国内IP段 订阅URL"
+
+msgid "netflix_ip_url"
+msgstr "Netflix IP段URL"
+
+msgid "Reset all"
+msgstr "恢复默认设置"
+
+msgid "Global SOCKS5 Proxy Server"
+msgstr "socket5 全局代理服务"
+
+msgid "Server"
+msgstr "服务器"
+
+msgid "Disable"
+msgstr "停用"
+
+msgid "Same as Global Server"
+msgstr "使用全局服务器"
+
+msgid "Local Port"
+msgstr "本地端口"
+
+msgid "Enable"
+msgstr "启用"
+
+msgid "Global Setting"
+msgstr "全局设置"
+
+msgid "Enable Server"
+msgstr "启动服务端"
+
+msgid "Server Setting"
+msgstr "服务端配置"
+
+msgid "Server Type"
+msgstr "服务端类型"
+
+msgid "Socks5"
+msgstr "Socks5"
+
+msgid "Shadowsocks"
+msgstr "Shadowsocks"
+
+msgid "ShadowsocksR"
+msgstr "ShadowsocksR"
+
+msgid "warning! Please do not reuse the port!"
+msgstr "端口请勿重复"
+
+msgid "Connection Timeout"
+msgstr "连接超时"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Not exist"
+msgstr "未安装"
+
+msgid "Global Client"
+msgstr "TCP透明代理"
+
+msgid "Running"
+msgstr "运行中"
+
+msgid "Not Running"
+msgstr "未运行"
+
+msgid "Game Mode UDP Relay"
+msgstr "游戏模式"
+
+msgid "DNS Anti-pollution"
+msgstr "DNS 防污染"
+
+msgid "Local Servers"
+msgstr "本地服务"
+
+msgid "KcpTun Version"
+msgstr "KcpTun 版本"
+
+msgid "Reset pdnsd cache"
+msgstr "重置pdnsd缓存"
+
+msgid "Google Connectivity"
+msgstr "Google 连通性检查"
+
+msgid "Baidu Connectivity"
+msgstr "Baidu 连通性检查"
+
+msgid "GFW List Data"
+msgstr "GFW 数据库"
+
+msgid "China IP Data"
+msgstr "国内IP 数据库"
+
+msgid "Netflix IP Data"
+msgstr "Netflix IP 数据库"
+
+msgid "Advertising Data"
+msgstr "广告屏蔽 数据库"
+
+msgid "Check Server Port"
+msgstr "服务器 检查"
+
+msgid "Check Server"
+msgstr "检查服务器"
+
+msgid "No Check"
+msgstr "未检查"
+
+msgid "Reset complete"
+msgstr "重置完成"
+
+msgid "Reset Error"
+msgstr "重置错误"
+
+msgid "Check..."
+msgstr "正在检查..."
+
+msgid "Connect OK"
+msgstr "连接正常"
+
+msgid "Connect Error"
+msgstr "连接错误"
+
+msgid "Check Connect"
+msgstr "连通性检测"
+
+msgid "Refresh..."
+msgstr "正在更新..."
+
+msgid "Latest Version"
+msgstr "最新版本"
+
+msgid "Refresh Error"
+msgstr "更新失败"
+
+msgid "Records"
+msgstr "条记录"
+
+msgid "Total Records:"
+msgstr "总计:"
+
+msgid "Refresh Data"
+msgstr "更新数据库"
+
+msgid "Please fill in reset"
+msgstr "请填写 reset"
+
+msgid "The content entered is incorrect!"
+msgstr "输入有误"
+
+msgid "Copy SSR to clipboard successfully."
+msgstr "复制到剪贴板"
+
+msgid "Unable to copy SSR to clipboard."
+msgstr "无法复制到剪贴板"
+
+msgid "Paste sharing link here"
+msgstr "在此处粘贴分享链接"
+
+msgid "User cancelled"
+msgstr "用户已取消"
+
+msgid "Import configuration information successfully."
+msgstr "导入配置信息成功"
+
+msgid "Invalid format."
+msgstr "无效的格式"
