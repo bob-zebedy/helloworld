@@ -1,11 +1,5 @@
 #!/bin/sh
-#
-# Copyright (C) 2017 openwrt-ssr
-# Copyright (C) 2017 yushi studio <ywb94@qq.com>
-#
-# This is free software, licensed under the GNU General Public License v3.
-# See /LICENSE for more information.
-#
+
 TAG="_SS_SPEC_RULE_"                                  # comment tag
 IPT="iptables -t nat"                                 # alias of iptables
 FWI=$(uci get firewall.shadowsocksr.path 2>/dev/null) # firewall include file

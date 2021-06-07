@@ -1,5 +1,3 @@
--- Copyright (C) 2017 yushi studio <ywb94@qq.com>
--- Licensed to the public under the GNU General Public License v3.
 require "luci.http"
 require "luci.dispatcher"
 require "nixio.fs"

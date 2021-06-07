@@ -1,9 +1,5 @@
 #!/usr/bin/lua
 
-------------------------------------------------
--- This file is part of the luci-app-ssr-plus update.lua
--- By Mattraks
-------------------------------------------------
 require "luci.sys"
 require "luci.model.uci"
 local icount = 0
