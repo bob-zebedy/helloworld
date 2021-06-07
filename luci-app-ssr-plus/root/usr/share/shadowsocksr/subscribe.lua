@@ -1,9 +1,5 @@
 #!/usr/bin/lua
 
-------------------------------------------------
--- This file is part of the luci-app-ssr-plus subscribe.lua
--- @author William Chan <root@williamchan.me>
-------------------------------------------------
 require "luci.model.uci"
 require "nixio"
 require "luci.util"
