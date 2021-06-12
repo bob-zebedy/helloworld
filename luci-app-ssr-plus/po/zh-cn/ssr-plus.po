@@ -286,8 +286,8 @@ msgstr "最大连接数"
 msgid "Self-signed Certificate"
 msgstr "自签证书"
 
-msgid "Upload"
-msgstr "上传"
+msgid "Upload Certificate"
+msgstr "上传证书"
 
 msgid "Create upload file error."
 msgstr "上传文件失败"
@@ -296,10 +296,10 @@ msgid "No specify upload file."
 msgstr "没有上传证书"
 
 msgid "Current Certificate Path"
-msgstr "当前证书路径"
+msgstr "证书路径"
 
 msgid "Please confirm the current certificate path"
-msgstr "请选择确认所传证书"
+msgstr "请确认证书路径"
 
 msgid "TCP Fast Open"
 msgstr "TCP快速打开(TFO)"
@@ -377,7 +377,7 @@ msgid "Check timout"
 msgstr "故障超时时间(秒)"
 
 msgid "Check Try Count"
-msgstr "尝试次数"
+msgstr "重试次数"
 
 msgid "Enable adblock"
 msgstr "开启广告屏蔽"
@@ -389,10 +389,10 @@ msgid "gfwlist_url"
 msgstr "GFWList 订阅URL"
 
 msgid "chn_route_url"
-msgstr "国内IP段 订阅URL"
+msgstr "CN IP 订阅URL"
 
 msgid "netflix_ip_url"
-msgstr "Netflix IP段URL"
+msgstr "Netflix IP 订阅URL"
 
 msgid "Reset all"
 msgstr "恢复默认设置"
@@ -546,6 +546,9 @@ msgstr "复制到剪贴板"
 
 msgid "Unable to copy SSR to clipboard."
 msgstr "无法复制到剪贴板"
+
+msgid "Import"
+msgstr "导入"
 
 msgid "Paste sharing link here"
 msgstr "在此处粘贴分享链接"
