@@ -561,7 +561,7 @@ o:depends({type = "v2ray", v2ray_protocol = "vmess", xtls = true, insecure = fal
 o:depends({type = "v2ray", v2ray_protocol = "vless", xtls = true, insecure = false})
 
 
-o = s:option(DummyValue, "upload", translate("Upload"))
+o = s:option(DummyValue, "upload", translate("Upload Certificate"))
 o.template = "shadowsocksr/certupload"
 o:depends("certificate", 1)
 

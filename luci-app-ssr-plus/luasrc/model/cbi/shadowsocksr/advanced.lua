@@ -49,7 +49,7 @@ o.default = "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/
 o:depends("adblock", "1")
 
 o = s:option(Value, "gfwlist_url", translate("gfwlist_url"))
-o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", translate("gfwlist/gfwlist"))
+o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", translate("GFWList"))
 o.default = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
 
 o = s:option(Value, "chnroute_url", translate("chn_route_url"))
