@@ -16,11 +16,11 @@ msgstr "高级设置"
 msgid "SSR Server"
 msgstr "服务设置"
 
-msgid "Status"
+msgid "Running Status"
 msgstr "运行状态"
 
 msgid "Log"
-msgstr "查看日志"
+msgstr "日志"
 
 msgid "Main Server"
 msgstr "主服务器"
