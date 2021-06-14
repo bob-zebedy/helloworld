@@ -169,8 +169,11 @@ msgstr "连接测试"
 msgid "Ping Latency"
 msgstr "Ping"
 
-msgid "Apply"
-msgstr "应用"
+msgid "Select Node"
+msgstr "选择节点"
+
+msgid "Current Node"
+msgstr "当前节点"
 
 msgid "Auto Switch"
 msgstr "自动切换"
