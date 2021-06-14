@@ -28,7 +28,7 @@ function index()
 end
 
 function subscribe()
-	luci.sys.call("/usr/bin/lua /usr/share/shadowsocksr/subscribe.lua >>/var/log/ssrplus.log")
+	luci.sys.call("/usr/bin/lua /usr/share/shadowsocksr/subscribe.lua >> /var/log/ssrplus.log")
 	luci.http.prepare_content("application/json")
 	luci.http.write_json({ret = 1})
 end
