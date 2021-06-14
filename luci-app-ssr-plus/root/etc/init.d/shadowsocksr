@@ -77,13 +77,13 @@ get_host_ip() {
 clean_log() {
 	local logsnum=$(cat $LOG_FILE 2>/dev/null | wc -l)
 	[ "$logsnum" -gt 1000 ] && {
-		echo "$(date "+%Y-%m-%d %H:%M:%S") 日志文件过长，清空处理！" >$LOG_FILE
+		echo "$(date "+%Y-%m-%d %H:%M:%S") 日志文件过长，清空处理！" > $LOG_FILE
 	}
 }
 
 echolog() {
 	local d="$(date "+%Y-%m-%d %H:%M:%S")"
-	echo -e "$d: $*" >>$LOG_FILE
+	echo -e "$d: $*" >> $LOG_FILE
 }
 
 add_cron() {
@@ -150,7 +150,7 @@ ln_start_bin() {
 		echolog "-----------end------------"
 		_exit 2
 	}
-	${file_func:-echolog "  - ${ln_name}"} "$@" >/dev/null 2>&1 &
+	${file_func:-echolog "  - ${ln_name}"} "$@" > /dev/null 2>&1 &
 }
 
 start_dns() {

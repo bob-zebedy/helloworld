@@ -5,7 +5,7 @@ f.reset = false
 f.submit = false
 t = f:field(TextValue, "conf")
 t.rmempty = true
-t.rows = 20
+t.rows = 30
 function t.cfgvalue()
 	if nixio.fs.access("/var/log/ssrplus.log") then
 		local logs = luci.util.execi("cat /var/log/ssrplus.log")
