@@ -148,11 +148,6 @@ if nixio.fs.access("/usr/bin/kcptun-client") then
 	end
 end
 
-if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') == '1' then
-	s = m:field(DummyValue, "cache", translate("Reset pdnsd cache"))
-	s.template = "shadowsocksr/cache"
-end
-
 s = m:field(DummyValue, "baidu", translate("Baidu Connectivity"))
 s.value = translate("No Check")
 s.template = "shadowsocksr/check"
@@ -186,5 +181,10 @@ end
 s = m:field(DummyValue, "check_port", translate("Check Server Port"))
 s.template = "shadowsocksr/checkport"
 s.value = translate("No Check")
+
+if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') == '1' then
+	s = m:field(DummyValue, "cache", translate("Reset pdnsd cache"))
+	s.template = "shadowsocksr/cache"
+end
 
 return m
