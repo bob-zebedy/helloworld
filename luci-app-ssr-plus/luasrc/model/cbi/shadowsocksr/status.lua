@@ -15,7 +15,7 @@ local nfip_count = 0
 local Process_list = luci.sys.exec("busybox ps -w")
 local uci = luci.model.uci.cursor()
 -- html constants
-font_blue = [[<font color="green">]]
+font_green = [[<font color="green">]]
 font_off = [[</font>]]
 bold_on = [[<strong>]]
 bold_off = [[</strong>]]
@@ -96,7 +96,7 @@ m.submit = false
 s = m:field(DummyValue, "redir_run", translate("Global Client"))
 s.rawhtml = true
 if redir_run == 1 then
-	s.value = font_blue .. bold_on .. translate("Running") .. bold_off .. font_off
+	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
 	s.value = translate("Not Running")
 end
@@ -104,7 +104,7 @@ end
 s = m:field(DummyValue, "reudp_run", translate("Game Mode UDP Relay"))
 s.rawhtml = true
 if reudp_run == 1 then
-	s.value = font_blue .. bold_on .. translate("Running") .. bold_off .. font_off
+	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
 	s.value = translate("Not Running")
 end
@@ -113,7 +113,7 @@ if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') ~= '0' then
 	s = m:field(DummyValue, "pdnsd_run", translate("DNS Anti-pollution"))
 	s.rawhtml = true
 	if pdnsd_run == 1 then
-		s.value = font_blue .. bold_on .. translate("Running") .. bold_off .. font_off
+		s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 	else
 		s.value = translate("Not Running")
 	end
@@ -122,7 +122,7 @@ end
 s = m:field(DummyValue, "sock5_run", translate("Global SOCKS5 Proxy Server"))
 s.rawhtml = true
 if sock5_run == 1 then
-	s.value = font_blue .. bold_on .. translate("Running") .. bold_off .. font_off
+	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
 	s.value = translate("Not Running")
 end
@@ -130,7 +130,7 @@ end
 s = m:field(DummyValue, "server_run", translate("Local Servers"))
 s.rawhtml = true
 if server_run == 1 then
-	s.value = font_blue .. bold_on .. translate("Running") .. bold_off .. font_off
+	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
 	s.value = translate("Not Running")
 end
@@ -142,7 +142,7 @@ if nixio.fs.access("/usr/bin/kcptun-client") then
 	s = m:field(DummyValue, "kcptun_run", translate("KcpTun"))
 	s.rawhtml = true
 	if kcptun_run == 1 then
-		s.value = font_blue .. bold_on .. translate("Running") .. bold_off .. font_off
+		s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 	else
 		s.value = translate("Not Running")
 	end
