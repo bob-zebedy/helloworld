@@ -537,7 +537,7 @@ o = s:option(Flag, "insecure", translate("allowInsecure"))
 o.rmempty = false
 o:depends("tls", true)
 o:depends("xtls", true)
-o.description = translate("If true, allowss insecure connection at TLS client, e.g., TLS server uses unverifiable certificates.")
+o.description = translate("If true, allowss insecure connection at TLS client, e.g., TLS server uses unverifiable certificates")
 
 -- [[ Mux ]]--
 o = s:option(Flag, "mux", translate("Mux"))
