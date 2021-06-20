@@ -53,12 +53,12 @@ o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", 
 o.default = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
 
 o = s:option(Value, "chnroute_url", translate("chn_route_url"))
-o:value("https://ispip.clang.cn/all_cn.txt", translate("CN"))
-o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("CN.CIDR"))
+o:value("https://ispip.clang.cn/all_cn.txt", translate("ALL_CN"))
+o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("ALL_CN_CIDR"))
 o.default = "https://ispip.clang.cn/all_cn.txt"
 
 o = s:option(Value, "nfip_url", translate("netflix_ip_url"))
-o:value("https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt", translate("Netflix IP"))
+o:value("https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt", translate("Netflix_IP"))
 o.default = "https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt"
 
 o = s:option(Button, "reset", translate("Reset all"))

@@ -74,13 +74,13 @@ msgid "GFW List Mode"
 msgstr "GFW模式"
 
 msgid "IP Route Mode"
-msgstr "ChinaIgnore模式"
+msgstr "绕过大陆模式"
 
 msgid "Global Mode"
-msgstr "Global模式"
+msgstr "全局模式"
 
 msgid "Oversea Mode"
-msgstr "海外回国模式"
+msgstr "回国模式"
 
 msgid "Proxy Ports"
 msgstr "代理端口模式"
@@ -392,10 +392,10 @@ msgid "gfwlist_url"
 msgstr "GFWList 订阅URL"
 
 msgid "chn_route_url"
-msgstr "CN IP 订阅URL"
+msgstr "CN_IP 订阅URL"
 
 msgid "netflix_ip_url"
-msgstr "Netflix IP 订阅URL"
+msgstr "Netflix_IP 订阅URL"
 
 msgid "Reset all"
 msgstr "恢复默认设置"
@@ -410,7 +410,7 @@ msgid "Disable"
 msgstr "停用"
 
 msgid "Same as Global Server"
-msgstr "使用全局服务器"
+msgstr "使用主服务器"
 
 msgid "Local Port"
 msgstr "本地端口"
