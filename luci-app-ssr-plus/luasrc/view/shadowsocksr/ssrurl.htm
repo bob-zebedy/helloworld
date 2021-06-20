@@ -69,9 +69,9 @@ function export_ssr_url(btn, urlname, sid) {
 	textarea.select();
 	try {
 		document.execCommand("copy"); // Security exception may be thrown by some browsers.
-		s.innerHTML = "<font color='green'><%:Copy SSR to clipboard successfully.%></font>";
+		s.innerHTML = "<font color='green'><%:Copy SSR to clipboard successfully%></font>";
 	} catch (ex) {
-		s.innerHTML = "<font color='red'><%:Unable to copy SSR to clipboard.%></font>";
+		s.innerHTML = "<font color='red'><%:Unable to copy SSR to clipboard%></font>";
 	} finally {
 		document.body.removeChild(textarea);
 	}
