@@ -147,7 +147,7 @@ ln_start_bin() {
 	#echo "${file_func} $*" >&2
 	[ -x "${file_func}" ] || {
 		echolog "找不到 ${file_func}，无法启动..."
-		echolog "-----------end------------"
+		echolog "--------------------日志结束--------------------"
 		_exit 2
 	}
 	${file_func:-echolog "  - ${ln_name}"} "$@" > /dev/null 2>&1 &
@@ -398,7 +398,7 @@ start_shunt() {
 			ln_start_bin $(first_type ${type}local ${type}-local) ${type}-local -c $shunt_dns_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "shunt:$(get_name $type) Started!"
+		echolog "分流服务器: $(get_name $type) 已启动"
 		;;
 	v2ray)
 		if [ -n "$tmp_local_port" ]; then
@@ -409,7 +409,7 @@ start_shunt() {
 			ln_start_bin $(first_type xray v2ray) v2ray -config $shunt_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "shunt:$($(first_type xray v2ray) -version | head -1) Started!"
+		echolog "分流服务器: $($(first_type xray v2ray) -version | head -1) 已启动"
 		;;
 	trojan)
 		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
@@ -421,7 +421,7 @@ start_shunt() {
 			ln_start_bin $(first_type trojan) $type --config $shunt_dns_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "shunt:$($(first_type trojan) --version 2>&1 | head -1) Started!"
+		echolog "分流服务器: $($(first_type trojan) --version 2>&1 | head -1) 已启动"
 		;;
 	naiveproxy)
 		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
@@ -433,7 +433,7 @@ start_shunt() {
 			ln_start_bin $(first_type naive) naive --config $shunt_dns_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "shunt:$($(first_type "naive") --version 2>&1 | head -1) Started!"
+		echolog "分流服务器: $($(first_type "naive") --version 2>&1 | head -1) 已启动"
 		redir_udp=0
 		;;
 	# socks5)
@@ -450,7 +450,7 @@ start_shunt() {
 	# 		ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_port shunt-dns-ssr-plus
 	# 	fi
 	# 	ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
-	# 	echolog "shunt:$type REDIRECT/TPROXY Started!"
+	# 	echolog "分流服务器: $type REDIRECT/TPROXY 已启动"
 	# 	;;
 	*)
 		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
@@ -462,7 +462,7 @@ start_shunt() {
 			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_port shunt-dns-ssr-plus
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "shunt:$type REDIRECT/TPROXY Started!"
+		echolog "分流服务器: $type REDIRECT/TPROXY 已启动"
 		;;
 	esac
 	return 0
@@ -541,24 +541,24 @@ Start_Run() {
 		for i in $(seq 1 $threads); do
 			ln_start_bin "$ss_program" ${type}-redir -c $tcp_config_file
 		done
-		echolog "Main node:$(get_name $type) $threads Threads Started!"
+		echolog "主服务器: $(get_name $type) $threads 线程已启动"
 		;;
 	v2ray)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port $socks_port
 		ln_start_bin $(first_type xray v2ray) v2ray -config $tcp_config_file
-		echolog "Main node:$($(first_type xray v2ray) -version | head -1) Started!"
+		echolog "主服务器: $($(first_type xray v2ray) -version | head -1) 已启动"
 		;;
 	trojan)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port
 		for i in $(seq 1 $threads); do
 			ln_start_bin $(first_type $type) $type --config $tcp_config_file
 		done
-		echolog "Main node:$($(first_type $type) --version 2>&1 | head -1) , $threads Threads Started!"
+		echolog "主服务器: $($(first_type $type) --version 2>&1 | head -1) , $threads 线程已启动"
 		;;
 	naiveproxy)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port
 		ln_start_bin $(first_type naive) naive $tcp_config_file
-		echolog "Main node:$($(first_type naive) --version 2>&1 | head -1) , $threads Threads Started!"
+		echolog "主服务器: $($(first_type naive) --version 2>&1 | head -1) , $threads 线程已启动"
 		;;
 	socks5)
 		if [ "$(uci_get_by_name $GLOBAL_SERVER auth_enable 0)" == "1" ]; then
@@ -569,14 +569,14 @@ Start_Run() {
 		#for i in $(seq 1 $threads); do
 		#	ln_start_bin $(first_type redsocks2) redsocks2 -c $tcp_config_file
 		#done
-		echolog "Main node:Socks5 REDIRECT/TPROXY $threads Threads Started!"
+		echolog "主服务器: Socks5 REDIRECT/TPROXY $threads 线程已启动"
 		;;
 	tun)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port
 		for i in $(seq 1 $threads); do
 			ln_start_bin $(first_type redsocks2) redsocks2 -c $tcp_config_file
 		done
-		echolog "Main node:Network Tunnel REDIRECT $threads Threads Started!"
+		echolog "主服务器: Network Tunnel REDIRECT $threads 线程已启动"
 		;;
 	esac
 	redir_tcp=1
@@ -801,7 +801,7 @@ start_rules() {
 
 start() {
 	set_lock
-	echolog "----------start------------"
+	echolog "--------------------日志开始--------------------"
 	mkdir -p /var/run /var/lock /var/log /var/dnsmasq.d $TMP_BIN_PATH $TMP_DNSMASQ_PATH
 	echo "conf-dir=${TMP_DNSMASQ_PATH}" >"/var/dnsmasq.d/dnsmasq-ssrplus.conf"
 	if load_config; then
@@ -830,7 +830,7 @@ start() {
 	start_server
 	start_monitor
 	clean_log
-	echolog "-----------end------------"
+	echolog "--------------------日志结束--------------------"
 	unset_lock
 }
 
