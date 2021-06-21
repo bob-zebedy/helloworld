@@ -28,8 +28,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$redir_tcp_process" -gt 0 ]; then
 		icount=$(busybox ps -w | grep ssr-retcp | grep -v grep | wc -l)
 		if [ "$icount" == 0 ]; then
-			logger -t "$NAME" "ssrplus redir tcp error.restart!"
-			echolog "ssrplus redir tcp error.restart!"
+			logger -t "$NAME" "TCP转发错误，重新启动"
+			echolog "TCP转发错误，已重新启动"
 			/etc/init.d/shadowsocksr restart
 			exit 0
 		fi
@@ -38,8 +38,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$redir_udp_process" -gt 0 ]; then
 		icount=$(busybox ps -w | grep ssr-reudp | grep -v grep | wc -l)
 		if [ "$icount" == 0 ]; then
-			logger -t "$NAME" "ssrplus redir udp error.restart!"
-			echolog "ssrplus redir udp error.restart!"
+			logger -t "$NAME" "UDP 转发错误，重新启动"
+			echolog "UDP 转发错误，重新启动"
 			/etc/init.d/shadowsocksr restart
 			exit 0
 		fi
@@ -48,8 +48,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$server_process_count" -gt 0 ]; then
 		icount=$(busybox ps -w | grep ssr-server | grep -v grep | wc -l)
 		if [ "$icount" -lt "$server_process_count" ]; then #如果进程挂掉就重启它
-			logger -t "$NAME" "ssrplus server error.restart!"
-			echolog "ssrplus server error.restart!"
+			logger -t "$NAME" "内部错误，重新启动"
+			echolog "内部错误，重新启动"
 			kill -9 $(busybox ps -w | grep ssr-server | grep -v grep | awk '{print $1}') >/dev/null 2>&1
 			/etc/init.d/shadowsocksr restart
 			exit 0
@@ -59,8 +59,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$kcp_process" -gt 0 ]; then
 		icount=$(busybox ps -w | grep kcptun-client | grep -v grep | wc -l)
 		if [ "$icount" -lt "$kcp_process" ]; then #如果进程挂掉就重启它
-			logger -t "$NAME" "ssrplus kcptun error.restart!"
-			echolog "ssrplus kcptun error.restart!"
+			logger -t "$NAME" "Kcptun错误，重新启动"
+			echolog "Kcptun错误，重新启动"
 			killall -q -9 kcptun-client
 			(/usr/bin/kcptun-client -r $server:$kcp_port -l :$server_port $password $kcp_param &)
 		fi
@@ -69,8 +69,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$local_process" -gt 0 ]; then
 		icount=$(busybox ps -w | grep ssr-local | grep -v grep | wc -l)
 		if [ "$icount" -lt "$local_process" ]; then #如果进程挂掉就重启它
-			logger -t "$NAME" "global socks server error.restart!"
-			echolog "global socks server error.restart!"
+			logger -t "$NAME" "全局Socket错误，重新启动"
+			echolog "全局Socket错误，重新启动"
 			kill -9 $(busybox ps -w | grep ssr-local | grep -v grep | awk '{print $1}') >/dev/null 2>&1
 			/etc/init.d/shadowsocksr restart
 			exit 0
@@ -80,8 +80,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$pdnsd_process" -eq 1 ]; then
 		icount=$(busybox ps -w | grep $TMP_BIN_PATH/pdnsd | grep -v grep | wc -l)
 		if [ "$icount" -lt "$pdnsd_process" ]; then #如果进程挂掉就重启它
-			logger -t "$NAME" "pdnsd tunnel error.restart!"
-			echolog "pdnsd tunnel error.restart!"
+			logger -t "$NAME" "pdnsd错误，重新启动"
+			echolog "pdnsd错误，重新启动"
 			if [ -f /var/run/pdnsd.pid ]; then
 				kill $(cat /var/run/pdnsd.pid) >/dev/null 2>&1
 			else
@@ -94,8 +94,8 @@ while [ "1" == "1" ]; do #死循环
 	if [ "$pdnsd_process" -eq 2 ]; then
 		icount=$(busybox ps -w | grep -e ssrplus-dns -e "dns2socks 127.0.0.1 $tmp_dns_port" | grep -v grep | wc -l)
 		if [ "$icount" -lt 2 ]; then #如果进程挂掉就重启它
-			logger -t "$NAME" "dns2socks $dnsstr tunnel error.restart!"
-			echolog "dns2socks $dnsstr tunnel error.restart!"
+			logger -t "$NAME" "dns2socks $dnsstr 错误，重新启动"
+			echolog "dns2socks $dnsstr 错误，重新启动"
 			dnsstr=$(uci_get_by_type global tunnel_forward 8.8.4.4:53)
 			dnsserver=$(echo "$dnsstr" | awk -F ':' '{print $1}')
 			dnsport=$(echo "$dnsstr" | awk -F ':' '{print $2}')
