@@ -835,7 +835,7 @@ start() {
 }
 
 boot() {
-	echolog "boot！"
+	echolog "正在启动..."
 	mkdir -p /var/run /var/lock /var/log /var/dnsmasq.d $TMP_BIN_PATH $TMP_DNSMASQ_PATH
 	ulimit -n 65535
 	start
