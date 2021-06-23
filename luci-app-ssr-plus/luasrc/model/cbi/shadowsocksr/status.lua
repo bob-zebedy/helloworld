@@ -171,6 +171,7 @@ s = m:field(DummyValue, "nfip_data", translate("Netflix IP Data"))
 s.rawhtml = true
 s.template = "shadowsocksr/refresh"
 s.value = nfip_count .. " " .. translate("Records")
+end
 
 if uci:get_first("shadowsocksr", 'global', 'adblock', '0') == '1' then
 	s = m:field(DummyValue, "ad_data", translate("Advertising Data"))
