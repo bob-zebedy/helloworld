@@ -394,6 +394,9 @@ msgstr "GFWList 订阅URL"
 msgid "chn_route_url"
 msgstr "CN_IP 订阅URL"
 
+msgid "Enable Netflix Mode"
+msgstr "启用 Netflix 分流模式"
+
 msgid "netflix_ip_url"
 msgstr "Netflix_IP 订阅URL"
 
