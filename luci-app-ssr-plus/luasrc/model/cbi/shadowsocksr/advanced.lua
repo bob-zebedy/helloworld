@@ -40,14 +40,6 @@ o.datatype = "uinteger"
 o:depends("enable_switch", "1")
 o.default = 3
 
-o = s:option(Flag, "adblock", translate("Enable adblock"))
-o.rmempty = false
-
-o = s:option(Value, "adblock_url", translate("adblock_url"))
-o:value("https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf", translate("anti-AD"))
-o.default = "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf"
-o:depends("adblock", "1")
-
 o = s:option(Value, "gfwlist_url", translate("gfwlist_url"))
 o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", translate("GFWList"))
 o.default = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
@@ -57,9 +49,21 @@ o:value("https://ispip.clang.cn/all_cn.txt", translate("ALL_CN"))
 o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("ALL_CN_CIDR"))
 o.default = "https://ispip.clang.cn/all_cn.txt"
 
+o = s:option(Flag, "netflix_enable", translate("Enable Netflix Mode"))
+o.rmempty = false
+
 o = s:option(Value, "nfip_url", translate("netflix_ip_url"))
 o:value("https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt", translate("Netflix_IP"))
 o.default = "https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt"
+o:depends("netflix_enable", "1")
+
+o = s:option(Flag, "adblock", translate("Enable adblock"))
+o.rmempty = false
+
+o = s:option(Value, "adblock_url", translate("adblock_url"))
+o:value("https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf", translate("anti-AD"))
+o.default = "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf"
+o:depends("adblock", "1")
 
 o = s:option(Button, "reset", translate("Reset all"))
 o.rawhtml = true

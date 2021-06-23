@@ -166,6 +166,7 @@ s.rawhtml = true
 s.template = "shadowsocksr/refresh"
 s.value = ip_count .. " " .. translate("Records")
 
+if uci:get_first("shadowsocksr", 'global', 'netflix_enable', '0') ~= '0' then
 s = m:field(DummyValue, "nfip_data", translate("Netflix IP Data"))
 s.rawhtml = true
 s.template = "shadowsocksr/refresh"
