@@ -391,20 +391,20 @@ msgstr "广告屏蔽 订阅URL"
 msgid "gfwlist_url"
 msgstr "GFWList 订阅URL"
 
-msgid "chn_route_url"
-msgstr "CN_IP 订阅URL"
+msgid "chn_ip_url"
+msgstr "China IP 订阅URL"
 
 msgid "Enable Netflix Mode"
-msgstr "启用 Netflix 分流模式"
+msgstr "开启 Netflix 分流"
 
 msgid "netflix_ip_url"
-msgstr "Netflix_IP 订阅URL"
+msgstr "Netflix IP 订阅URL"
 
 msgid "Reset all"
 msgstr "恢复默认设置"
 
 msgid "Global SOCKS5 Proxy Server"
-msgstr "socket5 全局代理服务"
+msgstr "Socket5 全局代理服务"
 
 msgid "Server"
 msgstr "服务器"
@@ -560,7 +560,7 @@ msgid "Paste sharing link here"
 msgstr "在此处粘贴分享链接"
 
 msgid "User cancelled"
-msgstr "用户已取消"
+msgstr "已取消"
 
 msgid "Import configuration information successfully"
 msgstr "导入配置成功"
