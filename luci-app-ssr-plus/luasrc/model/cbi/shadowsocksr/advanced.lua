@@ -44,9 +44,9 @@ o = s:option(Value, "gfwlist_url", translate("gfwlist_url"))
 o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", translate("GFWList"))
 o.default = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
 
-o = s:option(Value, "chnroute_url", translate("chn_route_url"))
-o:value("https://ispip.clang.cn/all_cn.txt", translate("ALL_CN"))
-o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("ALL_CN_CIDR"))
+o = s:option(Value, "chnroute_url", translate("chn_ip_url"))
+o:value("https://ispip.clang.cn/all_cn.txt", translate("CN"))
+o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("CN_CIDR"))
 o.default = "https://ispip.clang.cn/all_cn.txt"
 
 o = s:option(Flag, "netflix_enable", translate("Enable Netflix Mode"))
