@@ -17,6 +17,9 @@ PKG_LICENSE_FILES:=LICENSE
 PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
 
 PKG_BUILD_DEPENDS:=python3/host
+ifneq ($(wildcard $(TOPDIR)/feeds/packages/devel/ninja/ninja.mk),)
+PKG_BUILD_DEPENDS+= ninja/host
+endif
 PKG_USE_MIPS16:=0
 PKG_BUILD_PARALLEL:=1
 
@@ -100,6 +103,14 @@ define Build/Prepare
 		unzip -o "$(DL_DIR)/$(GN_FILE)" -d "gn/out" ; \
 	)
 endef
+
+ifeq ($(NINJA),)
+NINJA = \
+	MAKEFLAGS="$(MAKE_JOBSERVER)" \
+		$(STAGING_DIR_HOSTPKG)/bin/ninja \
+		$(if $(findstring c,$(OPENWRT_VERBOSE)),-v) \
+		$(if $(MAKE_JOBSERVER),,-j1)
+endif
 
 define Build/Compile
 	( \
