@@ -119,7 +119,6 @@ local function base64Decode(text)
 	end
 end
 -- 检查数组(table)中是否存在某个字符值
--- https://www.04007.cn/article/135.html
 local function checkTabValue(tab)
 	local revtab = {}
 	for k,v in pairs(tab) do
@@ -248,6 +247,19 @@ local function processData(szType, content)
 			result.encrypt_method_ss = method
 			result.password = password
 		else
+			result.server = nil
+		end
+	elseif szType == "sip008" then
+		result.type = v2_ss
+		result.v2ray_protocol = "shadowsocks"
+		result.server = content.server
+		result.server_port = content.server_port
+		result.password = content.password
+		result.encrypt_method_ss = content.method
+		result.plugin = content.plugin
+		result.plugin_opts = content.plugin_opts
+		result.alias = content.remarks
+		if not checkTabValue(encrypt_methods_ss)[content.method] then
 			result.server = nil
 		end
 	elseif szType == "ssd" then
@@ -400,7 +412,6 @@ local function check_filer(result)
 		local filter_word = split(filter_words, "|")
 		for i, v in pairs(filter_word) do
 			if result.alias:find(v) then
-				-- log('订阅节点关键字过滤:“' .. v ..'” ，该节点被丢弃')
 				return true
 			end
 		end
@@ -435,6 +446,9 @@ local execute = function()
 						tinsert(servers, setmetatable(server, {__index = extra}))
 					end
 					nodes = servers
+				elseif jsonParse(raw) then
+					szType = 'sip008'
+					nodes = jsonParse(raw)
 				else
 					-- ssd 外的格式
 					nodes = split(base64Decode(raw):gsub(" ", "_"), "\n")
@@ -442,7 +456,7 @@ local execute = function()
 				for _, v in ipairs(nodes) do
 					if v then
 						local result
-						if szType == 'ssd' then
+						if szType then
 							result = processData(szType, v)
 						elseif not szType then
 							local node = trim(v)
