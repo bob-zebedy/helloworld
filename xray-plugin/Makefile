@@ -10,11 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xray-plugin
 PKG_VERSION:=1.4.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/teddysun/xray-plugin/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=ae7ff14a34ca7e226969ebeae20317adb2514ab0d1d78b18e2ee6fd731eb0e89
+PKG_HASH:=4a178a2bacffcc2fd374c57e47b71eb0cb5667bfe747690a16501092c0618707
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
@@ -35,7 +35,7 @@ GO_PKG_LDFLAGS:=-s -w
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
-define Package/xray-plugin/config
+define Package/$(PKG_NAME)/config
 config XRAY_PLUGIN_PROVIDE_V2RAY_PLUGIN
 	bool "Provide v2ray-plugin binary using xray-plugin"
 	default n
@@ -54,7 +54,7 @@ ifneq ($(CONFIG_XRAY_PLUGIN_COMPRESS_GOPROXY),)
 	export GOPROXY=https://goproxy.io
 endif
 
-define Package/xray-plugin
+define Package/$(PKG_NAME)
 	SECTION:=net
 	CATEGORY:=Network
 	TITLE:=SIP003 plugin for Shadowsocks, based on Xray
@@ -62,7 +62,7 @@ define Package/xray-plugin
 	DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
-define Package/xray-plugin/description
+define Package/$(PKG_NAME)/description
 	Yet another SIP003 plugin for Shadowsocks, based on Xray.
 endef
 
@@ -73,12 +73,12 @@ ifneq ($(CONFIG_XRAY_PLUGIN_COMPRESS_UPX),)
 endif
 endef
 
-define Package/xray-plugin/install
+define Package/$(PKG_NAME)/install
 	$(call GoPackage/Package/Install/Bin,$(1))
 ifneq ($(CONFIG_XRAY_PLUGIN_PROVIDE_V2RAY_PLUGIN),)
 	$(LN) xray-plugin $(1)/usr/bin/v2ray-plugin
 endif
 endef
 
-$(eval $(call GoBinPackage,xray-plugin))
-$(eval $(call BuildPackage,xray-plugin))
+$(eval $(call GoBinPackage,$(PKG_NAME)))
+$(eval $(call BuildPackage,$(PKG_NAME)))
