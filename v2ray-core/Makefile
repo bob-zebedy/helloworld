@@ -1,7 +1,3 @@
-# SPDX-License-Identifier: GPL-3.0-only
-#
-# Copyright (C) 2021 ImmortalWrt.org
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=v2ray-core
@@ -14,7 +10,7 @@ PKG_HASH:=9d0ca27b78beba96b8ee00141a3e45d7c706d57b3d7c449d7975a8dec815e327
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
+PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_V2RAY_CORE_COMPRESS_GOPROXY \
