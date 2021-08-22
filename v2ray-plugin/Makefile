@@ -1,10 +1,3 @@
-#
-# Copyright (C) 2020 SharerMax
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=v2ray-plugin
@@ -17,7 +10,7 @@ PKG_HASH:=e23d6bbf828efa9b0ac722b4665c5b3c12df2046879a2efe8ee980a8912bba0b
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=madeye <max.c.lv@gmail.com>
+PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1

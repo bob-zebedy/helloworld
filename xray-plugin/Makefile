@@ -1,11 +1,3 @@
-#
-# Copyright (C) 2021 ImmortalWrt
-# <https://project-openwrt.eu.org>
-#
-# This is free software, licensed under the GNU General Public License v3.
-# See /LICENSE for more information.
-#
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xray-plugin
@@ -18,7 +10,7 @@ PKG_HASH:=4a178a2bacffcc2fd374c57e47b71eb0cb5667bfe747690a16501092c0618707
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Tianling Shen <cnsztl@project-openwrt.eu.org>
+PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_XRAY_PLUGIN_PROVIDE_V2RAY_PLUGIN \
