@@ -136,16 +136,16 @@ else
 end
 
 if nixio.fs.access("/usr/bin/kcptun-client") then
-	s = m:field(DummyValue, "kcp_version", translate("KcpTun Version"))
-	s.rawhtml = true
-	s.value = kcptun_version
-	s = m:field(DummyValue, "kcptun_run", translate("KcpTun"))
+	s = m:field(DummyValue, "kcptun_run", translate("KcpTun Run"))
 	s.rawhtml = true
 	if kcptun_run == 1 then
 		s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 	else
 		s.value = translate("Not Running")
 	end
+	s = m:field(DummyValue, "kcp_version", translate("KcpTun Version"))
+	s.rawhtml = true
+	s.value = kcptun_version
 end
 
 s = m:field(DummyValue, "baidu", translate("Baidu Connectivity"))
