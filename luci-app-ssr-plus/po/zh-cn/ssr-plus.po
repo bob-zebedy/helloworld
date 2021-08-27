@@ -479,7 +479,7 @@ msgid "KcpTun Version"
 msgstr "KcpTun 版本"
 
 msgid "Reset pdnsd cache"
-msgstr "pdnsd缓存"
+msgstr "重置pdnsd缓存"
 
 msgid "Google Connectivity"
 msgstr "Google 连通性检查"
