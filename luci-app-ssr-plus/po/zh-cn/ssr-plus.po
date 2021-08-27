@@ -472,6 +472,9 @@ msgstr "DNS 防污染"
 msgid "Local Servers"
 msgstr "本地服务"
 
+msgid "KcpTun Run"
+msgstr "KcpTun 状态"
+
 msgid "KcpTun Version"
 msgstr "KcpTun 版本"
 
