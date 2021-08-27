@@ -627,21 +627,18 @@ if is_finded("kcptun-client") then
 	o = s:option(Value, "kcp_port", translate("KcpTun Port"))
 	o.datatype = "port"
 	o.default = 4000
-	o:depends("kcp_enable", "1")
-	o:depends("type", "ssr")
-	o:depends("type", "ss")
+	o:depends({type = "ssr", kcp_enable = true})
+	o:depends({type = "ss", kcp_enable = true})
 
 	o = s:option(Value, "kcp_password", translate("KcpTun Password"))
 	o.password = true
-	o:depends("kcp_enable", "1")
-	o:depends("type", "ssr")
-	o:depends("type", "ss")
+	o:depends({type = "ssr", kcp_enable = true})
+	o:depends({type = "ss", kcp_enable = true})
 
 	o = s:option(Value, "kcp_param", translate("KcpTun Param"))
 	o.default = "--nocomp"
-	o:depends("kcp_enable", "1")
-	o:depends("type", "ssr")
-	o:depends("type", "ss")
+	o:depends({type = "ssr", kcp_enable = true})
+	o:depends({type = "ss", kcp_enable = true})
 end
 
 return m
