@@ -83,7 +83,7 @@ clean_log() {
 
 echolog() {
 	local d="$(date "+%Y-%m-%d %H:%M:%S")"
-	echo -e "$d: $*" >> $LOG_FILE
+	echo -e "[$d]  $*" >> $LOG_FILE
 }
 
 add_cron() {
@@ -142,12 +142,11 @@ ln_start_bin() {
 			ln -s "${file_func}" "${TMP_BIN_PATH}/${ln_name}" >/dev/null 2>&1
 			file_func="${TMP_BIN_PATH}/${ln_name}"
 		}
-		[ -x "${file_func}" ] || echolog "$(readlink ${file_func}) 没有执行权限，无法启动：${file_func} $*"
+		[ -x "${file_func}" ] || echolog "$(readlink ${file_func}) 无权限执行 ${file_func} $*"
 	fi
 	#echo "${file_func} $*" >&2
 	[ -x "${file_func}" ] || {
-		echolog "找不到 ${file_func}，无法启动..."
-		echolog "--------------------日志结束--------------------"
+		echolog "启动失败, 找不到 ${file_func}"
 		_exit 2
 	}
 	${file_func:-echolog "  - ${ln_name}"} "$@" > /dev/null 2>&1 &

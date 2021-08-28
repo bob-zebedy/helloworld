@@ -1,5 +1,5 @@
-msgid "ShadowSocksR Plus+"
-msgstr "科学上网"
+msgid "International Internet Service"
+msgstr "国际互联网"
 
 msgid "SSR Client"
 msgstr "基本设置"
@@ -89,16 +89,16 @@ msgid "All Ports"
 msgstr "所有端口"
 
 msgid "Only Common Ports"
-msgstr "仅常用端口"
+msgstr "常用端口"
 
 msgid "Resolve Dns Mode"
 msgstr "DNS解析方式"
 
-msgid "Use Pdnsd tcp query and cache"
-msgstr "使用 PDNSD TCP 查询并缓存"
+msgid "Use pdnsd query and cache"
+msgstr "使用 pdnsd 查询并缓存"
 
-msgid "Use DNS2SOCKS query and cache"
-msgstr "使用 DNS2SOCKS 查询并缓存"
+msgid "Use dns2socks query and cache"
+msgstr "使用 dns2socks 查询并缓存"
 
 msgid "Use Local DNS Service listen port 5335"
 msgstr "使用本地DNS服务器"
@@ -110,7 +110,7 @@ msgid "Anti-pollution DNS Server"
 msgstr "国外域名DNS服务器"
 
 msgid "Custom DNS Server format as IP:PORT"
-msgstr "自定义服务器(IP:Port)"
+msgstr "自定义DNS(IP:Port)"
 
 msgid "Servers subscription and manage"
 msgstr "服务器节点与订阅管理"
@@ -119,7 +119,7 @@ msgid "Auto Update"
 msgstr "自动更新"
 
 msgid "Auto Update Server subscription, GFW list and CHN route"
-msgstr "自动更新服务器节点,GFW列表,CHN路由表"
+msgstr "自动更新服务器节点, GFW列表, CHN路由表"
 
 msgid "Update time (every day)"
 msgstr "更新时间(每天)"
