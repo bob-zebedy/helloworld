@@ -81,8 +81,8 @@ o:value("2", translate("Only Common Ports"))
 o.default = 1
 
 o = s:option(ListValue, "pdnsd_enable", translate("Resolve Dns Mode"))
-o:value("1", translate("Use Pdnsd tcp query and cache"))
-o:value("2", translate("Use DNS2SOCKS query and cache"))
+o:value("1", translate("Use pdnsd query and cache"))
+o:value("2", translate("Use dns2socks query and cache"))
 o:value("0", translate("Use Local DNS Service listen port 5335"))
 o.default = 1
 
