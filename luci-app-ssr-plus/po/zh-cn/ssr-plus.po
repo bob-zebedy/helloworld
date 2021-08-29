@@ -26,7 +26,7 @@ msgid "Main Server"
 msgstr "主服务器"
 
 msgid "Game Mode UDP Server"
-msgstr "游戏UDP 节点"
+msgstr "游戏UDP节点"
 
 msgid "Netflix Node"
 msgstr "Netflix 节点"
@@ -454,8 +454,8 @@ msgstr "未知"
 msgid "Not exist"
 msgstr "未安装"
 
-msgid "Global Client"
-msgstr "TCP透明代理"
+msgid "Proxy Mode"
+msgstr "代理模式"
 
 msgid "Running"
 msgstr "运行中"
@@ -464,13 +464,13 @@ msgid "Not Running"
 msgstr "未运行"
 
 msgid "Game Mode UDP Relay"
-msgstr "游戏模式"
+msgstr "游戏中继模式"
 
 msgid "DNS Anti-pollution"
-msgstr "DNS 防污染"
+msgstr "DNS 防污染服务"
 
-msgid "Local Servers"
-msgstr "本地服务"
+msgid "Local Proxy Servers"
+msgstr "本地代理服务端"
 
 msgid "KcpTun Run"
 msgstr "KcpTun 状态"
