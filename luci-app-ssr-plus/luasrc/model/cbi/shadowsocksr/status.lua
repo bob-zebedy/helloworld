@@ -93,7 +93,7 @@ m = SimpleForm("Version")
 m.reset = false
 m.submit = false
 
-s = m:field(DummyValue, "redir_run", translate("Global Client"))
+s = m:field(DummyValue, "redir_run", translate("Proxy Mode"))
 s.rawhtml = true
 if redir_run == 1 then
 	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
@@ -127,7 +127,7 @@ else
 	s.value = translate("Not Running")
 end
 
-s = m:field(DummyValue, "server_run", translate("Local Servers"))
+s = m:field(DummyValue, "server_run", translate("Local Proxy Servers"))
 s.rawhtml = true
 if server_run == 1 then
 	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
@@ -179,10 +179,6 @@ if uci:get_first("shadowsocksr", 'global', 'adblock', '0') == '1' then
 	s.template = "shadowsocksr/refresh"
 	s.value = ad_count .. " " .. translate("Records")
 end
-
-s = m:field(DummyValue, "check_port", translate("Check Server Port"))
-s.template = "shadowsocksr/checkport"
-s.value = translate("No Check")
 
 if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') == '1' then
 	s = m:field(DummyValue, "cache", translate("Reset pdnsd cache"))
