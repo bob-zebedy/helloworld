@@ -23,7 +23,7 @@ local filter_words = ucic:get_first(name, 'server_subscribe', 'filter_words', 'è
 local v2_ss = luci.sys.exec('type -t -p ss-redir sslocal') ~= "" and "ss" or "v2ray"
 local v2_tj = luci.sys.exec('type -t -p trojan') ~= "" and "trojan" or "v2ray"
 local log = function(...)
-	print(os.date("%Y-%m-%d %H:%M:%S ") .. table.concat({...}, " "))
+	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "] " .. table.concat({...}, " "))
 end
 local encrypt_methods_ss = {
 	-- aead

@@ -189,6 +189,4 @@ else
 		log("正在更新【广告屏蔽】数据库")
 		update(uci:get_first("shadowsocksr", "global", "adblock_url"), "/etc/ssrplus/ad.conf", "ad_data", TMP_DNSMASQ_PATH .. "/ad.conf")
 	end
-	-- log("正在更新【Netflix IP段】数据库")
-	-- update(uci:get_first("shadowsocksr", "global", "nfip_url"), "/etc/ssrplus/netflixip.list", "nfip_data")
 end
