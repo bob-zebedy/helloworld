@@ -25,11 +25,9 @@ check_proxy() {
 	for i in $(seq 1 $try_count); do
 		/usr/bin/ssr-check www.google.com 80 $switch_time 1
 		if [ "$?" == "0" ]; then
-			# echolog "Check Google Proxy Success, count=$i"
 			result=0
 			break
 		else
-			# echolog "Check Google Proxy Fail, count=$i"
 			/usr/bin/ssr-check www.baidu.com 80 $switch_time 1
 			if [ "$?" == "0" ]; then
 				result=1
@@ -106,7 +104,7 @@ start() {
 		#判断当前代理是否为缺省服务器
 		if [ "$CURRENT_SERVER" != "$DEFAULT_SERVER" ]; then
 			#echo "not default proxy"
-			echolog "当前服务器不是主服务器，尝试切换为主服务器"
+			echolog "当前服务器不是主服务器, 尝试切换为主服务器"
 			#检查缺省服务器是否正常
 			if test_proxy $DEFAULT_SERVER; then
 				echolog "主服务器可用"
@@ -118,12 +116,11 @@ start() {
 			fi
 		fi
 		#判断当前代理是否正常
-		#echolog "Start checking if the current server is available."
 		check_proxy
 		current_ret=$?
 		if [ "$current_ret" == "1" ]; then
 			#当前代理错误，判断有无可用的服务器
-			echolog "当前代理服务器错误，尝试切换其他服务器"
+			echolog "当前代理服务器错误, 尝试切换其他服务器"
 			select_proxy
 			if [ "$ENABLE_SERVER" != nil ]; then
 				echolog "找到可用的服务器"
@@ -138,7 +135,6 @@ start() {
 			fi
 		else
 			normal_flag=0
-			# echolog "ShadowsocksR No Problem."
 		fi
 	done
 }
