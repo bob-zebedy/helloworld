@@ -23,7 +23,7 @@ local filter_words = ucic:get_first(name, 'server_subscribe', 'filter_words', '�
 local v2_ss = luci.sys.exec('type -t -p ss-redir sslocal') ~= "" and "ss" or "v2ray"
 local v2_tj = luci.sys.exec('type -t -p trojan') ~= "" and "trojan" or "v2ray"
 local log = function(...)
-	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "] " .. table.concat({...}, " "))
+	print(os.date("%Y-%m-%d %H:%M:%S ") .. table.concat({...}, " "))
 end
 local encrypt_methods_ss = {
 	-- aead
@@ -58,7 +58,7 @@ local function split(full, sep)
 		local nStart, nEnd = full:find(sep, off)
 		if not nEnd then
 			local res = ssub(full, off, slen(full))
-			if #res > 0 then -- 过滤掉 \0
+			if #res > 0 then
 				tinsert(result, res)
 			end
 			break
@@ -97,7 +97,6 @@ end
 -- md5
 local function md5(content)
 	local stdout = luci.sys.exec('echo \"' .. urlEncode(content) .. '\" | md5sum | cut -d \" \" -f1')
-	-- assert(nixio.errno() == 0)
 	return trim(stdout)
 end
 -- base64
@@ -160,8 +159,6 @@ local function processData(szType, content)
 		result.alter_id = info.aid
 		result.vmess_id = info.id
 		result.alias = info.ps
-		-- result.mux = 1
-		-- result.concurrency = 8
 		if info.net == 'ws' then
 			result.ws_host = info.host
 			result.ws_path = info.path
@@ -217,7 +214,7 @@ local function processData(szType, content)
 		local password = userinfo:sub(userinfo:find(":") + 1, #userinfo)
 		result.alias = UrlDecode(alias)
 		result.type = v2_ss
-		result.v2ray_protocol = "shadowsocks"
+		result.password = password
 		result.server = host[1]
 		if host[2]:find("/%?") then
 			local query = split(host[2], "/%?")
@@ -243,11 +240,13 @@ local function processData(szType, content)
 		else
 			result.server_port = host[2]:gsub("/","")
 		end
-		if checkTabValue(encrypt_methods_ss)[method] then
-			result.encrypt_method_ss = method
-			result.password = password
-		else
+		if not checkTabValue(encrypt_methods_ss)[method] then
 			result.server = nil
+		elseif v2_ss == "v2ray" then
+			result.v2ray_protocol = "shadowsocks"
+			result.encrypt_method_v2ray_ss = method
+		else
+			result.encrypt_method_ss = method
 		end
 	elseif szType == "sip008" then
 		result.type = v2_ss
@@ -255,12 +254,16 @@ local function processData(szType, content)
 		result.server = content.server
 		result.server_port = content.server_port
 		result.password = content.password
-		result.encrypt_method_ss = content.method
 		result.plugin = content.plugin
 		result.plugin_opts = content.plugin_opts
 		result.alias = content.remarks
 		if not checkTabValue(encrypt_methods_ss)[content.method] then
 			result.server = nil
+		elseif v2_ss == "v2ray" then
+			result.v2ray_protocol = "shadowsocks"
+			result.encrypt_method_v2ray_ss = content.method
+		else
+			result.encrypt_method_ss = content.method
 		end
 	elseif szType == "ssd" then
 		result.type = v2_ss
@@ -268,14 +271,20 @@ local function processData(szType, content)
 		result.server = content.server
 		result.server_port = content.port
 		result.password = content.password
-		result.encrypt_method_ss = content.encryption
-		result.plugin = content.plugin
 		result.plugin_opts = content.plugin_options
 		result.alias = "[" .. content.airport .. "] " .. content.remarks
-		if checkTabValue(encrypt_methods_ss)[result.encrypt_method_ss] then
-			result.server = nil
-		elseif result.plugin == "simple-obfs" then
+		if content.plugin == "simple-obfs" then
 			result.plugin = "obfs-local"
+		else
+			result.plugin = content.plugin
+		end
+		if not checkTabValue(encrypt_methods_ss)[content.encryption] then
+			result.server = nil
+		elseif v2_ss == "v2ray" then
+			result.v2ray_protocol = "shadowsocks"
+			result.encrypt_method_v2ray_ss = content.method
+		else
+			result.encrypt_method_ss = content.method
 		end
 	elseif szType == "trojan" then
 		local idx_sp = 0
@@ -293,7 +302,6 @@ local function processData(szType, content)
 		result.type = v2_tj
 		result.v2ray_protocol = "trojan"
 		result.server = host[1]
-		-- 按照官方的建议 默认验证ssl证书
 		result.insecure = "0"
 		result.tls = "1"
 		if host[2]:find("?") then
@@ -305,7 +313,6 @@ local function processData(szType, content)
 				params[t[1]] = t[2]
 			end
 			if params.sni then
-				-- 未指定peer（sni）默认使用remote addr
 				result.tls_host = params.sni
 			end
 		else
@@ -373,7 +380,6 @@ local function processData(szType, content)
 			if params.type == 'grpc' then
 				result.serviceName = params.serviceName
 			end
-			
 			if params.security == "tls" then
 				result.tls = "1"
 				result.tls_host = params.sni
@@ -391,7 +397,6 @@ local function processData(szType, content)
 			result.alias = "NULL"
 		end
 	end
-	-- alias 不参与 hashkey 计算
 	local alias = result.alias
 	result.alias = nil
 	local switch_enable = result.switch_enable
@@ -401,9 +406,8 @@ local function processData(szType, content)
 	result.switch_enable = switch_enable
 	return result
 end
--- wget
 local function wget(url)
-	local stdout = luci.sys.exec('wget -q --user-agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36" --no-check-certificate -O- "' .. url .. '"')
+	local stdout = luci.sys.exec('uclient-fetch -q --user-agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36" --no-check-certificate -O- "' .. url .. '"')
 	return trim(stdout)
 end
 
@@ -441,16 +445,16 @@ local execute = function()
 					nodes = jsonParse(nodes)
 					local extra = {airport = nodes.airport, port = nodes.port, encryption = nodes.encryption, password = nodes.password}
 					local servers = {}
-					-- SS里面包着 干脆直接这样
 					for _, server in ipairs(nodes.servers) do
 						tinsert(servers, setmetatable(server, {__index = extra}))
 					end
 					nodes = servers
 				elseif jsonParse(raw) then
-					szType = 'sip008'
 					nodes = jsonParse(raw)
+					if nodes[1].server and nodes[1].method then
+						szType = 'sip008'
+					end
 				else
-					-- ssd 外的格式
 					nodes = split(base64Decode(raw):gsub(" ", "_"), "\n")
 				end
 				for _, v in ipairs(nodes) do
@@ -475,13 +479,10 @@ local execute = function()
 						else
 							log('跳过未知类型: ' .. szType)
 						end
-						-- log(result)
 						if result then
-							-- 中文做地址的 也没有人拿中文域名搞，就算中文域也有Puny Code SB 机场
-							if not result.server or not result.server_port or result.alias == "NULL" or check_filer(result) or result.server:match("[^0-9a-zA-Z%-%.%s]") or cache[groupHash][result.hashkey]then
+							if not result.server or not result.server_port or result.alias == "NULL" or check_filer(result) or result.server:match("[^0-9a-zA-Z%-%.%s]") or cache[groupHash][result.hashkey] then
 								log('丢弃无效节点: ' .. result.type .. ' 节点, ' .. result.alias)
 							else
-								-- log('成功解析: ' .. result.type ..' 节点, ' .. result.alias)
 								result.grouphashkey = groupHash
 								tinsert(nodeResult[index], result)
 								cache[groupHash][result.hashkey] = nodeResult[index][#nodeResult[index]]
