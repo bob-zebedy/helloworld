@@ -5,14 +5,13 @@ require "nixio"
 require "luci.util"
 require "luci.sys"
 require "luci.jsonc"
--- these global functions are accessed all the time by the event handler
--- so caching them is worth the effort
+
 local tinsert = table.insert
 local ssub, slen, schar, sbyte, sformat, sgsub = string.sub, string.len, string.char, string.byte, string.format, string.gsub
 local jsonParse, jsonStringify = luci.jsonc.parse, luci.jsonc.stringify
 local b64decode = nixio.bin.b64decode
 local cache = {}
-local nodeResult = setmetatable({}, {__index = cache}) -- update result
+local nodeResult = setmetatable({}, {__index = cache})
 local name = 'shadowsocksr'
 local uciType = 'servers'
 local ucic = luci.model.uci.cursor()
@@ -23,7 +22,7 @@ local filter_words = ucic:get_first(name, 'server_subscribe', 'filter_words', '�
 local v2_ss = luci.sys.exec('type -t -p ss-redir sslocal') ~= "" and "ss" or "v2ray"
 local v2_tj = luci.sys.exec('type -t -p trojan') ~= "" and "trojan" or "v2ray"
 local log = function(...)
-	print(os.date("%Y-%m-%d %H:%M:%S ") .. table.concat({...}, " "))
+	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "]" .. table.concat({...}, " "))
 end
 local encrypt_methods_ss = {
 	-- aead
@@ -426,7 +425,7 @@ local execute = function()
 	-- exec
 	do
 		if proxy == '0' then -- 不使用代理更新的话先暂停
-			log('服务正在暂停')
+			log('不使用代理更新')
 			luci.sys.init.stop(name)
 		end
 		for k, url in ipairs(subscribe_url) do
@@ -481,7 +480,7 @@ local execute = function()
 						end
 						if result then
 							if not result.server or not result.server_port or result.alias == "NULL" or check_filer(result) or result.server:match("[^0-9a-zA-Z%-%.%s]") or cache[groupHash][result.hashkey] then
-								log('丢弃无效节点: ' .. result.type .. ' 节点, ' .. result.alias)
+								log('丢弃无效 ' .. result.type .. ' 节点: ' .. result.alias)
 							else
 								result.grouphashkey = groupHash
 								tinsert(nodeResult[index], result)
@@ -499,10 +498,10 @@ local execute = function()
 	-- diff
 	do
 		if next(nodeResult) == nil then
-			log("更新失败，没有可用的节点信息")
+			log("无可用节点信息")
 			if proxy == '0' then
 				luci.sys.init.start(name)
-				log('订阅失败, 恢复服务')
+				log('更新订阅失败')
 			end
 			return
 		end
@@ -552,14 +551,14 @@ local execute = function()
 					ucic:commit(name)
 					ucic:set(name, ucic:get_first(name, 'global'), 'global_server', ucic:get_first(name, uciType))
 					ucic:commit(name)
-					log('当前主服务器节点已被删除，正在自动更换为第一个节点。')
+					log('主服务器已被删除, 自动更换当前第一个节点')
 					luci.sys.call("/etc/init.d/" .. name .. " start > /dev/null 2>&1 &")
 				else
-					log('维持当前主服务器节点。')
+					log('维持当前主服务器节点')
 					luci.sys.call("/etc/init.d/" .. name .. " restart > /dev/null 2>&1 &")
 				end
 			else
-				log('没有服务器节点了，停止服务')
+				log('无可用服务器节点, 停止服务')
 				luci.sys.call("/etc/init.d/" .. name .. " stop > /dev/null 2>&1 &")
 			end
 		end
@@ -575,10 +574,10 @@ if subscribe_url and #subscribe_url > 0 then
 		log('发生错误, 正在恢复服务')
 		local firstServer = ucic:get_first(name, uciType)
 		if firstServer then
-			luci.sys.call("/etc/init.d/" .. name .. " restart > /dev/null 2>&1 &") -- 不加&的话日志会出现的更早
+			luci.sys.call("/etc/init.d/" .. name .. " restart > /dev/null 2>&1 &")
 			log('重启服务成功')
 		else
-			luci.sys.call("/etc/init.d/" .. name .. " stop > /dev/null 2>&1 &") -- 不加&的话日志会出现的更早
+			luci.sys.call("/etc/init.d/" .. name .. " stop > /dev/null 2>&1 &")
 			log('停止服务成功')
 		end
 	end)

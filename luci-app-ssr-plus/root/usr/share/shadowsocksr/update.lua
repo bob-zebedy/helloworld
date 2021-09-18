@@ -88,11 +88,7 @@ local function generate_adblock(type)
 end
 
 local log = function(...)
-	if args then
-		print("{ret=" .. table.concat({...}, ",retcount=") .. "}")
-	else
-		print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "]" .. table.concat({...}, " "))
-	end
+	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "]" .. table.concat({...}, " "))
 end
 
 local function update(url, file, type, file2)
@@ -134,7 +130,7 @@ local function update(url, file, type, file2)
 			if args then
 				log(1)
 			else
-				log("你已经是最新数据，无需更新！")
+				log("你已经是最新数据, 无需更新! ")
 			end
 		else
 			icount = luci.sys.exec("cat /tmp/ssr-update." .. type .. " | wc -l")
@@ -150,14 +146,14 @@ local function update(url, file, type, file2)
 			if args then
 				log(0, tonumber(icount) / Num)
 			else
-				log("更新成功！ 新的总纪录数：" .. tostring(tonumber(icount) / Num))
+				log("更新成功! 新的总纪录数: " .. tostring(tonumber(icount) / Num))
 			end
 		end
 	else
 		if args then
 			log(-1)
 		else
-			log("更新失败！")
+			log("更新失败!")
 		end
 	end
 	os.remove("/tmp/ssr-update." .. type)
@@ -181,12 +177,12 @@ if args then
 		os.exit(0)
 	end
 else
-	log("正在更新【GFW列表】数据库")
+	log("正在更新 [GFW列表] 数据库")
 	update(uci:get_first("shadowsocksr", "global", "gfwlist_url"), "/etc/ssrplus/gfw_list.conf", "gfw_data", TMP_DNSMASQ_PATH .. "/gfw_list.conf")
-	log("正在更新【国内IP段】数据库")
+	log("正在更新 [国内IP段] 数据库")
 	update(uci:get_first("shadowsocksr", "global", "chnroute_url"), "/etc/ssrplus/china_ssr.txt", "ip_data", TMP_PATH .. "/china_ssr.txt")
 	if uci:get_first("shadowsocksr", "global", "adblock", "0") == "1" then
-		log("正在更新【广告屏蔽】数据库")
+		log("正在更新 [广告屏蔽] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "adblock_url"), "/etc/ssrplus/ad.conf", "ad_data", TMP_DNSMASQ_PATH .. "/ad.conf")
 	end
 end
