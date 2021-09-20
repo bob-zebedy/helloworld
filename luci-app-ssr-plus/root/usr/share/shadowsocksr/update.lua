@@ -88,7 +88,7 @@ local function generate_adblock(type)
 end
 
 local log = function(...)
-	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "]" .. table.concat({...}, " "))
+	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "] " .. table.concat({...}, " "))
 end
 
 local function update(url, file, type, file2)
@@ -130,7 +130,7 @@ local function update(url, file, type, file2)
 			if args then
 				log(1)
 			else
-				log("你已经是最新数据, 无需更新! ")
+				log("已经是最新数据, 无需更新! ")
 			end
 		else
 			icount = luci.sys.exec("cat /tmp/ssr-update." .. type .. " | wc -l")
@@ -146,7 +146,7 @@ local function update(url, file, type, file2)
 			if args then
 				log(0, tonumber(icount) / Num)
 			else
-				log("更新成功! 新的总纪录数: " .. tostring(tonumber(icount) / Num))
+				log("更新成功! 新的纪录总数: " .. tostring(tonumber(icount) / Num))
 			end
 		end
 	else
