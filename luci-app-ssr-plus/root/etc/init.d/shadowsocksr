@@ -793,11 +793,11 @@ start() {
 		add_cron
 		start_switch
 	else
-		echolog "正在加载 [禁止连接的域名]..."
+		echolog "正在加载 [禁止连接的域名]"
 		cat /etc/ssrplus/deny.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/address=\/&\//" >$TMP_DNSMASQ_PATH/denylist.conf
 		echolog "已加载 [禁止连接的域名]"
 		if [ "$(uci_get_by_type global adblock 0)" == "1" ]; then
-			echolog "主节点未启动, 正在加载 [广告过滤]..."
+			echolog "主节点未启动, 正在加载 [广告过滤]"
 			cp -f /etc/ssrplus/ad.conf $TMP_DNSMASQ_PATH/
 			if [ -f "$TMP_DNSMASQ_PATH/ad.conf" ]; then
 				for line in $(cat /etc/ssrplus/black.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
