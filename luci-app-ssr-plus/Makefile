@@ -23,7 +23,7 @@ LUCI_TITLE:=Shadowsocks LuCI interface
 LUCI_PKGARCH:=all
 LUCI_DEPENDS:=+coreutils +coreutils-base64 +dns2socks +dnsmasq-full +ipset +ip-full \
 	+iptables-mod-tproxy +lua +libuci-lua +microsocks +pdnsd-alt +tcping +curl \
-	+resolveip +shadowsocksr-libev-ssr-check +uclient-fetch \
+	+resolveip +shadowsocksr-libev-ssr-check +wget-ssl \
 	+libustream-openssl \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Kcptun:kcptun-client \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_NaiveProxy:naiveproxy \
