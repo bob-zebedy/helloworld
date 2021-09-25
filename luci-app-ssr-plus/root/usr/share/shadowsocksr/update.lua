@@ -93,7 +93,7 @@ end
 
 local function update(url, file, type, file2)
 	local Num = 1
-	local refresh_cmd = "uclient-fetch --no-check-certificate -q -O /tmp/ssr-update." .. type .. " " .. url
+	local refresh_cmd = "wget --no-check-certificate -q -O /tmp/ssr-update." .. type .. " " .. url
 	local sret = luci.sys.call(refresh_cmd)
 	if sret == 0 then
 		if type == "gfw_data" then
@@ -161,25 +161,29 @@ end
 
 if args then
 	if args == "gfw_data" then
+		log("正在更新 [GFW 列表] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "gfwlist_url"), "/etc/ssrplus/gfw_list.conf", args, TMP_DNSMASQ_PATH .. "/gfw_list.conf")
 		os.exit(0)
 	end
 	if args == "ip_data" then
+		log("正在更新 [国内 IP 段] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "chnroute_url"), "/etc/ssrplus/china_ssr.txt", args, TMP_PATH .. "/china_ssr.txt")
 		os.exit(0)
 	end
 	if args == "ad_data" then
+		log("正在更新 [广告屏蔽] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "adblock_url"), "/etc/ssrplus/ad.conf", args, TMP_DNSMASQ_PATH .. "/ad.conf")
 		os.exit(0)
 	end
 	if args == "nfip_data" then
+		log("正在更新 [Netflix IP 数据库] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "nfip_url"), "/etc/ssrplus/netflixip.list", args)
 		os.exit(0)
 	end
 else
-	log("正在更新 [GFW列表] 数据库")
+	log("正在更新 [GFW 列表] 数据库")
 	update(uci:get_first("shadowsocksr", "global", "gfwlist_url"), "/etc/ssrplus/gfw_list.conf", "gfw_data", TMP_DNSMASQ_PATH .. "/gfw_list.conf")
-	log("正在更新 [国内IP段] 数据库")
+	log("正在更新 [国内 IP 段] 数据库")
 	update(uci:get_first("shadowsocksr", "global", "chnroute_url"), "/etc/ssrplus/china_ssr.txt", "ip_data", TMP_PATH .. "/china_ssr.txt")
 	if uci:get_first("shadowsocksr", "global", "adblock", "0") == "1" then
 		log("正在更新 [广告屏蔽] 数据库")
