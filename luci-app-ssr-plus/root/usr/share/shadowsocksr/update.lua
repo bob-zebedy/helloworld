@@ -88,7 +88,11 @@ local function generate_adblock(type)
 end
 
 local log = function(...)
-	print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "] " .. table.concat({...}, " "))
+	if args then
+		print("{ret=" .. table.concat({...}, ",retcount=") .. "}")
+	else
+		print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "] " .. table.concat({...}, " "))
+	end
 end
 
 local function update(url, file, type, file2)
@@ -161,22 +165,18 @@ end
 
 if args then
 	if args == "gfw_data" then
-		log("正在更新 [GFW 列表] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "gfwlist_url"), "/etc/ssrplus/gfw_list.conf", args, TMP_DNSMASQ_PATH .. "/gfw_list.conf")
 		os.exit(0)
 	end
 	if args == "ip_data" then
-		log("正在更新 [国内 IP 段] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "chnroute_url"), "/etc/ssrplus/china_ssr.txt", args, TMP_PATH .. "/china_ssr.txt")
 		os.exit(0)
 	end
 	if args == "ad_data" then
-		log("正在更新 [广告屏蔽] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "adblock_url"), "/etc/ssrplus/ad.conf", args, TMP_DNSMASQ_PATH .. "/ad.conf")
 		os.exit(0)
 	end
 	if args == "nfip_data" then
-		log("正在更新 [Netflix IP 数据库] 数据库")
 		update(uci:get_first("shadowsocksr", "global", "nfip_url"), "/etc/ssrplus/netflixip.list", args)
 		os.exit(0)
 	end
