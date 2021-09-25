@@ -35,7 +35,8 @@
 
 #include "common.h"
 
-typedef struct listen_ctx {
+typedef struct listen_ctx
+{
     ev_io io;
     int fd;
     int timeout;
@@ -52,14 +53,16 @@ typedef struct listen_ctx {
     void **list_obfs_global;
 } listen_ctx_t;
 
-typedef struct server_ctx {
+typedef struct server_ctx
+{
     ev_io io;
     ev_timer watcher;
     int connected;
     struct server *server;
 } server_ctx_t;
 
-typedef struct server {
+typedef struct server
+{
     int fd;
     int stage;
     buffer_t *buf;
@@ -89,18 +92,21 @@ typedef struct server {
     int protocol_compatible_state;
 } server_t;
 
-typedef struct query {
+typedef struct query
+{
     server_t *server;
     char hostname[257];
 } query_t;
 
-typedef struct remote_ctx {
+typedef struct remote_ctx
+{
     ev_io io;
     int connected;
     struct remote *remote;
 } remote_ctx_t;
 
-typedef struct remote {
+typedef struct remote
+{
     int fd;
     buffer_t *buf;
     ssize_t buf_capacity;

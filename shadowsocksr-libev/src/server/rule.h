@@ -39,7 +39,8 @@
 #include <pcre/pcre.h>
 #endif
 
-typedef struct rule {
+typedef struct rule
+{
     char *pattern;
 
     /* Runtime fields */
