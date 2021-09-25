@@ -5,29 +5,32 @@ static int auth_simple_pack_unit_size = 2000;
 typedef int (*hmac_with_key_func)(char *auth, char *msg, int msg_len, uint8_t *auth_key, int key_len);
 typedef int (*hash_func)(char *auth, char *msg, int msg_len);
 
-typedef struct auth_simple_global_data {
+typedef struct auth_simple_global_data
+{
     uint8_t local_client_id[8];
     uint32_t connection_id;
-}auth_simple_global_data;
+} auth_simple_global_data;
 
-typedef struct auth_simple_local_data {
+typedef struct auth_simple_local_data
+{
     int has_sent_header;
-    char * recv_buffer;
+    char *recv_buffer;
     int recv_buffer_size;
     uint32_t recv_id;
     uint32_t pack_id;
-    char * salt;
-    uint8_t * user_key;
+    char *salt;
+    uint8_t *user_key;
     char uid[4];
     int user_key_len;
     hmac_with_key_func hmac;
     hash_func hash;
     int hash_len;
-}auth_simple_local_data;
+} auth_simple_local_data;
 
-void auth_simple_local_data_init(auth_simple_local_data* local) {
+void auth_simple_local_data_init(auth_simple_local_data *local)
+{
     local->has_sent_header = 0;
-    local->recv_buffer = (char*)malloc(16384);
+    local->recv_buffer = (char *)malloc(16384);
     local->recv_buffer_size = 0;
     local->recv_id = 1;
     local->pack_id = 1;
@@ -40,50 +43,57 @@ void auth_simple_local_data_init(auth_simple_local_data* local) {
     local->salt = "";
 }
 
-void * auth_simple_init_data() {
-    auth_simple_global_data *global = (auth_simple_global_data*)malloc(sizeof(auth_simple_global_data));
+void *auth_simple_init_data()
+{
+    auth_simple_global_data *global = (auth_simple_global_data *)malloc(sizeof(auth_simple_global_data));
     rand_bytes(global->local_client_id, 8);
-    rand_bytes((uint8_t*)&global->connection_id, 4);
+    rand_bytes((uint8_t *)&global->connection_id, 4);
     global->connection_id &= 0xFFFFFF;
     return global;
 }
 
-obfs * auth_simple_new_obfs() {
-    obfs * self = new_obfs();
+obfs *auth_simple_new_obfs()
+{
+    obfs *self = new_obfs();
     self->l_data = malloc(sizeof(auth_simple_local_data));
-    auth_simple_local_data_init((auth_simple_local_data*)self->l_data);
+    auth_simple_local_data_init((auth_simple_local_data *)self->l_data);
     return self;
 }
 
-obfs * auth_aes128_md5_new_obfs() {
-    obfs * self = new_obfs();
+obfs *auth_aes128_md5_new_obfs()
+{
+    obfs *self = new_obfs();
     self->l_data = malloc(sizeof(auth_simple_local_data));
-    auth_simple_local_data_init((auth_simple_local_data*)self->l_data);
-    ((auth_simple_local_data*)self->l_data)->hmac = ss_md5_hmac_with_key;
-    ((auth_simple_local_data*)self->l_data)->hash = ss_md5_hash_func;
-    ((auth_simple_local_data*)self->l_data)->hash_len = 16;
-    ((auth_simple_local_data*)self->l_data)->salt = "auth_aes128_md5";
+    auth_simple_local_data_init((auth_simple_local_data *)self->l_data);
+    ((auth_simple_local_data *)self->l_data)->hmac = ss_md5_hmac_with_key;
+    ((auth_simple_local_data *)self->l_data)->hash = ss_md5_hash_func;
+    ((auth_simple_local_data *)self->l_data)->hash_len = 16;
+    ((auth_simple_local_data *)self->l_data)->salt = "auth_aes128_md5";
     return self;
 }
 
-obfs * auth_aes128_sha1_new_obfs() {
-    obfs * self = new_obfs();
+obfs *auth_aes128_sha1_new_obfs()
+{
+    obfs *self = new_obfs();
     self->l_data = malloc(sizeof(auth_simple_local_data));
-    auth_simple_local_data_init((auth_simple_local_data*)self->l_data);
-    ((auth_simple_local_data*)self->l_data)->hmac = ss_sha1_hmac_with_key;
-    ((auth_simple_local_data*)self->l_data)->hash = ss_sha1_hash_func;
-    ((auth_simple_local_data*)self->l_data)->hash_len = 20;
-    ((auth_simple_local_data*)self->l_data)->salt = "auth_aes128_sha1";
+    auth_simple_local_data_init((auth_simple_local_data *)self->l_data);
+    ((auth_simple_local_data *)self->l_data)->hmac = ss_sha1_hmac_with_key;
+    ((auth_simple_local_data *)self->l_data)->hash = ss_sha1_hash_func;
+    ((auth_simple_local_data *)self->l_data)->hash_len = 20;
+    ((auth_simple_local_data *)self->l_data)->salt = "auth_aes128_sha1";
     return self;
 }
 
-void auth_simple_dispose(obfs *self) {
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    if (local->recv_buffer != NULL) {
+void auth_simple_dispose(obfs *self)
+{
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    if (local->recv_buffer != NULL)
+    {
         free(local->recv_buffer);
         local->recv_buffer = NULL;
     }
-    if (local->user_key != NULL) {
+    if (local->user_key != NULL)
+    {
         free(local->user_key);
         local->user_key = NULL;
     }
@@ -92,7 +102,8 @@ void auth_simple_dispose(obfs *self) {
     dispose_obfs(self);
 }
 
-int auth_simple_pack_data(char *data, int datalength, char *outdata) {
+int auth_simple_pack_data(char *data, int datalength, char *outdata)
+{
     unsigned char rand_len = (xorshift128plus() & 0xF) + 1;
     int out_size = rand_len + datalength + 6;
     outdata[0] = out_size >> 8;
@@ -103,23 +114,26 @@ int auth_simple_pack_data(char *data, int datalength, char *outdata) {
     return out_size;
 }
 
-void memintcopy_lt(void *mem, uint32_t val) {
+void memintcopy_lt(void *mem, uint32_t val)
+{
     ((uint8_t *)mem)[0] = val;
     ((uint8_t *)mem)[1] = val >> 8;
     ((uint8_t *)mem)[2] = val >> 16;
     ((uint8_t *)mem)[3] = val >> 24;
 }
 
-int auth_simple_pack_auth_data(auth_simple_global_data *global, char *data, int datalength, char *outdata) {
+int auth_simple_pack_auth_data(auth_simple_global_data *global, char *data, int datalength, char *outdata)
+{
     unsigned char rand_len = (xorshift128plus() & 0xF) + 1;
     int out_size = rand_len + datalength + 6 + 12;
     outdata[0] = out_size >> 8;
     outdata[1] = out_size;
     outdata[2] = rand_len;
     ++global->connection_id;
-    if (global->connection_id > 0xFF000000) {
+    if (global->connection_id > 0xFF000000)
+    {
         rand_bytes(global->local_client_id, 8);
-        rand_bytes((uint8_t*)&global->connection_id, 4);
+        rand_bytes((uint8_t *)&global->connection_id, 4);
         global->connection_id &= 0xFFFFFF;
     }
     time_t t = time(NULL);
@@ -131,15 +145,17 @@ int auth_simple_pack_auth_data(auth_simple_global_data *global, char *data, int 
     return out_size;
 }
 
-int auth_simple_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_simple_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    char * out_buffer = (char*)malloc(datalength * 2 + 64);
-    char * buffer = out_buffer;
-    char * data = plaindata;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    char *out_buffer = (char *)malloc(datalength * 2 + 64);
+    char *buffer = out_buffer;
+    char *data = plaindata;
     int len = datalength;
     int pack_len;
-    if (len > 0 && local->has_sent_header == 0) {
+    if (len > 0 && local->has_sent_header == 0)
+    {
         int head_size = get_head_size(plaindata, datalength, 30);
         if (head_size > datalength)
             head_size = datalength;
@@ -149,19 +165,22 @@ int auth_simple_client_pre_encrypt(obfs *self, char **pplaindata, int datalength
         len -= head_size;
         local->has_sent_header = 1;
     }
-    while ( len > auth_simple_pack_unit_size ) {
+    while (len > auth_simple_pack_unit_size)
+    {
         pack_len = auth_simple_pack_data(data, auth_simple_pack_unit_size, buffer);
         buffer += pack_len;
         data += auth_simple_pack_unit_size;
         len -= auth_simple_pack_unit_size;
     }
-    if (len > 0) {
+    if (len > 0)
+    {
         pack_len = auth_simple_pack_data(data, len, buffer);
         buffer += pack_len;
     }
     len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -169,20 +188,23 @@ int auth_simple_client_pre_encrypt(obfs *self, char **pplaindata, int datalength
     return len;
 }
 
-int auth_simple_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_simple_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    uint8_t * recv_buffer = (uint8_t *)local->recv_buffer;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    uint8_t *recv_buffer = (uint8_t *)local->recv_buffer;
     if (local->recv_buffer_size + datalength > 16384)
         return -1;
     memmove(recv_buffer + local->recv_buffer_size, plaindata, datalength);
     local->recv_buffer_size += datalength;
 
-    char * out_buffer = (char*)malloc(local->recv_buffer_size);
-    char * buffer = out_buffer;
-    while (local->recv_buffer_size > 2) {
+    char *out_buffer = (char *)malloc(local->recv_buffer_size);
+    char *buffer = out_buffer;
+    while (local->recv_buffer_size > 2)
+    {
         int length = ((int)recv_buffer[0] << 8) | recv_buffer[1];
-        if (length >= 8192 || length < 7) {
+        if (length >= 8192 || length < 7)
+        {
             free(out_buffer);
             local->recv_buffer_size = 0;
             return -1;
@@ -190,8 +212,9 @@ int auth_simple_client_post_decrypt(obfs *self, char **pplaindata, int datalengt
         if (length > local->recv_buffer_size)
             break;
 
-        int crc = crc32((unsigned char*)recv_buffer, length);
-        if (crc != -1) {
+        int crc = crc32((unsigned char *)recv_buffer, length);
+        if (crc != -1)
+        {
             free(out_buffer);
             local->recv_buffer_size = 0;
             return -1;
@@ -202,8 +225,9 @@ int auth_simple_client_post_decrypt(obfs *self, char **pplaindata, int datalengt
         memmove(recv_buffer, recv_buffer + length, local->recv_buffer_size -= length);
     }
     int len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -211,8 +235,8 @@ int auth_simple_client_post_decrypt(obfs *self, char **pplaindata, int datalengt
     return len;
 }
 
-
-int auth_sha1_pack_data(char *data, int datalength, char *outdata) {
+int auth_sha1_pack_data(char *data, int datalength, char *outdata)
+{
     unsigned char rand_len = (xorshift128plus() & 0xF) + 1;
     int out_size = rand_len + datalength + 6;
     outdata[0] = out_size >> 8;
@@ -223,7 +247,8 @@ int auth_sha1_pack_data(char *data, int datalength, char *outdata) {
     return out_size;
 }
 
-int auth_sha1_pack_auth_data(auth_simple_global_data *global, server_info *server, char *data, int datalength, char *outdata) {
+int auth_sha1_pack_auth_data(auth_simple_global_data *global, server_info *server, char *data, int datalength, char *outdata)
+{
     unsigned char rand_len = (xorshift128plus() & 0x7F) + 1;
     int data_offset = rand_len + 4 + 2;
     int out_size = data_offset + datalength + 12 + OBFS_HMAC_SHA1_LEN;
@@ -232,9 +257,10 @@ int auth_sha1_pack_auth_data(auth_simple_global_data *global, server_info *serve
     outdata[5] = out_size;
     outdata[6] = rand_len;
     ++global->connection_id;
-    if (global->connection_id > 0xFF000000) {
+    if (global->connection_id > 0xFF000000)
+    {
         rand_bytes(global->local_client_id, 8);
-        rand_bytes((uint8_t*)&global->connection_id, 4);
+        rand_bytes((uint8_t *)&global->connection_id, 4);
         global->connection_id &= 0xFFFFFF;
     }
     time_t t = time(NULL);
@@ -248,15 +274,17 @@ int auth_sha1_pack_auth_data(auth_simple_global_data *global, server_info *serve
     return out_size;
 }
 
-int auth_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    char * out_buffer = (char*)malloc(datalength * 2 + 256);
-    char * buffer = out_buffer;
-    char * data = plaindata;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    char *out_buffer = (char *)malloc(datalength * 2 + 256);
+    char *buffer = out_buffer;
+    char *data = plaindata;
     int len = datalength;
     int pack_len;
-    if (len > 0 && local->has_sent_header == 0) {
+    if (len > 0 && local->has_sent_header == 0)
+    {
         int head_size = get_head_size(plaindata, datalength, 30);
         if (head_size > datalength)
             head_size = datalength;
@@ -266,19 +294,22 @@ int auth_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, 
         len -= head_size;
         local->has_sent_header = 1;
     }
-    while ( len > auth_simple_pack_unit_size ) {
+    while (len > auth_simple_pack_unit_size)
+    {
         pack_len = auth_sha1_pack_data(data, auth_simple_pack_unit_size, buffer);
         buffer += pack_len;
         data += auth_simple_pack_unit_size;
         len -= auth_simple_pack_unit_size;
     }
-    if (len > 0) {
+    if (len > 0)
+    {
         pack_len = auth_sha1_pack_data(data, len, buffer);
         buffer += pack_len;
     }
     len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -286,20 +317,23 @@ int auth_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, 
     return len;
 }
 
-int auth_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    uint8_t * recv_buffer = (uint8_t *)local->recv_buffer;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    uint8_t *recv_buffer = (uint8_t *)local->recv_buffer;
     if (local->recv_buffer_size + datalength > 16384)
         return -1;
     memmove(recv_buffer + local->recv_buffer_size, plaindata, datalength);
     local->recv_buffer_size += datalength;
 
-    char * out_buffer = (char*)malloc(local->recv_buffer_size);
-    char * buffer = out_buffer;
-    while (local->recv_buffer_size > 2) {
+    char *out_buffer = (char *)malloc(local->recv_buffer_size);
+    char *buffer = out_buffer;
+    while (local->recv_buffer_size > 2)
+    {
         int length = ((int)recv_buffer[0] << 8) | recv_buffer[1];
-        if (length >= 8192 || length < 7) {
+        if (length >= 8192 || length < 7)
+        {
             free(out_buffer);
             local->recv_buffer_size = 0;
             return -1;
@@ -307,7 +341,8 @@ int auth_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength,
         if (length > local->recv_buffer_size)
             break;
 
-        if (checkadler32((unsigned char*)recv_buffer, length) == 0) {
+        if (checkadler32((unsigned char *)recv_buffer, length) == 0)
+        {
             free(out_buffer);
             local->recv_buffer_size = 0;
             return -1;
@@ -319,8 +354,9 @@ int auth_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength,
         memmove(recv_buffer, recv_buffer + length, local->recv_buffer_size -= length);
     }
     int len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -328,8 +364,11 @@ int auth_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength,
     return len;
 }
 
-int auth_sha1_v2_pack_data(char *data, int datalength, char *outdata) {
-    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F) : (xorshift128plus() & 0x3FF)) + 1;
+int auth_sha1_v2_pack_data(char *data, int datalength, char *outdata)
+{
+    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F)
+                                                                      : (xorshift128plus() & 0x3FF)) +
+                            1;
     int out_size = rand_len + datalength + 6;
     outdata[0] = out_size >> 8;
     outdata[1] = out_size;
@@ -348,13 +387,16 @@ int auth_sha1_v2_pack_data(char *data, int datalength, char *outdata) {
     return out_size;
 }
 
-int auth_sha1_v2_pack_auth_data(auth_simple_global_data *global, server_info *server, char *data, int datalength, char *outdata) {
-    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F) : (xorshift128plus() & 0x3FF)) + 1;
+int auth_sha1_v2_pack_auth_data(auth_simple_global_data *global, server_info *server, char *data, int datalength, char *outdata)
+{
+    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F)
+                                                                      : (xorshift128plus() & 0x3FF)) +
+                            1;
     int data_offset = rand_len + 4 + 2;
     int out_size = data_offset + datalength + 12 + OBFS_HMAC_SHA1_LEN;
-    const char* salt = "auth_sha1_v2";
+    const char *salt = "auth_sha1_v2";
     int salt_len = strlen(salt);
-    unsigned char *crc_salt = (unsigned char*)malloc(salt_len + server->key_len);
+    unsigned char *crc_salt = (unsigned char *)malloc(salt_len + server->key_len);
     memcpy(crc_salt, salt, salt_len);
     memcpy(crc_salt + salt_len, server->key, server->key_len);
     fillcrc32to(crc_salt, salt_len + server->key_len, (unsigned char *)outdata);
@@ -372,9 +414,10 @@ int auth_sha1_v2_pack_auth_data(auth_simple_global_data *global, server_info *se
         outdata[8] = rand_len;
     }
     ++global->connection_id;
-    if (global->connection_id > 0xFF000000) {
+    if (global->connection_id > 0xFF000000)
+    {
         rand_bytes(global->local_client_id, 8);
-        rand_bytes((uint8_t*)&global->connection_id, 4);
+        rand_bytes((uint8_t *)&global->connection_id, 4);
         global->connection_id &= 0xFFFFFF;
     }
     memmove(outdata + data_offset, global->local_client_id, 8);
@@ -386,15 +429,17 @@ int auth_sha1_v2_pack_auth_data(auth_simple_global_data *global, server_info *se
     return out_size;
 }
 
-int auth_sha1_v2_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_sha1_v2_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    char * out_buffer = (char*)malloc(datalength * 2 + 4096);
-    char * buffer = out_buffer;
-    char * data = plaindata;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    char *out_buffer = (char *)malloc(datalength * 2 + 4096);
+    char *buffer = out_buffer;
+    char *data = plaindata;
     int len = datalength;
     int pack_len;
-    if (len > 0 && local->has_sent_header == 0) {
+    if (len > 0 && local->has_sent_header == 0)
+    {
         int head_size = get_head_size(plaindata, datalength, 30);
         if (head_size > datalength)
             head_size = datalength;
@@ -404,19 +449,22 @@ int auth_sha1_v2_client_pre_encrypt(obfs *self, char **pplaindata, int datalengt
         len -= head_size;
         local->has_sent_header = 1;
     }
-    while ( len > auth_simple_pack_unit_size ) {
+    while (len > auth_simple_pack_unit_size)
+    {
         pack_len = auth_sha1_v2_pack_data(data, auth_simple_pack_unit_size, buffer);
         buffer += pack_len;
         data += auth_simple_pack_unit_size;
         len -= auth_simple_pack_unit_size;
     }
-    if (len > 0) {
+    if (len > 0)
+    {
         pack_len = auth_sha1_v2_pack_data(data, len, buffer);
         buffer += pack_len;
     }
     len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -424,21 +472,24 @@ int auth_sha1_v2_client_pre_encrypt(obfs *self, char **pplaindata, int datalengt
     return len;
 }
 
-int auth_sha1_v2_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_sha1_v2_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    uint8_t * recv_buffer = (uint8_t *)local->recv_buffer;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    uint8_t *recv_buffer = (uint8_t *)local->recv_buffer;
     if (local->recv_buffer_size + datalength > 16384)
         return -1;
     memmove(recv_buffer + local->recv_buffer_size, plaindata, datalength);
     local->recv_buffer_size += datalength;
 
-    char * out_buffer = (char*)malloc(local->recv_buffer_size);
-    char * buffer = out_buffer;
+    char *out_buffer = (char *)malloc(local->recv_buffer_size);
+    char *buffer = out_buffer;
     char error = 0;
-    while (local->recv_buffer_size > 2) {
+    while (local->recv_buffer_size > 2)
+    {
         int length = ((int)recv_buffer[0] << 8) | recv_buffer[1];
-        if (length >= 8192 || length < 7) {
+        if (length >= 8192 || length < 7)
+        {
             local->recv_buffer_size = 0;
             error = 1;
             break;
@@ -446,7 +497,8 @@ int auth_sha1_v2_client_post_decrypt(obfs *self, char **pplaindata, int dataleng
         if (length > local->recv_buffer_size)
             break;
 
-        if (checkadler32((unsigned char*)recv_buffer, length) == 0) {
+        if (checkadler32((unsigned char *)recv_buffer, length) == 0)
+        {
             local->recv_buffer_size = 0;
             error = 1;
             break;
@@ -466,26 +518,33 @@ int auth_sha1_v2_client_post_decrypt(obfs *self, char **pplaindata, int dataleng
         memmove(recv_buffer, recv_buffer + length, local->recv_buffer_size -= length);
     }
     int len;
-    if (error == 0) {
+    if (error == 0)
+    {
         len = buffer - out_buffer;
-        if (*capacity < len) {
-            *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+        if (*capacity < len)
+        {
+            *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
             plaindata = *pplaindata;
         }
         memmove(plaindata, out_buffer, len);
-    } else {
+    }
+    else
+    {
         len = -1;
     }
     free(out_buffer);
     return len;
 }
 
-int auth_sha1_v4_pack_data(char *data, int datalength, char *outdata) {
-    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F) : (xorshift128plus() & 0x3FF)) + 1;
+int auth_sha1_v4_pack_data(char *data, int datalength, char *outdata)
+{
+    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F)
+                                                                      : (xorshift128plus() & 0x3FF)) +
+                            1;
     int out_size = rand_len + datalength + 8;
     outdata[0] = out_size >> 8;
     outdata[1] = out_size;
-    uint32_t crc_val = crc32((unsigned char*)outdata, 2);
+    uint32_t crc_val = crc32((unsigned char *)outdata, 2);
     outdata[2] = crc_val;
     outdata[3] = crc_val >> 8;
     if (rand_len < 128)
@@ -503,13 +562,16 @@ int auth_sha1_v4_pack_data(char *data, int datalength, char *outdata) {
     return out_size;
 }
 
-int auth_sha1_v4_pack_auth_data(auth_simple_global_data *global, server_info *server, char *data, int datalength, char *outdata) {
-    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F) : (xorshift128plus() & 0x3FF)) + 1;
+int auth_sha1_v4_pack_auth_data(auth_simple_global_data *global, server_info *server, char *data, int datalength, char *outdata)
+{
+    unsigned int rand_len = (datalength > 1300 ? 0 : datalength > 400 ? (xorshift128plus() & 0x7F)
+                                                                      : (xorshift128plus() & 0x3FF)) +
+                            1;
     int data_offset = rand_len + 4 + 2;
     int out_size = data_offset + datalength + 12 + OBFS_HMAC_SHA1_LEN;
-    const char* salt = "auth_sha1_v4";
+    const char *salt = "auth_sha1_v4";
     int salt_len = strlen(salt);
-    unsigned char *crc_salt = (unsigned char*)malloc(salt_len + server->key_len + 2);
+    unsigned char *crc_salt = (unsigned char *)malloc(salt_len + server->key_len + 2);
     crc_salt[0] = outdata[0] = out_size >> 8;
     crc_salt[1] = outdata[1] = out_size;
 
@@ -528,9 +590,10 @@ int auth_sha1_v4_pack_auth_data(auth_simple_global_data *global, server_info *se
         outdata[8] = rand_len;
     }
     ++global->connection_id;
-    if (global->connection_id > 0xFF000000) {
+    if (global->connection_id > 0xFF000000)
+    {
         rand_bytes(global->local_client_id, 8);
-        rand_bytes((uint8_t*)&global->connection_id, 4);
+        rand_bytes((uint8_t *)&global->connection_id, 4);
         global->connection_id &= 0xFFFFFF;
     }
     time_t t = time(NULL);
@@ -544,15 +607,17 @@ int auth_sha1_v4_pack_auth_data(auth_simple_global_data *global, server_info *se
     return out_size;
 }
 
-int auth_sha1_v4_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_sha1_v4_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    char * out_buffer = (char*)malloc(datalength * 2 + 4096);
-    char * buffer = out_buffer;
-    char * data = plaindata;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    char *out_buffer = (char *)malloc(datalength * 2 + 4096);
+    char *buffer = out_buffer;
+    char *data = plaindata;
     int len = datalength;
     int pack_len;
-    if (len > 0 && local->has_sent_header == 0) {
+    if (len > 0 && local->has_sent_header == 0)
+    {
         int head_size = get_head_size(plaindata, datalength, 30);
         if (head_size > datalength)
             head_size = datalength;
@@ -562,19 +627,22 @@ int auth_sha1_v4_client_pre_encrypt(obfs *self, char **pplaindata, int datalengt
         len -= head_size;
         local->has_sent_header = 1;
     }
-    while ( len > auth_simple_pack_unit_size ) {
+    while (len > auth_simple_pack_unit_size)
+    {
         pack_len = auth_sha1_v4_pack_data(data, auth_simple_pack_unit_size, buffer);
         buffer += pack_len;
         data += auth_simple_pack_unit_size;
         len -= auth_simple_pack_unit_size;
     }
-    if (len > 0) {
+    if (len > 0)
+    {
         pack_len = auth_sha1_v4_pack_data(data, len, buffer);
         buffer += pack_len;
     }
     len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -582,27 +650,31 @@ int auth_sha1_v4_client_pre_encrypt(obfs *self, char **pplaindata, int datalengt
     return len;
 }
 
-int auth_sha1_v4_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_sha1_v4_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    uint8_t * recv_buffer = (uint8_t *)local->recv_buffer;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    uint8_t *recv_buffer = (uint8_t *)local->recv_buffer;
     if (local->recv_buffer_size + datalength > 16384)
         return -1;
     memmove(recv_buffer + local->recv_buffer_size, plaindata, datalength);
     local->recv_buffer_size += datalength;
 
-    char * out_buffer = (char*)malloc(local->recv_buffer_size);
-    char * buffer = out_buffer;
+    char *out_buffer = (char *)malloc(local->recv_buffer_size);
+    char *buffer = out_buffer;
     char error = 0;
-    while (local->recv_buffer_size > 4) {
-        uint32_t crc_val = crc32((unsigned char*)recv_buffer, 2);
-        if ((((uint32_t)recv_buffer[3] << 8) | recv_buffer[2]) != (crc_val & 0xffff)) {
+    while (local->recv_buffer_size > 4)
+    {
+        uint32_t crc_val = crc32((unsigned char *)recv_buffer, 2);
+        if ((((uint32_t)recv_buffer[3] << 8) | recv_buffer[2]) != (crc_val & 0xffff))
+        {
             local->recv_buffer_size = 0;
             error = 1;
             break;
         }
         int length = ((int)recv_buffer[0] << 8) | recv_buffer[1];
-        if (length >= 8192 || length < 7) {
+        if (length >= 8192 || length < 7)
+        {
             local->recv_buffer_size = 0;
             error = 1;
             break;
@@ -610,7 +682,8 @@ int auth_sha1_v4_client_post_decrypt(obfs *self, char **pplaindata, int dataleng
         if (length > local->recv_buffer_size)
             break;
 
-        if (checkadler32((unsigned char*)recv_buffer, length) == 0) {
+        if (checkadler32((unsigned char *)recv_buffer, length) == 0)
+        {
             local->recv_buffer_size = 0;
             error = 1;
             break;
@@ -630,29 +703,36 @@ int auth_sha1_v4_client_post_decrypt(obfs *self, char **pplaindata, int dataleng
         memmove(recv_buffer, recv_buffer + length, local->recv_buffer_size -= length);
     }
     int len;
-    if (error == 0) {
+    if (error == 0)
+    {
         len = buffer - out_buffer;
-        if (*capacity < len) {
-            *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+        if (*capacity < len)
+        {
+            *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
             plaindata = *pplaindata;
         }
         memmove(plaindata, out_buffer, len);
-    } else {
+    }
+    else
+    {
         len = -1;
     }
     free(out_buffer);
     return len;
 }
 
-
-int auth_aes128_sha1_pack_data(char *data, int datalength, char *outdata, auth_simple_local_data *local, server_info *server) {
-    unsigned int rand_len = (datalength > 1200 ? 0 : local->pack_id > 4 ? (xorshift128plus() & 0x20) : datalength > 900 ? (xorshift128plus() & 0x80) : (xorshift128plus() & 0x200)) + 1;
+int auth_aes128_sha1_pack_data(char *data, int datalength, char *outdata, auth_simple_local_data *local, server_info *server)
+{
+    unsigned int rand_len = (datalength > 1200 ? 0 : local->pack_id > 4 ? (xorshift128plus() & 0x20)
+                                                 : datalength > 900     ? (xorshift128plus() & 0x80)
+                                                                        : (xorshift128plus() & 0x200)) +
+                            1;
     int out_size = rand_len + datalength + 8;
     memcpy(outdata + rand_len + 4, data, datalength);
     outdata[0] = out_size;
     outdata[1] = out_size >> 8;
     uint8_t key_len = local->user_key_len + 4;
-    uint8_t *key = (uint8_t*)malloc(key_len);
+    uint8_t *key = (uint8_t *)malloc(key_len);
     memcpy(key, local->user_key, local->user_key_len);
     memintcopy_lt(key + key_len - 4, local->pack_id);
 
@@ -690,7 +770,8 @@ int auth_aes128_sha1_pack_data(char *data, int datalength, char *outdata, auth_s
     return out_size;
 }
 
-int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info *server, auth_simple_local_data *local, char *data, int datalength, char *outdata) {
+int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info *server, auth_simple_local_data *local, char *data, int datalength, char *outdata)
+{
     unsigned int rand_len = (datalength > 400 ? (xorshift128plus() & 0x200) : (xorshift128plus() & 0x400));
     int data_offset = rand_len + 16 + 4 + 4 + 7;
     int out_size = data_offset + datalength + 4;
@@ -698,7 +779,7 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
     char encrypt[24];
     char encrypt_data[16];
 
-    uint8_t *key = (uint8_t*)malloc(server->iv_len + server->key_len);
+    uint8_t *key = (uint8_t *)malloc(server->iv_len + server->key_len);
     uint8_t key_len = server->iv_len + server->key_len;
     memcpy(key, server->iv, server->iv_len);
     memcpy(key + server->iv_len, server->key, server->key_len);
@@ -710,9 +791,10 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
     }
 
     ++global->connection_id;
-    if (global->connection_id > 0xFF000000) {
+    if (global->connection_id > 0xFF000000)
+    {
         rand_bytes(global->local_client_id, 8);
-        rand_bytes((uint8_t*)&global->connection_id, 4);
+        rand_bytes((uint8_t *)&global->connection_id, 4);
         global->connection_id &= 0xFFFFFF;
     }
     time_t t = time(NULL);
@@ -726,11 +808,14 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
 
     {
 
-        if (local->user_key == NULL) {
-            if(server->param != NULL && server->param[0] != 0) {
+        if (local->user_key == NULL)
+        {
+            if (server->param != NULL && server->param[0] != 0)
+            {
                 char *param = server->param;
                 char *delim = strchr(param, ':');
-                if(delim != NULL) {
+                if (delim != NULL)
+                {
                     char uid_str[16] = {};
                     strncpy(uid_str, param, delim - param);
                     char key_str[128];
@@ -742,15 +827,16 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
                     local->hash(hash, key_str, strlen(key_str));
 
                     local->user_key_len = local->hash_len;
-                    local->user_key = (uint8_t*)malloc(local->user_key_len);
+                    local->user_key = (uint8_t *)malloc(local->user_key_len);
                     memcpy(local->user_key, hash, local->hash_len);
                 }
             }
-            if (local->user_key == NULL) {
+            if (local->user_key == NULL)
+            {
                 rand_bytes((uint8_t *)local->uid, 4);
 
                 local->user_key_len = server->key_len;
-                local->user_key = (uint8_t*)malloc(local->user_key_len);
+                local->user_key = (uint8_t *)malloc(local->user_key_len);
                 memcpy(local->user_key, server->key, local->user_key_len);
             }
         }
@@ -766,7 +852,7 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
 
         char enc_key[16];
         int enc_key_len = base64_len + strlen(local->salt);
-        bytes_to_key_with_size(encrypt_key_base64, enc_key_len, (uint8_t*)enc_key, 16);
+        bytes_to_key_with_size(encrypt_key_base64, enc_key_len, (uint8_t *)enc_key, 16);
         ss_aes_128_cbc(encrypt, encrypt_data, enc_key);
         memcpy(encrypt + 4, encrypt_data, 16);
         memcpy(encrypt, local->uid, 4);
@@ -800,15 +886,17 @@ int auth_aes128_sha1_pack_auth_data(auth_simple_global_data *global, server_info
     return out_size;
 }
 
-int auth_aes128_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_aes128_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    char * out_buffer = (char*)malloc(datalength * 2 + 4096);
-    char * buffer = out_buffer;
-    char * data = plaindata;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    char *out_buffer = (char *)malloc(datalength * 2 + 4096);
+    char *buffer = out_buffer;
+    char *data = plaindata;
     int len = datalength;
     int pack_len;
-    if (len > 0 && local->has_sent_header == 0) {
+    if (len > 0 && local->has_sent_header == 0)
+    {
         int head_size = 1200;
         if (head_size > datalength)
             head_size = datalength;
@@ -818,19 +906,22 @@ int auth_aes128_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datal
         len -= head_size;
         local->has_sent_header = 1;
     }
-    while ( len > auth_simple_pack_unit_size ) {
+    while (len > auth_simple_pack_unit_size)
+    {
         pack_len = auth_aes128_sha1_pack_data(data, auth_simple_pack_unit_size, buffer, local, &self->server);
         buffer += pack_len;
         data += auth_simple_pack_unit_size;
         len -= auth_simple_pack_unit_size;
     }
-    if (len > 0) {
+    if (len > 0)
+    {
         pack_len = auth_aes128_sha1_pack_data(data, len, buffer, local, &self->server);
         buffer += pack_len;
     }
     len = buffer - out_buffer;
-    if (*capacity < len) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+    if (*capacity < len)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, len);
@@ -838,31 +929,34 @@ int auth_aes128_sha1_client_pre_encrypt(obfs *self, char **pplaindata, int datal
     return len;
 }
 
-int auth_aes128_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_aes128_sha1_client_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
     //server_info *server = (server_info*)&self->server;
-    uint8_t * recv_buffer = (uint8_t *)local->recv_buffer;
+    uint8_t *recv_buffer = (uint8_t *)local->recv_buffer;
     if (local->recv_buffer_size + datalength > 16384)
         return -1;
     memmove(recv_buffer + local->recv_buffer_size, plaindata, datalength);
     local->recv_buffer_size += datalength;
 
     int key_len = local->user_key_len + 4;
-    uint8_t *key = (uint8_t*)malloc(key_len);
+    uint8_t *key = (uint8_t *)malloc(key_len);
     memcpy(key, local->user_key, local->user_key_len);
 
-    char * out_buffer = (char*)malloc(local->recv_buffer_size);
-    char * buffer = out_buffer;
+    char *out_buffer = (char *)malloc(local->recv_buffer_size);
+    char *buffer = out_buffer;
     char error = 0;
-    while (local->recv_buffer_size > 4) {
+    while (local->recv_buffer_size > 4)
+    {
         memintcopy_lt(key + key_len - 4, local->recv_id);
 
         {
             char hash[20];
-            local->hmac(hash, (char*)recv_buffer, 2, key, key_len);
+            local->hmac(hash, (char *)recv_buffer, 2, key, key_len);
 
-            if (memcmp(hash, recv_buffer + 2, 2)) {
+            if (memcmp(hash, recv_buffer + 2, 2))
+            {
                 local->recv_buffer_size = 0;
                 error = 1;
                 break;
@@ -870,7 +964,8 @@ int auth_aes128_sha1_client_post_decrypt(obfs *self, char **pplaindata, int data
         }
 
         int length = ((int)recv_buffer[1] << 8) + recv_buffer[0];
-        if (length >= 8192 || length < 8) {
+        if (length >= 8192 || length < 8)
+        {
             local->recv_buffer_size = 0;
             error = 1;
             break;
@@ -905,14 +1000,18 @@ int auth_aes128_sha1_client_post_decrypt(obfs *self, char **pplaindata, int data
         memmove(recv_buffer, recv_buffer + length, local->recv_buffer_size -= length);
     }
     int len;
-    if (error == 0) {
+    if (error == 0)
+    {
         len = buffer - out_buffer;
-        if (*capacity < len) {
-            *pplaindata = (char*)realloc(*pplaindata, *capacity = len * 2);
+        if (*capacity < len)
+        {
+            *pplaindata = (char *)realloc(*pplaindata, *capacity = len * 2);
             plaindata = *pplaindata;
         }
         memmove(plaindata, out_buffer, len);
-    } else {
+    }
+    else
+    {
         len = -1;
     }
     free(out_buffer);
@@ -920,16 +1019,20 @@ int auth_aes128_sha1_client_post_decrypt(obfs *self, char **pplaindata, int data
     return len;
 }
 
-int auth_aes128_sha1_client_udp_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_aes128_sha1_client_udp_pre_encrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
-    char * out_buffer = (char*)malloc(datalength + 8);
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
+    char *out_buffer = (char *)malloc(datalength + 8);
 
-    if (local->user_key == NULL) {
-        if(self->server.param != NULL && self->server.param[0] != 0) {
+    if (local->user_key == NULL)
+    {
+        if (self->server.param != NULL && self->server.param[0] != 0)
+        {
             char *param = self->server.param;
             char *delim = strchr(param, ':');
-            if(delim != NULL) {
+            if (delim != NULL)
+            {
                 char uid_str[16] = {};
                 strncpy(uid_str, param, delim - param);
                 char key_str[128];
@@ -941,15 +1044,16 @@ int auth_aes128_sha1_client_udp_pre_encrypt(obfs *self, char **pplaindata, int d
                 local->hash(hash, key_str, strlen(key_str));
 
                 local->user_key_len = local->hash_len;
-                local->user_key = (uint8_t*)malloc(local->user_key_len);
+                local->user_key = (uint8_t *)malloc(local->user_key_len);
                 memcpy(local->user_key, hash, local->hash_len);
             }
         }
-        if (local->user_key == NULL) {
+        if (local->user_key == NULL)
+        {
             rand_bytes((uint8_t *)local->uid, 4);
 
             local->user_key_len = self->server.key_len;
-            local->user_key = (uint8_t*)malloc(local->user_key_len);
+            local->user_key = (uint8_t *)malloc(local->user_key_len);
             memcpy(local->user_key, self->server.key, local->user_key_len);
         }
     }
@@ -964,8 +1068,9 @@ int auth_aes128_sha1_client_udp_pre_encrypt(obfs *self, char **pplaindata, int d
         memmove(out_buffer + outlength - 4, hash, 4);
     }
 
-    if (*capacity < outlength) {
-        *pplaindata = (char*)realloc(*pplaindata, *capacity = outlength * 2);
+    if (*capacity < outlength)
+    {
+        *pplaindata = (char *)realloc(*pplaindata, *capacity = outlength * 2);
         plaindata = *pplaindata;
     }
     memmove(plaindata, out_buffer, outlength);
@@ -974,12 +1079,13 @@ int auth_aes128_sha1_client_udp_pre_encrypt(obfs *self, char **pplaindata, int d
     return outlength;
 }
 
-int auth_aes128_sha1_client_udp_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t* capacity) {
+int auth_aes128_sha1_client_udp_post_decrypt(obfs *self, char **pplaindata, int datalength, size_t *capacity)
+{
     if (datalength <= 4)
         return 0;
 
     char *plaindata = *pplaindata;
-    auth_simple_local_data *local = (auth_simple_local_data*)self->l_data;
+    auth_simple_local_data *local = (auth_simple_local_data *)self->l_data;
 
     char hash[20];
     local->hmac(hash, plaindata, datalength - 4, self->server.key, self->server.key_len);

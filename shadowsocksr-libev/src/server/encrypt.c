@@ -126,8 +126,7 @@ static const char *supported_ciphers[CIPHER_NUM] = {
     "seed-cfb",
     "salsa20",
     "chacha20",
-    "chacha20-ietf"
-};
+    "chacha20-ietf"};
 
 #ifdef USE_CRYPTO_POLARSSL
 static const char *supported_ciphers_polarssl[CIPHER_NUM] = {
@@ -152,8 +151,7 @@ static const char *supported_ciphers_polarssl[CIPHER_NUM] = {
     CIPHER_UNSUPPORTED,
     "salsa20",
     "chacha20",
-    "chacha20-ietf"
-};
+    "chacha20-ietf"};
 #endif
 
 #ifdef USE_CRYPTO_MBEDTLS
@@ -179,8 +177,7 @@ static const char *supported_ciphers_mbedtls[CIPHER_NUM] = {
     CIPHER_UNSUPPORTED,
     "salsa20",
     "chacha20",
-    "chacha20-ietf"
-};
+    "chacha20-ietf"};
 #endif
 
 #ifdef USE_CRYPTO_APPLECC
@@ -206,8 +203,7 @@ static const CCAlgorithm supported_ciphers_applecc[CIPHER_NUM] = {
     kCCAlgorithmInvalid,
     kCCAlgorithmInvalid,
     kCCAlgorithmInvalid,
-    kCCAlgorithmInvalid
-};
+    kCCAlgorithmInvalid};
 
 static const CCMode supported_modes_applecc[CIPHER_NUM] = {
     kCCAlgorithmInvalid,
@@ -231,61 +227,57 @@ static const CCMode supported_modes_applecc[CIPHER_NUM] = {
     kCCAlgorithmInvalid,
     kCCAlgorithmInvalid,
     kCCAlgorithmInvalid,
-    kCCAlgorithmInvalid
-};
+    kCCAlgorithmInvalid};
 #endif
 
 static const int supported_ciphers_iv_size[CIPHER_NUM] = {
-    0,  0,  6, 16, 16, 16, 16, 16, 16, 16,  8, 16, 16, 16,  8,  8,  8,  8, 16,  8,  8, 12
-};
+    0, 0, 6, 16, 16, 16, 16, 16, 16, 16, 8, 16, 16, 16, 8, 8, 8, 8, 16, 8, 8, 12};
 
 static const int supported_ciphers_key_size[CIPHER_NUM] = {
-    0, 16, 16, 16, 16, 24, 32, 16, 24, 32, 16, 16, 24, 32, 16,  8, 16, 16, 16, 32, 32, 32
-};
+    0, 16, 16, 16, 16, 24, 32, 16, 24, 32, 16, 16, 24, 32, 16, 8, 16, 16, 16, 32, 32, 32};
 
 static int
 safe_memcmp(const void *s1, const void *s2, size_t n)
 {
     const unsigned char *_s1 = (const unsigned char *)s1;
     const unsigned char *_s2 = (const unsigned char *)s2;
-    int ret                  = 0;
+    int ret = 0;
     size_t i;
     for (i = 0; i < n; i++)
         ret |= _s1[i] ^ _s2[i];
     return !!ret;
 }
 
-int
-balloc(buffer_t *ptr, size_t capacity)
+int balloc(buffer_t *ptr, size_t capacity)
 {
     sodium_memzero(ptr, sizeof(buffer_t));
-    ptr->array    = ss_malloc(capacity);
+    ptr->array = ss_malloc(capacity);
     ptr->capacity = capacity;
     return capacity;
 }
 
-int
-brealloc(buffer_t *ptr, size_t len, size_t capacity)
+int brealloc(buffer_t *ptr, size_t len, size_t capacity)
 {
     if (ptr == NULL)
         return -1;
     size_t real_capacity = max(len, capacity);
-    if (ptr->capacity < real_capacity) {
-        ptr->array    = ss_realloc(ptr->array, real_capacity);
+    if (ptr->capacity < real_capacity)
+    {
+        ptr->array = ss_realloc(ptr->array, real_capacity);
         ptr->capacity = real_capacity;
     }
     return real_capacity;
 }
 
-void
-bfree(buffer_t *ptr)
+void bfree(buffer_t *ptr)
 {
     if (ptr == NULL)
         return;
-    ptr->idx      = 0;
-    ptr->len      = 0;
+    ptr->idx = 0;
+    ptr->len = 0;
     ptr->capacity = 0;
-    if (ptr->array != NULL) {
+    if (ptr->array != NULL)
+    {
         ss_free(ptr->array);
     }
 }
@@ -295,7 +287,8 @@ crypto_stream_xor_ic(uint8_t *c, const uint8_t *m, uint64_t mlen,
                      const uint8_t *n, uint64_t ic, const uint8_t *k,
                      int method)
 {
-    switch (method) {
+    switch (method)
+    {
     case SALSA20:
         return crypto_stream_salsa20_xor_ic(c, m, mlen, n, ic, k);
     case CHACHA20:
@@ -331,12 +324,16 @@ merge(uint8_t *left, int llength, uint8_t *right,
     memcpy(ltmp, left, llength * sizeof(uint8_t));
     memcpy(rtmp, right, rlength * sizeof(uint8_t));
 
-    while (llength > 0 && rlength > 0) {
-        if (random_compare(ll, rr, salt, key) <= 0) {
+    while (llength > 0 && rlength > 0)
+    {
+        if (random_compare(ll, rr, salt, key) <= 0)
+        {
             *result = *ll;
             ++ll;
             --llength;
-        } else {
+        }
+        else
+        {
             *result = *rr;
             ++rr;
             --rlength;
@@ -344,15 +341,20 @@ merge(uint8_t *left, int llength, uint8_t *right,
         ++result;
     }
 
-    if (llength > 0) {
-        while (llength > 0) {
+    if (llength > 0)
+    {
+        while (llength > 0)
+        {
             *result = *ll;
             ++result;
             ++ll;
             --llength;
         }
-    } else {
-        while (rlength > 0) {
+    }
+    else
+    {
+        while (rlength > 0)
+        {
             *result = *rr;
             ++result;
             ++rr;
@@ -372,7 +374,8 @@ merge_sort(uint8_t array[], int length,
     uint8_t *left, *right;
     int llength;
 
-    if (length <= 1) {
+    if (length <= 1)
+    {
         return;
     }
 
@@ -380,7 +383,7 @@ merge_sort(uint8_t array[], int length,
 
     llength = length - middle;
 
-    left  = array;
+    left = array;
     right = array + llength;
 
     merge_sort(left, llength, salt, key);
@@ -388,13 +391,12 @@ merge_sort(uint8_t array[], int length,
     merge(left, llength, right, middle, salt, key);
 }
 
-int
-enc_get_iv_len()
+int enc_get_iv_len()
 {
     return enc_iv_len;
 }
 
-uint8_t* enc_get_key()
+uint8_t *enc_get_key()
 {
     return enc_key;
 }
@@ -410,14 +412,16 @@ unsigned char *enc_md5(const unsigned char *d, size_t n, unsigned char *md)
     return MD5(d, n, md);
 #elif defined(USE_CRYPTO_POLARSSL)
     static unsigned char m[16];
-    if (md == NULL) {
+    if (md == NULL)
+    {
         md = m;
     }
     md5(d, n, md);
     return md;
 #elif defined(USE_CRYPTO_MBEDTLS)
     static unsigned char m[16];
-    if (md == NULL) {
+    if (md == NULL)
+    {
         md = m;
     }
     mbedtls_md5(d, n, md);
@@ -425,8 +429,7 @@ unsigned char *enc_md5(const unsigned char *d, size_t n, unsigned char *md)
 #endif
 }
 
-void
-enc_table_init(const char *pass)
+void enc_table_init(const char *pass)
 {
     uint32_t i;
     uint64_t key = 0;
@@ -449,8 +452,7 @@ enc_table_init(const char *pass)
         dec_table[enc_table[i]] = i;
 }
 
-int
-cipher_iv_size(const cipher_t *cipher)
+int cipher_iv_size(const cipher_t *cipher)
 {
 #if defined(USE_CRYPTO_OPENSSL)
     if (cipher->info == NULL)
@@ -458,15 +460,15 @@ cipher_iv_size(const cipher_t *cipher)
     else
         return EVP_CIPHER_iv_length(cipher->info);
 #elif defined(USE_CRYPTO_POLARSSL) || defined(USE_CRYPTO_MBEDTLS)
-    if (cipher == NULL) {
+    if (cipher == NULL)
+    {
         return 0;
     }
     return cipher->info->iv_size;
 #endif
 }
 
-int
-cipher_key_size(const cipher_t *cipher)
+int cipher_key_size(const cipher_t *cipher)
 {
 #if defined(USE_CRYPTO_OPENSSL)
     if (cipher->info == NULL)
@@ -474,12 +476,14 @@ cipher_key_size(const cipher_t *cipher)
     else
         return EVP_CIPHER_key_length(cipher->info);
 #elif defined(USE_CRYPTO_POLARSSL)
-    if (cipher == NULL) {
+    if (cipher == NULL)
+    {
         return 0;
     }
     /* Override PolarSSL 32 bit default key size with sane 128 bit default */
     if (cipher->info->base != NULL && POLARSSL_CIPHER_ID_BLOWFISH ==
-        cipher->info->base->cipher) {
+                                          cipher->info->base->cipher)
+    {
         return 128 / 8;
     }
     return cipher->info->key_length / 8;
@@ -492,7 +496,8 @@ cipher_key_size(const cipher_t *cipher)
      * Changed pk_info_t into an opaque structure.
      * Changed cipher_base_t into an opaque structure.
      */
-    if (cipher == NULL) {
+    if (cipher == NULL)
+    {
         return 0;
     }
     /* From Version 1.2.7 released 2013-04-13 Default Blowfish keysize is now 128-bits */
@@ -500,23 +505,22 @@ cipher_key_size(const cipher_t *cipher)
 #endif
 }
 
-void
-bytes_to_key_with_size(const char *pass, size_t len, uint8_t *md, size_t md_size)
+void bytes_to_key_with_size(const char *pass, size_t len, uint8_t *md, size_t md_size)
 {
     uint8_t result[128];
     enc_md5((const unsigned char *)pass, len, result);
     memcpy(md, result, 16);
     int i = 16;
-    for (; i < md_size; i += 16) {
+    for (; i < md_size; i += 16)
+    {
         memcpy(result + 16, pass, len);
         enc_md5(result, 16 + len, result);
         memcpy(md + i, result, 16);
     }
 }
 
-int
-bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
-             const uint8_t *pass, uint8_t *key)
+int bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
+                 const uint8_t *pass, uint8_t *key)
 {
     size_t datal;
     datal = strlen((const char *)pass);
@@ -529,21 +533,24 @@ bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
     int addmd;
     unsigned int i, j, mds;
 
-    mds  = 16;
+    mds = 16;
     nkey = cipher_key_size(cipher);
     if (pass == NULL)
         return nkey;
     memset(&c, 0, sizeof(MD5_CTX));
 
-    for (j = 0, addmd = 0; j < nkey; addmd++) {
+    for (j = 0, addmd = 0; j < nkey; addmd++)
+    {
         MD5_Init(&c);
-        if (addmd) {
+        if (addmd)
+        {
             MD5_Update(&c, md_buf, mds);
         }
         MD5_Update(&c, pass, datal);
         MD5_Final(md_buf, &c);
 
-        for (i = 0; i < mds; i++, j++) {
+        for (i = 0; i < mds; i++, j++)
+        {
             if (j >= nkey)
                 break;
             key[j] = md_buf[i];
@@ -560,7 +567,7 @@ bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
     unsigned int i, j, mds;
 
     nkey = cipher_key_size(cipher);
-    mds  = md_get_size(md);
+    mds = md_get_size(md);
     memset(&c, 0, sizeof(md_context_t));
 
     if (pass == NULL)
@@ -568,15 +575,18 @@ bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
     if (md_init_ctx(&c, md))
         return 0;
 
-    for (j = 0, addmd = 0; j < nkey; addmd++) {
+    for (j = 0, addmd = 0; j < nkey; addmd++)
+    {
         md_starts(&c);
-        if (addmd) {
+        if (addmd)
+        {
             md_update(&c, md_buf, mds);
         }
         md_update(&c, pass, datal);
         md_finish(&c, md_buf);
 
-        for (i = 0; i < mds; i++, j++) {
+        for (i = 0; i < mds; i++, j++)
+        {
             if (j >= nkey)
                 break;
             key[j] = md_buf[i];
@@ -595,7 +605,7 @@ bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
     unsigned int i, j, mds;
 
     nkey = cipher_key_size(cipher);
-    mds  = mbedtls_md_get_size(md);
+    mds = mbedtls_md_get_size(md);
     memset(&c, 0, sizeof(mbedtls_md_context_t));
 
     if (pass == NULL)
@@ -603,15 +613,18 @@ bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
     if (mbedtls_md_setup(&c, md, 1))
         return 0;
 
-    for (j = 0, addmd = 0; j < nkey; addmd++) {
+    for (j = 0, addmd = 0; j < nkey; addmd++)
+    {
         mbedtls_md_starts(&c);
-        if (addmd) {
+        if (addmd)
+        {
             mbedtls_md_update(&c, md_buf, mds);
         }
         mbedtls_md_update(&c, pass, datal);
         mbedtls_md_finish(&c, &(md_buf[0]));
 
-        for (i = 0; i < mds; i++, j++) {
+        for (i = 0; i < mds; i++, j++)
+        {
             if (j >= nkey)
                 break;
             key[j] = md_buf[i];
@@ -623,8 +636,7 @@ bytes_to_key(const cipher_t *cipher, const digest_type_t *md,
 #endif
 }
 
-int
-rand_bytes(uint8_t *output, int len)
+int rand_bytes(uint8_t *output, int len)
 {
     randombytes_buf(output, len);
     // always return success
@@ -634,16 +646,19 @@ rand_bytes(uint8_t *output, int len)
 const cipher_kt_t *
 get_cipher_type(int method)
 {
-    if (method <= TABLE || method >= CIPHER_NUM) {
+    if (method <= TABLE || method >= CIPHER_NUM)
+    {
         LOGE("get_cipher_type(): Illegal method");
         return NULL;
     }
 
-    if (method == RC4_MD5 || method == RC4_MD5_6) {
+    if (method == RC4_MD5 || method == RC4_MD5_6)
+    {
         method = RC4;
     }
 
-    if (method >= SALSA20) {
+    if (method >= SALSA20)
+    {
         return NULL;
     }
 
@@ -652,7 +667,8 @@ get_cipher_type(int method)
     return EVP_get_cipherbyname(ciphername);
 #elif defined(USE_CRYPTO_POLARSSL)
     const char *polarname = supported_ciphers_polarssl[method];
-    if (strcmp(polarname, CIPHER_UNSUPPORTED) == 0) {
+    if (strcmp(polarname, CIPHER_UNSUPPORTED) == 0)
+    {
         LOGE("Cipher %s currently is not supported by PolarSSL library",
              ciphername);
         return NULL;
@@ -660,7 +676,8 @@ get_cipher_type(int method)
     return cipher_info_from_string(polarname);
 #elif defined(USE_CRYPTO_MBEDTLS)
     const char *mbedtlsname = supported_ciphers_mbedtls[method];
-    if (strcmp(mbedtlsname, CIPHER_UNSUPPORTED) == 0) {
+    if (strcmp(mbedtlsname, CIPHER_UNSUPPORTED) == 0)
+    {
         LOGE("Cipher %s currently is not supported by mbed TLS library",
              ciphername);
         return NULL;
@@ -672,7 +689,8 @@ get_cipher_type(int method)
 const digest_type_t *
 get_digest_type(const char *digest)
 {
-    if (digest == NULL) {
+    if (digest == NULL)
+    {
         LOGE("get_digest_type(): Digest name is null");
         return NULL;
     }
@@ -686,15 +704,16 @@ get_digest_type(const char *digest)
 #endif
 }
 
-void
-cipher_context_init(cipher_ctx_t *ctx, int method, int enc)
+void cipher_context_init(cipher_ctx_t *ctx, int method, int enc)
 {
-    if (method <= TABLE || method >= CIPHER_NUM) {
+    if (method <= TABLE || method >= CIPHER_NUM)
+    {
         LOGE("cipher_context_init(): Illegal method");
         return;
     }
 
-    if (method >= SALSA20) {
+    if (method >= SALSA20)
+    {
         enc_iv_len = supported_ciphers_iv_size[method];
         return;
     }
@@ -703,19 +722,28 @@ cipher_context_init(cipher_ctx_t *ctx, int method, int enc)
 #if defined(USE_CRYPTO_APPLECC)
     cipher_cc_t *cc = &ctx->cc;
     cc->cryptor = NULL;
-    cc->cipher  = supported_ciphers_applecc[method];
-    if (cc->cipher == kCCAlgorithmInvalid) {
+    cc->cipher = supported_ciphers_applecc[method];
+    if (cc->cipher == kCCAlgorithmInvalid)
+    {
         cc->valid = kCCContextInvalid;
-    } else {
+    }
+    else
+    {
         cc->valid = kCCContextValid;
-        if (cc->cipher == kCCAlgorithmRC4) {
-            cc->mode    = supported_modes_applecc[method];
-            cc->padding = ccNoPadding;
-        } else {
+        if (cc->cipher == kCCAlgorithmRC4)
+        {
             cc->mode = supported_modes_applecc[method];
-            if (cc->mode == kCCModeCTR) {
+            cc->padding = ccNoPadding;
+        }
+        else
+        {
+            cc->mode = supported_modes_applecc[method];
+            if (cc->mode == kCCModeCTR)
+            {
                 cc->padding = ccNoPadding;
-            } else {
+            }
+            else
+            {
                 cc->padding = ccPKCS7Padding;
             }
         }
@@ -729,86 +757,101 @@ cipher_context_init(cipher_ctx_t *ctx, int method, int enc)
     ctx->evp = EVP_CIPHER_CTX_new();
     cipher_evp_t *evp = ctx->evp;
 
-    if (cipher == NULL) {
+    if (cipher == NULL)
+    {
         LOGE("Cipher %s not found in OpenSSL library", ciphername);
         FATAL("Cannot initialize cipher");
     }
-    if (!EVP_CipherInit_ex(evp, cipher, NULL, NULL, NULL, enc)) {
+    if (!EVP_CipherInit_ex(evp, cipher, NULL, NULL, NULL, enc))
+    {
         LOGE("Cannot initialize cipher %s", ciphername);
         exit(EXIT_FAILURE);
     }
-    if (!EVP_CIPHER_CTX_set_key_length(evp, enc_key_len)) {
+    if (!EVP_CIPHER_CTX_set_key_length(evp, enc_key_len))
+    {
         EVP_CIPHER_CTX_cleanup(evp);
         LOGE("Invalid key length: %d", enc_key_len);
         exit(EXIT_FAILURE);
     }
-    if (method > RC4_MD5) {
+    if (method > RC4_MD5)
+    {
         EVP_CIPHER_CTX_set_padding(evp, 1);
     }
 #elif defined(USE_CRYPTO_POLARSSL)
     ctx->evp = (cipher_evp_t *)ss_malloc(sizeof(cipher_evp_t));
     cipher_evp_t *evp = ctx->evp;
 
-    if (cipher == NULL) {
+    if (cipher == NULL)
+    {
         LOGE("Cipher %s not found in PolarSSL library", ciphername);
         FATAL("Cannot initialize PolarSSL cipher");
     }
-    if (cipher_init_ctx(evp, cipher) != 0) {
+    if (cipher_init_ctx(evp, cipher) != 0)
+    {
         FATAL("Cannot initialize PolarSSL cipher context");
     }
 #elif defined(USE_CRYPTO_MBEDTLS)
     ctx->evp = (cipher_evp_t *)ss_malloc(sizeof(cipher_evp_t));
     cipher_evp_t *evp = ctx->evp;
 
-    if (cipher == NULL) {
+    if (cipher == NULL)
+    {
         LOGE("Cipher %s not found in mbed TLS library", ciphername);
         FATAL("Cannot initialize mbed TLS cipher");
     }
     mbedtls_cipher_init(evp);
-    if (mbedtls_cipher_setup(evp, cipher) != 0) {
+    if (mbedtls_cipher_setup(evp, cipher) != 0)
+    {
         FATAL("Cannot initialize mbed TLS cipher context");
     }
 #endif
 }
 
-void
-cipher_context_set_iv(cipher_ctx_t *ctx, uint8_t *iv, size_t iv_len,
-                      int enc)
+void cipher_context_set_iv(cipher_ctx_t *ctx, uint8_t *iv, size_t iv_len,
+                           int enc)
 {
     const unsigned char *true_key;
 
-    if (iv == NULL) {
+    if (iv == NULL)
+    {
         LOGE("cipher_context_set_iv(): IV is null");
         return;
     }
 
-    if (!enc) {
+    if (!enc)
+    {
         memcpy(ctx->iv, iv, iv_len);
     }
 
-    if (enc_method >= SALSA20) {
+    if (enc_method >= SALSA20)
+    {
         return;
     }
 
-    if (enc_method == RC4_MD5 || enc_method == RC4_MD5_6) {
+    if (enc_method == RC4_MD5 || enc_method == RC4_MD5_6)
+    {
         unsigned char key_iv[32];
         memcpy(key_iv, enc_key, 16);
         memcpy(key_iv + 16, iv, iv_len);
         true_key = enc_md5(key_iv, 16 + iv_len, NULL);
-        iv_len   = 0;
-    } else {
+        iv_len = 0;
+    }
+    else
+    {
         true_key = enc_key;
     }
 
 #ifdef USE_CRYPTO_APPLECC
     cipher_cc_t *cc = &ctx->cc;
-    if (cc->valid == kCCContextValid) {
+    if (cc->valid == kCCContextValid)
+    {
         memcpy(cc->iv, iv, iv_len);
         memcpy(cc->key, true_key, enc_key_len);
-        cc->iv_len  = iv_len;
+        cc->iv_len = iv_len;
         cc->key_len = enc_key_len;
         cc->encrypt = enc ? kCCEncrypt : kCCDecrypt;
-        if (cc->cryptor != NULL) {
+        if (cc->cryptor != NULL)
+        {
             CCCryptorRelease(cc->cryptor);
             cc->cryptor = NULL;
         }
@@ -822,8 +865,10 @@ cipher_context_set_iv(cipher_ctx_t *ctx, uint8_t *iv, size_t iv_len,
             cc->iv, cc->key, cc->key_len,
             NULL, 0, 0, kCCModeOptionCTR_BE,
             &cc->cryptor);
-        if (ret != kCCSuccess) {
-            if (cc->cryptor != NULL) {
+        if (ret != kCCSuccess)
+        {
+            if (cc->cryptor != NULL)
+            {
                 CCCryptorRelease(cc->cryptor);
                 cc->cryptor = NULL;
             }
@@ -834,47 +879,56 @@ cipher_context_set_iv(cipher_ctx_t *ctx, uint8_t *iv, size_t iv_len,
 #endif
 
     cipher_evp_t *evp = ctx->evp;
-    if (evp == NULL) {
+    if (evp == NULL)
+    {
         LOGE("cipher_context_set_iv(): Cipher context is null");
         return;
     }
 #if defined(USE_CRYPTO_OPENSSL)
-    if (!EVP_CipherInit_ex(evp, NULL, NULL, true_key, iv, enc)) {
+    if (!EVP_CipherInit_ex(evp, NULL, NULL, true_key, iv, enc))
+    {
         EVP_CIPHER_CTX_cleanup(evp);
         FATAL("Cannot set key and IV");
     }
 #elif defined(USE_CRYPTO_POLARSSL)
     // XXX: PolarSSL 1.3.11: cipher_free_ctx deprecated, Use cipher_free() instead.
-    if (cipher_setkey(evp, true_key, enc_key_len * 8, enc) != 0) {
+    if (cipher_setkey(evp, true_key, enc_key_len * 8, enc) != 0)
+    {
         cipher_free_ctx(evp);
         FATAL("Cannot set PolarSSL cipher key");
     }
 #if POLARSSL_VERSION_NUMBER >= 0x01030000
-    if (cipher_set_iv(evp, iv, iv_len) != 0) {
+    if (cipher_set_iv(evp, iv, iv_len) != 0)
+    {
         cipher_free_ctx(evp);
         FATAL("Cannot set PolarSSL cipher IV");
     }
-    if (cipher_reset(evp) != 0) {
+    if (cipher_reset(evp) != 0)
+    {
         cipher_free_ctx(evp);
         FATAL("Cannot finalize PolarSSL cipher context");
     }
 #else
-    if (cipher_reset(evp, iv) != 0) {
+    if (cipher_reset(evp, iv) != 0)
+    {
         cipher_free_ctx(evp);
         FATAL("Cannot set PolarSSL cipher IV");
     }
 #endif
 #elif defined(USE_CRYPTO_MBEDTLS)
-    if (mbedtls_cipher_setkey(evp, true_key, enc_key_len * 8, enc) != 0) {
+    if (mbedtls_cipher_setkey(evp, true_key, enc_key_len * 8, enc) != 0)
+    {
         mbedtls_cipher_free(evp);
         FATAL("Cannot set mbed TLS cipher key");
     }
 
-    if (mbedtls_cipher_set_iv(evp, iv, iv_len) != 0) {
+    if (mbedtls_cipher_set_iv(evp, iv, iv_len) != 0)
+    {
         mbedtls_cipher_free(evp);
         FATAL("Cannot set mbed TLS cipher IV");
     }
-    if (mbedtls_cipher_reset(evp) != 0) {
+    if (mbedtls_cipher_reset(evp) != 0)
+    {
         mbedtls_cipher_free(evp);
         FATAL("Cannot finalize mbed TLS cipher context");
     }
@@ -885,20 +939,22 @@ cipher_context_set_iv(cipher_ctx_t *ctx, uint8_t *iv, size_t iv_len,
 #endif
 }
 
-void
-cipher_context_release(cipher_ctx_t *ctx)
+void cipher_context_release(cipher_ctx_t *ctx)
 {
-    if (enc_method >= SALSA20) {
+    if (enc_method >= SALSA20)
+    {
         return;
     }
 
 #ifdef USE_CRYPTO_APPLECC
     cipher_cc_t *cc = &ctx->cc;
-    if (cc->cryptor != NULL) {
+    if (cc->cryptor != NULL)
+    {
         CCCryptorRelease(cc->cryptor);
         cc->cryptor = NULL;
     }
-    if (cc->valid == kCCContextValid) {
+    if (cc->valid == kCCContextValid)
+    {
         return;
     }
 #endif
@@ -906,11 +962,11 @@ cipher_context_release(cipher_ctx_t *ctx)
 #if defined(USE_CRYPTO_OPENSSL)
     EVP_CIPHER_CTX_free(ctx->evp);
 #elif defined(USE_CRYPTO_POLARSSL)
-// NOTE: cipher_free_ctx deprecated in PolarSSL 1.3.11
+    // NOTE: cipher_free_ctx deprecated in PolarSSL 1.3.11
     cipher_free_ctx(ctx->evp);
     ss_free(ctx->evp);
 #elif defined(USE_CRYPTO_MBEDTLS)
-// NOTE: cipher_free_ctx deprecated
+    // NOTE: cipher_free_ctx deprecated
     mbedtls_cipher_free(ctx->evp);
     ss_free(ctx->evp);
 #endif
@@ -922,7 +978,8 @@ cipher_context_update(cipher_ctx_t *ctx, uint8_t *output, size_t *olen,
 {
 #ifdef USE_CRYPTO_APPLECC
     cipher_cc_t *cc = &ctx->cc;
-    if (cc->valid == kCCContextValid) {
+    if (cc->valid == kCCContextValid)
+    {
         CCCryptorStatus ret;
         ret = CCCryptorUpdate(cc->cryptor, input, ilen, output,
                               ilen, olen);
@@ -1053,11 +1110,11 @@ int ss_sha1_hash_func(char *auth, char *msg, int msg_len)
 
 int ss_aes_128_cbc(char *encrypt, char *out_data, char *key)
 {
-    unsigned char iv[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    unsigned char iv[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 #if defined(USE_CRYPTO_OPENSSL)
     AES_KEY aes;
-    AES_set_encrypt_key((unsigned char*)key, 128, &aes);
+    AES_set_encrypt_key((unsigned char *)key, 128, &aes);
     AES_cbc_encrypt((const unsigned char *)encrypt, (unsigned char *)out_data, 16, &aes, iv, AES_ENCRYPT);
 
 #elif defined(USE_CRYPTO_MBEDTLS)
@@ -1065,8 +1122,8 @@ int ss_aes_128_cbc(char *encrypt, char *out_data, char *key)
 
     unsigned char output[16];
 
-    mbedtls_aes_setkey_enc( &aes, (unsigned char *)key, 128 );
-    mbedtls_aes_crypt_cbc( &aes, MBEDTLS_AES_ENCRYPT, 16, iv, (unsigned char *)encrypt, output );
+    mbedtls_aes_setkey_enc(&aes, (unsigned char *)key, 128);
+    mbedtls_aes_crypt_cbc(&aes, MBEDTLS_AES_ENCRYPT, 16, iv, (unsigned char *)encrypt, output);
 
     memcpy(out_data, output, 16);
 #else
@@ -1075,8 +1132,8 @@ int ss_aes_128_cbc(char *encrypt, char *out_data, char *key)
 
     unsigned char output[16];
 
-    aes_setkey_enc( &aes, (unsigned char *)key, 128 );
-    aes_crypt_cbc( &aes, AES_ENCRYPT, 16, iv, (unsigned char *)encrypt, output );
+    aes_setkey_enc(&aes, (unsigned char *)key, 128);
+    aes_crypt_cbc(&aes, AES_ENCRYPT, 16, iv, (unsigned char *)encrypt, output);
 
     memcpy(out_data, output, 16);
 #endif
@@ -1097,7 +1154,8 @@ int ss_onetimeauth(buffer_t *buf, uint8_t *iv, size_t capacity)
     HMAC(EVP_sha1(), auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, buf->len, (uint8_t *)hash, NULL);
 #elif defined(USE_CRYPTO_MBEDTLS)
     mbedtls_md_hmac(mbedtls_md_info_from_type(
-                        MBEDTLS_MD_SHA1), auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, buf->len,
+                        MBEDTLS_MD_SHA1),
+                    auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, buf->len,
                     (uint8_t *)hash);
 #else
     sha1_hmac(auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, buf->len, (uint8_t *)hash);
@@ -1109,8 +1167,7 @@ int ss_onetimeauth(buffer_t *buf, uint8_t *iv, size_t capacity)
     return 0;
 }
 
-int
-ss_onetimeauth_verify(buffer_t *buf, uint8_t *iv)
+int ss_onetimeauth_verify(buffer_t *buf, uint8_t *iv)
 {
     uint8_t hash[ONETIMEAUTH_BYTES * 2];
     uint8_t auth_key[MAX_IV_LENGTH + MAX_KEY_LENGTH];
@@ -1122,7 +1179,8 @@ ss_onetimeauth_verify(buffer_t *buf, uint8_t *iv)
     HMAC(EVP_sha1(), auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, len, hash, NULL);
 #elif defined(USE_CRYPTO_MBEDTLS)
     mbedtls_md_hmac(mbedtls_md_info_from_type(
-                        MBEDTLS_MD_SHA1), auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, len, hash);
+                        MBEDTLS_MD_SHA1),
+                    auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, len, hash);
 #else
     sha1_hmac(auth_key, enc_iv_len + enc_key_len, (uint8_t *)buf->array, len, hash);
 #endif
@@ -1130,17 +1188,17 @@ ss_onetimeauth_verify(buffer_t *buf, uint8_t *iv)
     return safe_memcmp(buf->array + len, hash, ONETIMEAUTH_BYTES);
 }
 
-int
-ss_encrypt_all(buffer_t *plain, int method, int auth, size_t capacity)
+int ss_encrypt_all(buffer_t *plain, int method, int auth, size_t capacity)
 {
-    if (method > TABLE) {
+    if (method > TABLE)
+    {
         cipher_ctx_t evp;
         cipher_context_init(&evp, method, 1);
 
         size_t iv_len = enc_iv_len;
-        int err       = 1;
+        int err = 1;
 
-        static buffer_t tmp = { 0, 0, 0, NULL };
+        static buffer_t tmp = {0, 0, 0, NULL};
         brealloc(&tmp, iv_len + plain->len, capacity);
         buffer_t *cipher = &tmp;
         cipher->len = plain->len;
@@ -1151,23 +1209,28 @@ ss_encrypt_all(buffer_t *plain, int method, int auth, size_t capacity)
         cipher_context_set_iv(&evp, iv, iv_len, 1);
         memcpy(cipher->array, iv, iv_len);
 
-        if (auth) {
+        if (auth)
+        {
             ss_onetimeauth(plain, iv, capacity);
             cipher->len = plain->len;
         }
 
-        if (method >= SALSA20) {
+        if (method >= SALSA20)
+        {
             crypto_stream_xor_ic((uint8_t *)(cipher->array + iv_len),
                                  (const uint8_t *)plain->array, (uint64_t)(plain->len),
                                  (const uint8_t *)iv,
                                  0, enc_key, method);
-        } else {
+        }
+        else
+        {
             err = cipher_context_update(&evp, (uint8_t *)(cipher->array + iv_len),
                                         &cipher->len, (const uint8_t *)plain->array,
                                         plain->len);
         }
 
-        if (!err) {
+        if (!err)
+        {
             bfree(plain);
             cipher_context_release(&evp);
             return -1;
@@ -1185,10 +1248,13 @@ ss_encrypt_all(buffer_t *plain, int method, int auth, size_t capacity)
         plain->len = iv_len + cipher->len;
 
         return 0;
-    } else {
+    }
+    else
+    {
         char *begin = plain->array;
-        char *ptr   = plain->array;
-        while (ptr < begin + plain->len) {
+        char *ptr = plain->array;
+        while (ptr < begin + plain->len)
+        {
             *ptr = (char)enc_table[(uint8_t)*ptr];
             ptr++;
         }
@@ -1196,15 +1262,16 @@ ss_encrypt_all(buffer_t *plain, int method, int auth, size_t capacity)
     }
 }
 
-int
-ss_encrypt(buffer_t *plain, enc_ctx_t *ctx, size_t capacity)
+int ss_encrypt(buffer_t *plain, enc_ctx_t *ctx, size_t capacity)
 {
-    if (ctx != NULL) {
-        static buffer_t tmp = { 0, 0, 0, NULL };
+    if (ctx != NULL)
+    {
+        static buffer_t tmp = {0, 0, 0, NULL};
 
-        int err       = 1;
+        int err = 1;
         size_t iv_len = 0;
-        if (!ctx->init) {
+        if (!ctx->init)
+        {
             iv_len = enc_iv_len;
         }
 
@@ -1212,17 +1279,20 @@ ss_encrypt(buffer_t *plain, enc_ctx_t *ctx, size_t capacity)
         buffer_t *cipher = &tmp;
         cipher->len = plain->len;
 
-        if (!ctx->init) {
+        if (!ctx->init)
+        {
             cipher_context_set_iv(&ctx->evp, ctx->evp.iv, iv_len, 1);
             memcpy(cipher->array, ctx->evp.iv, iv_len);
             ctx->counter = 0;
-            ctx->init    = 1;
+            ctx->init = 1;
         }
 
-        if (enc_method >= SALSA20) {
+        if (enc_method >= SALSA20)
+        {
             int padding = ctx->counter % SODIUM_BLOCK_SIZE;
             brealloc(cipher, iv_len + (padding + cipher->len) * 2, capacity);
-            if (padding) {
+            if (padding)
+            {
                 brealloc(plain, plain->len + padding, capacity);
                 memmove(plain->array + padding, plain->array, plain->len);
                 sodium_memzero(plain->array, padding);
@@ -1234,17 +1304,21 @@ ss_encrypt(buffer_t *plain, enc_ctx_t *ctx, size_t capacity)
                                  ctx->counter / SODIUM_BLOCK_SIZE, enc_key,
                                  enc_method);
             ctx->counter += plain->len;
-            if (padding) {
+            if (padding)
+            {
                 memmove(cipher->array + iv_len,
                         cipher->array + iv_len + padding, cipher->len);
             }
-        } else {
+        }
+        else
+        {
             err =
                 cipher_context_update(&ctx->evp,
                                       (uint8_t *)(cipher->array + iv_len),
                                       &cipher->len, (const uint8_t *)plain->array,
                                       plain->len);
-            if (!err) {
+            if (!err)
+            {
                 return -1;
             }
         }
@@ -1259,10 +1333,13 @@ ss_encrypt(buffer_t *plain, enc_ctx_t *ctx, size_t capacity)
         plain->len = iv_len + cipher->len;
 
         return 0;
-    } else {
+    }
+    else
+    {
         char *begin = plain->array;
-        char *ptr   = plain->array;
-        while (ptr < begin + plain->len) {
+        char *ptr = plain->array;
+        while (ptr < begin + plain->len)
+        {
             *ptr = (char)enc_table[(uint8_t)*ptr];
             ptr++;
         }
@@ -1270,21 +1347,22 @@ ss_encrypt(buffer_t *plain, enc_ctx_t *ctx, size_t capacity)
     }
 }
 
-int
-ss_decrypt_all(buffer_t *cipher, int method, int auth, size_t capacity)
+int ss_decrypt_all(buffer_t *cipher, int method, int auth, size_t capacity)
 {
-    if (method > TABLE) {
+    if (method > TABLE)
+    {
         size_t iv_len = enc_iv_len;
-        int ret       = 1;
+        int ret = 1;
 
-        if (cipher->len <= iv_len) {
+        if (cipher->len <= iv_len)
+        {
             return -1;
         }
 
         cipher_ctx_t evp;
         cipher_context_init(&evp, method, 0);
 
-        static buffer_t tmp = { 0, 0, 0, NULL };
+        static buffer_t tmp = {0, 0, 0, NULL};
         brealloc(&tmp, cipher->len, capacity);
         buffer_t *plain = &tmp;
         plain->len = cipher->len - iv_len;
@@ -1293,29 +1371,38 @@ ss_decrypt_all(buffer_t *cipher, int method, int auth, size_t capacity)
         memcpy(iv, cipher->array, iv_len);
         cipher_context_set_iv(&evp, iv, iv_len, 0);
 
-        if (method >= SALSA20) {
+        if (method >= SALSA20)
+        {
             crypto_stream_xor_ic((uint8_t *)plain->array,
                                  (const uint8_t *)(cipher->array + iv_len),
                                  (uint64_t)(cipher->len - iv_len),
                                  (const uint8_t *)iv, 0, enc_key, method);
-        } else {
+        }
+        else
+        {
             ret = cipher_context_update(&evp, (uint8_t *)plain->array, &plain->len,
                                         (const uint8_t *)(cipher->array + iv_len),
                                         cipher->len - iv_len);
         }
 
-        if (auth || (plain->array[0] & ONETIMEAUTH_FLAG)) {
-            if (plain->len > ONETIMEAUTH_BYTES) {
+        if (auth || (plain->array[0] & ONETIMEAUTH_FLAG))
+        {
+            if (plain->len > ONETIMEAUTH_BYTES)
+            {
                 ret = !ss_onetimeauth_verify(plain, iv);
-                if (ret) {
+                if (ret)
+                {
                     plain->len -= ONETIMEAUTH_BYTES;
                 }
-            } else {
+            }
+            else
+            {
                 ret = 0;
             }
         }
 
-        if (!ret) {
+        if (!ret)
+        {
             bfree(cipher);
             cipher_context_release(&evp);
             return -1;
@@ -1333,10 +1420,13 @@ ss_decrypt_all(buffer_t *cipher, int method, int auth, size_t capacity)
         cipher->len = plain->len;
 
         return 0;
-    } else {
+    }
+    else
+    {
         char *begin = cipher->array;
-        char *ptr   = cipher->array;
-        while (ptr < begin + cipher->len) {
+        char *ptr = cipher->array;
+        while (ptr < begin + cipher->len)
+        {
             *ptr = (char)dec_table[(uint8_t)*ptr];
             ptr++;
         }
@@ -1344,44 +1434,51 @@ ss_decrypt_all(buffer_t *cipher, int method, int auth, size_t capacity)
     }
 }
 
-int
-ss_decrypt(buffer_t *cipher, enc_ctx_t *ctx, size_t capacity)
+int ss_decrypt(buffer_t *cipher, enc_ctx_t *ctx, size_t capacity)
 {
-    if (ctx != NULL) {
-        static buffer_t tmp = { 0, 0, 0, NULL };
+    if (ctx != NULL)
+    {
+        static buffer_t tmp = {0, 0, 0, NULL};
 
         size_t iv_len = 0;
-        int err       = 1;
+        int err = 1;
 
         brealloc(&tmp, cipher->len, capacity);
         buffer_t *plain = &tmp;
         plain->len = cipher->len;
 
-        if (!ctx->init) {
+        if (!ctx->init)
+        {
             uint8_t iv[MAX_IV_LENGTH];
-            iv_len      = enc_iv_len;
+            iv_len = enc_iv_len;
             plain->len -= iv_len;
 
             memcpy(iv, cipher->array, iv_len);
             cipher_context_set_iv(&ctx->evp, iv, iv_len, 0);
             ctx->counter = 0;
-            ctx->init    = 1;
+            ctx->init = 1;
 
-            if (enc_method > RC4) {
-                if (cache_key_exist(iv_cache, (char *)iv, iv_len)) {
+            if (enc_method > RC4)
+            {
+                if (cache_key_exist(iv_cache, (char *)iv, iv_len))
+                {
                     bfree(cipher);
                     return -1;
-                } else {
+                }
+                else
+                {
                     cache_insert(iv_cache, (char *)iv, iv_len, NULL);
                 }
             }
         }
 
-        if (enc_method >= SALSA20) {
+        if (enc_method >= SALSA20)
+        {
             int padding = ctx->counter % SODIUM_BLOCK_SIZE;
             brealloc(plain, (plain->len + padding) * 2, capacity);
 
-            if (padding) {
+            if (padding)
+            {
                 brealloc(cipher, cipher->len + padding, capacity);
                 memmove(cipher->array + iv_len + padding, cipher->array + iv_len,
                         cipher->len - iv_len);
@@ -1394,16 +1491,20 @@ ss_decrypt(buffer_t *cipher, enc_ctx_t *ctx, size_t capacity)
                                  ctx->counter / SODIUM_BLOCK_SIZE, enc_key,
                                  enc_method);
             ctx->counter += cipher->len - iv_len;
-            if (padding) {
+            if (padding)
+            {
                 memmove(plain->array, plain->array + padding, plain->len);
             }
-        } else {
+        }
+        else
+        {
             err = cipher_context_update(&ctx->evp, (uint8_t *)plain->array, &plain->len,
                                         (const uint8_t *)(cipher->array + iv_len),
                                         cipher->len - iv_len);
         }
 
-        if (!err) {
+        if (!err)
+        {
             bfree(cipher);
             return -1;
         }
@@ -1418,10 +1519,13 @@ ss_decrypt(buffer_t *cipher, enc_ctx_t *ctx, size_t capacity)
         cipher->len = plain->len;
 
         return 0;
-    } else {
+    }
+    else
+    {
         char *begin = cipher->array;
-        char *ptr   = cipher->array;
-        while (ptr < begin + cipher->len) {
+        char *ptr = cipher->array;
+        while (ptr < begin + cipher->len)
+        {
             *ptr = (char)dec_table[(uint8_t)*ptr];
             ptr++;
         }
@@ -1429,21 +1533,21 @@ ss_decrypt(buffer_t *cipher, enc_ctx_t *ctx, size_t capacity)
     }
 }
 
-void
-enc_ctx_init(int method, enc_ctx_t *ctx, int enc)
+void enc_ctx_init(int method, enc_ctx_t *ctx, int enc)
 {
     sodium_memzero(ctx, sizeof(enc_ctx_t));
     cipher_context_init(&ctx->evp, method, enc);
 
-    if (enc) {
+    if (enc)
+    {
         rand_bytes(ctx->evp.iv, enc_iv_len);
     }
 }
 
-void
-enc_key_init(int method, const char *pass)
+void enc_key_init(int method, const char *pass)
 {
-    if (method <= TABLE || method >= CIPHER_NUM) {
+    if (method <= TABLE || method >= CIPHER_NUM)
+    {
         LOGE("enc_key_init(): Illegal method");
         return;
     }
@@ -1461,51 +1565,59 @@ enc_key_init(int method, const char *pass)
     memset(&cipher, 0, sizeof(cipher_t));
 
     // Initialize sodium for random generator
-    if (sodium_init() == -1) {
+    if (sodium_init() == -1)
+    {
         FATAL("Failed to initialize sodium");
     }
 
-    if (method == SALSA20 || method == CHACHA20 || method == CHACHA20IETF) {
+    if (method == SALSA20 || method == CHACHA20 || method == CHACHA20IETF)
+    {
 #if defined(USE_CRYPTO_OPENSSL)
-        cipher.info    = NULL;
+        cipher.info = NULL;
         cipher.key_len = supported_ciphers_key_size[method];
-        cipher.iv_len  = supported_ciphers_iv_size[method];
+        cipher.iv_len = supported_ciphers_iv_size[method];
 #endif
 #if defined(USE_CRYPTO_POLARSSL)
-        cipher.info             = &cipher_info;
-        cipher.info->base       = NULL;
+        cipher.info = &cipher_info;
+        cipher.info->base = NULL;
         cipher.info->key_length = supported_ciphers_key_size[method] * 8;
-        cipher.info->iv_size    = supported_ciphers_iv_size[method];
+        cipher.info->iv_size = supported_ciphers_iv_size[method];
 #endif
 #if defined(USE_CRYPTO_MBEDTLS)
         // XXX: key_length changed to key_bitlen in mbed TLS 2.0.0
-        cipher.info             = &cipher_info;
-        cipher.info->base       = NULL;
+        cipher.info = &cipher_info;
+        cipher.info->base = NULL;
         cipher.info->key_bitlen = supported_ciphers_key_size[method] * 8;
-        cipher.info->iv_size    = supported_ciphers_iv_size[method];
+        cipher.info->iv_size = supported_ciphers_iv_size[method];
 #endif
-    } else {
+    }
+    else
+    {
         cipher.info = (cipher_kt_t *)get_cipher_type(method);
     }
 
-    if (cipher.info == NULL && cipher.key_len == 0) {
-        do {
+    if (cipher.info == NULL && cipher.key_len == 0)
+    {
+        do
+        {
 #if defined(USE_CRYPTO_POLARSSL) && defined(USE_CRYPTO_APPLECC)
-            if (supported_ciphers_applecc[method] != kCCAlgorithmInvalid) {
-                cipher_info.base       = NULL;
+            if (supported_ciphers_applecc[method] != kCCAlgorithmInvalid)
+            {
+                cipher_info.base = NULL;
                 cipher_info.key_length = supported_ciphers_key_size[method] * 8;
-                cipher_info.iv_size    = supported_ciphers_iv_size[method];
-                cipher.info            = (cipher_kt_t *)&cipher_info;
+                cipher_info.iv_size = supported_ciphers_iv_size[method];
+                cipher.info = (cipher_kt_t *)&cipher_info;
                 break;
             }
 #endif
 #if defined(USE_CRYPTO_MBEDTLS) && defined(USE_CRYPTO_APPLECC)
             // XXX: key_length changed to key_bitlen in mbed TLS 2.0.0
-            if (supported_ciphers_applecc[method] != kCCAlgorithmInvalid) {
-                cipher_info.base       = NULL;
+            if (supported_ciphers_applecc[method] != kCCAlgorithmInvalid)
+            {
+                cipher_info.base = NULL;
                 cipher_info.key_bitlen = supported_ciphers_key_size[method] * 8;
-                cipher_info.iv_size    = supported_ciphers_iv_size[method];
-                cipher.info            = (cipher_kt_t *)&cipher_info;
+                cipher_info.iv_size = supported_ciphers_iv_size[method];
+                cipher.info = (cipher_kt_t *)&cipher_info;
                 break;
             }
 #endif
@@ -1515,65 +1627,77 @@ enc_key_init(int method, const char *pass)
     }
 
     const digest_type_t *md = get_digest_type("MD5");
-    if (md == NULL) {
+    if (md == NULL)
+    {
         FATAL("MD5 Digest not found in crypto library");
     }
 
     enc_key_len = bytes_to_key(&cipher, md, (const uint8_t *)pass, enc_key);
 
-    if (enc_key_len == 0) {
+    if (enc_key_len == 0)
+    {
         FATAL("Cannot generate key and IV");
     }
-    if (method == RC4_MD5 || method == RC4_MD5_6) {
+    if (method == RC4_MD5 || method == RC4_MD5_6)
+    {
         enc_iv_len = supported_ciphers_iv_size[method];
-    } else {
+    }
+    else
+    {
         enc_iv_len = cipher_iv_size(&cipher);
     }
     enc_method = method;
 }
 
-int
-enc_init(const char *pass, const char *method)
+int enc_init(const char *pass, const char *method)
 {
     int m = TABLE;
-    if (method != NULL) {
+    if (method != NULL)
+    {
         for (m = TABLE; m < CIPHER_NUM; m++)
-            if (strcmp(method, supported_ciphers[m]) == 0) {
+            if (strcmp(method, supported_ciphers[m]) == 0)
+            {
                 break;
             }
-        if (m >= CIPHER_NUM) {
+        if (m >= CIPHER_NUM)
+        {
             LOGE("Invalid cipher name: %s, use rc4-md5 instead", method);
             m = RC4_MD5;
         }
     }
-    if (m == TABLE) {
+    if (m == TABLE)
+    {
         enc_table_init(pass);
-    } else {
+    }
+    else
+    {
         enc_key_init(m, pass);
     }
     return m;
 }
 
-int
-ss_check_hash(buffer_t *buf, chunk_t *chunk, enc_ctx_t *ctx, size_t capacity)
+int ss_check_hash(buffer_t *buf, chunk_t *chunk, enc_ctx_t *ctx, size_t capacity)
 {
     int i, j, k;
-    ssize_t blen  = buf->len;
+    ssize_t blen = buf->len;
     uint32_t cidx = chunk->idx;
 
     brealloc(chunk->buf, chunk->len + blen, capacity);
     brealloc(buf, chunk->len + blen, capacity);
 
-    for (i = 0, j = 0, k = 0; i < blen; i++) {
+    for (i = 0, j = 0, k = 0; i < blen; i++)
+    {
         chunk->buf->array[cidx++] = buf->array[k++];
 
-        if (cidx == CLEN_BYTES) {
+        if (cidx == CLEN_BYTES)
+        {
             uint16_t clen = ntohs(*((uint16_t *)chunk->buf->array));
             brealloc(chunk->buf, clen + AUTH_BYTES, capacity);
             chunk->len = clen;
         }
 
-        if (cidx == chunk->len + AUTH_BYTES) {
+        if (cidx == chunk->len + AUTH_BYTES)
+        {
             // Compare hash
             uint8_t hash[ONETIMEAUTH_BYTES * 2];
             uint8_t key[MAX_IV_LENGTH + sizeof(uint32_t)];
@@ -1592,7 +1716,8 @@ ss_check_hash(buffer_t *buf, chunk_t *chunk, enc_ctx_t *ctx, size_t capacity)
                       (uint8_t *)chunk->buf->array + AUTH_BYTES, chunk->len, hash);
 #endif
 
-            if (safe_memcmp(hash, chunk->buf->array + CLEN_BYTES, ONETIMEAUTH_BYTES) != 0) {
+            if (safe_memcmp(hash, chunk->buf->array + CLEN_BYTES, ONETIMEAUTH_BYTES) != 0)
+            {
                 return 0;
             }
 
@@ -1601,22 +1726,21 @@ ss_check_hash(buffer_t *buf, chunk_t *chunk, enc_ctx_t *ctx, size_t capacity)
             memcpy(buf->array + j, chunk->buf->array + AUTH_BYTES, chunk->len);
 
             // Reset the base offset
-            j   += chunk->len;
-            k    = j;
+            j += chunk->len;
+            k = j;
             cidx = 0;
             chunk->counter++;
         }
     }
 
-    buf->len   = j;
+    buf->len = j;
     chunk->idx = cidx;
     return 1;
 }
 
-int
-ss_gen_hash(buffer_t *buf, uint32_t *counter, enc_ctx_t *ctx, size_t capacity)
+int ss_gen_hash(buffer_t *buf, uint32_t *counter, enc_ctx_t *ctx, size_t capacity)
 {
-    ssize_t blen       = buf->len;
+    ssize_t blen = buf->len;
     uint16_t chunk_len = htons((uint16_t)blen);
     uint8_t hash[ONETIMEAUTH_BYTES * 2];
     uint8_t key[MAX_IV_LENGTH + sizeof(uint32_t)];
@@ -1629,7 +1753,8 @@ ss_gen_hash(buffer_t *buf, uint32_t *counter, enc_ctx_t *ctx, size_t capacity)
     HMAC(EVP_sha1(), key, enc_iv_len + sizeof(uint32_t), (uint8_t *)buf->array, blen, hash, NULL);
 #elif defined(USE_CRYPTO_MBEDTLS)
     mbedtls_md_hmac(mbedtls_md_info_from_type(
-                        MBEDTLS_MD_SHA1), key, enc_iv_len + sizeof(uint32_t), (uint8_t *)buf->array, blen, hash);
+                        MBEDTLS_MD_SHA1),
+                    key, enc_iv_len + sizeof(uint32_t), (uint8_t *)buf->array, blen, hash);
 #else
     sha1_hmac(key, enc_iv_len + sizeof(uint32_t), (uint8_t *)buf->array, blen, hash);
 #endif

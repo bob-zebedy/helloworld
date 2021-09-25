@@ -23,7 +23,7 @@ typedef struct cnode
 {
     void *data;
     struct cnode *next;
-}node, *Node;
+} node, *Node;
 
 typedef struct clist
 {
@@ -42,17 +42,17 @@ typedef struct clist
     lpf5 modify_at;
     lpf6 sort;
     lpf7 delete_at;
-}list;
+} list;
 
 //初始化链表
 List list_init(unsigned int data_size);
-int  list_add_back(List l, void *data);
-int  list_add_front(List l, void *data);
-int  list_delete_node(List l, void *data, compare pfunc);
-int  list_delete_at(List l, unsigned int index);
-int  list_modify_at(List l, unsigned int index, void *new_data);
-int  list_have_same(List l, void *data, compare pfunc);
-int  list_have_same_cmp(List l, void *data);
+int list_add_back(List l, void *data);
+int list_add_front(List l, void *data);
+int list_delete_node(List l, void *data, compare pfunc);
+int list_delete_at(List l, unsigned int index);
+int list_modify_at(List l, unsigned int index, void *new_data);
+int list_have_same(List l, void *data, compare pfunc);
+int list_have_same_cmp(List l, void *data);
 void list_foreach(List l, dofunc doit);
 void list_sort(List l, compare pfunc);
 void list_clear(List l);

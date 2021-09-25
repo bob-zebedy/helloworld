@@ -47,7 +47,8 @@ new_rule()
     rule_t *rule;
 
     rule = calloc(1, sizeof(rule_t));
-    if (rule == NULL) {
+    if (rule == NULL)
+    {
         ERROR("malloc");
         return NULL;
     }
@@ -55,16 +56,19 @@ new_rule()
     return rule;
 }
 
-int
-accept_rule_arg(rule_t *rule, const char *arg)
+int accept_rule_arg(rule_t *rule, const char *arg)
 {
-    if (rule->pattern == NULL) {
+    if (rule->pattern == NULL)
+    {
         rule->pattern = strdup(arg);
-        if (rule->pattern == NULL) {
+        if (rule->pattern == NULL)
+        {
             ERROR("strdup failed");
             return -1;
         }
-    } else {
+    }
+    else
+    {
         LOGE("Unexpected table rule argument: %s", arg);
         return -1;
     }
@@ -72,22 +76,22 @@ accept_rule_arg(rule_t *rule, const char *arg)
     return 1;
 }
 
-void
-add_rule(struct cork_dllist *rules, rule_t *rule)
+void add_rule(struct cork_dllist *rules, rule_t *rule)
 {
     cork_dllist_add(rules, &rule->entries);
 }
 
-int
-init_rule(rule_t *rule)
+int init_rule(rule_t *rule)
 {
-    if (rule->pattern_re == NULL) {
+    if (rule->pattern_re == NULL)
+    {
         const char *reerr;
         int reerroffset;
 
         rule->pattern_re =
             pcre_compile(rule->pattern, 0, &reerr, &reerroffset, NULL);
-        if (rule->pattern_re == NULL) {
+        if (rule->pattern_re == NULL)
+        {
             LOGE("Regex compilation of \"%s\" failed: %s, offset %d",
                  rule->pattern, reerr, reerroffset);
             return 0;
@@ -102,12 +106,14 @@ lookup_rule(const struct cork_dllist *rules, const char *name, size_t name_len)
 {
     struct cork_dllist_item *curr, *next;
 
-    if (name == NULL) {
-        name     = "";
+    if (name == NULL)
+    {
+        name = "";
         name_len = 0;
     }
 
-    cork_dllist_foreach_void(rules, curr, next) {
+    cork_dllist_foreach_void(rules, curr, next)
+    {
         rule_t *rule = cork_container_of(curr, rule_t, entries);
         if (pcre_exec(rule->pattern_re, NULL,
                       name, name_len, 0, 0, NULL, 0) >= 0)
@@ -117,8 +123,7 @@ lookup_rule(const struct cork_dllist *rules, const char *name, size_t name_len)
     return NULL;
 }
 
-void
-remove_rule(rule_t *rule)
+void remove_rule(rule_t *rule)
 {
     cork_dllist_remove(&rule->entries);
     free_rule(rule);
