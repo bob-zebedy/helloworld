@@ -19,6 +19,7 @@ local proxy = ucic:get_first(name, 'server_subscribe', 'proxy', '0')
 local switch = ucic:get_first(name, 'server_subscribe', 'switch', '1')
 local subscribe_url = ucic:get_first(name, 'server_subscribe', 'subscribe_url', {})
 local filter_words = ucic:get_first(name, 'server_subscribe', 'filter_words', '过期时间|剩余流量|官网')
+local save_words = ucic:get_first(name, 'server_subscribe', 'save_words', '')
 local v2_ss = luci.sys.exec('type -t -p ss-redir sslocal') ~= "" and "ss" or "v2ray"
 local v2_tj = luci.sys.exec('type -t -p trojan') ~= "" and "trojan" or "v2ray"
 local log = function(...)
@@ -412,11 +413,44 @@ end
 
 local function check_filer(result)
 	do
+		-- 过滤的关键词列表
 		local filter_word = split(filter_words, "|")
+		-- 保留的关键词列表
+		local check_save = false
+		if save_words ~= nil and save_words ~= "" and save_words ~= "NULL" then
+			check_save = true
+		end
+		local save_word = split(save_words, "|")
+
+		-- 检查结果
+		local filter_result = false
+		local save_result = true
+
+		-- 检查是否存在过滤关键词
+		local filter_word = split(filter_words, "|")
+
 		for i, v in pairs(filter_word) do
 			if result.alias:find(v) then
-				return true
+				filter_result = true
 			end
+		end
+
+		-- 检查是否打开了保留关键词检查，并且进行过滤
+		if check_save == true then
+			for i, v in pairs(save_word) do
+				if result.alias:find(v) then
+					save_result = false
+				end
+			end
+		else
+			save_result = false
+		end
+
+		-- 不等时返回
+		if filter_result == true or save_result == true then
+			return true
+		else
+			return false
 		end
 	end
 end
@@ -436,7 +470,6 @@ local execute = function()
 				cache[groupHash] = {}
 				tinsert(nodeResult, {})
 				local index = #nodeResult
-				-- SSD 似乎是这种格式 ssd:// 开头的
 				if raw:find('ssd://') then
 					szType = 'ssd'
 					local nEnd = select(2, raw:find('ssd://'))
