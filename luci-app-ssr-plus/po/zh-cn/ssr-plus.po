@@ -133,6 +133,12 @@ msgstr "关键字过滤"
 msgid "Filter Words splited by |"
 msgstr "关键字用|分隔"
 
+msgid "Subscribe Save Words"
+msgstr "订阅节点关键字保留检查"
+
+msgid "Save Words splited by |"
+msgstr "命中关键字的节点将被保留, 多个关键字用 | 分隔"
+
 msgid "Update Subscribe List"
 msgstr "更新订阅"
 
