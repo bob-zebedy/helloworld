@@ -61,7 +61,7 @@ function act_ping()
 		socket:setopt("socket", "sndtimeo", 3)
 		e.socket = socket:connect(domain, port)
 		socket:close()
-		e.ping = luci.sys.exec(string.format("echo -n $(tcping -q -c 1 -i 1 -t 2 -p %s %s 2>&1 | grep -o 'time=[0-9]*' | awk -F '=' '{print $2}') 2>/dev/null", port, domain))
+		e.ping = luci.sys.exec(string.format("echo -n $(tcping -c 3 -i 1 -t 2 -f -p %s %s 2>&1 | grep -o 'max = [0-9./]*' | awk -F '/' '{print $2}') 2>/dev/null", port, domain))
 	end
 	if (iret == 0) then
 		luci.sys.call(" ipset del ss_spec_wan_ac " .. domain)
