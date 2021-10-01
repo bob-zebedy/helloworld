@@ -95,13 +95,13 @@ msgid "Resolve Dns Mode"
 msgstr "DNS解析方式"
 
 msgid "Use pdnsd query and cache"
-msgstr "使用 pdnsd 查询并缓存"
+msgstr "使用 PDNSD 查询并缓存"
 
 msgid "Use dns2socks query and cache"
-msgstr "使用 dns2socks 查询并缓存"
+msgstr "使用 DNS2SOCKS 查询并缓存"
 
 msgid "Use Local DNS Service listen port 5335"
-msgstr "使用本地DNS服务器"
+msgstr "使用本地DNS服务器(端口5335)"
 
 msgid "DNS Server IP:Port"
 msgstr "DNS服务器 IP:Port"
