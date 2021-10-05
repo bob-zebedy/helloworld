@@ -91,7 +91,7 @@ local log = function(...)
 	if args then
 		print("{ret=" .. table.concat({...}, ",retcount=") .. "}")
 	else
-		print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "] " .. table.concat({...}, " "))
+		print("[" .. os.date("%Y-%m-%d %H:%M:%S") .. "]  " .. table.concat({...}, " "))
 	end
 end
 
