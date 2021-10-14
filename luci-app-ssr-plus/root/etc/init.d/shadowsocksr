@@ -28,7 +28,7 @@ redir_tcp=0
 redir_udp=0
 local_enable=0
 kcp_enable_flag=0
-pdnsd_enable_flag=0
+dns_mode_flag=0
 switch_server=$1
 CRON_FILE=/etc/crontabs/root
 EXTRA_COMMANDS='reset'
@@ -153,8 +153,8 @@ ln_start_bin() {
 }
 
 start_dns() {
-	local ssrplus_dns="$(uci_get_by_type global pdnsd_enable 0)"
-	local dnsstr="$(uci_get_by_type global tunnel_forward 8.8.4.4:53)"
+	local ssrplus_dns="$(uci_get_by_type global dns_mode 0)"
+	local dnsstr="$(uci_get_by_type global tunnel_forward 1.1.1.1:53)"
 	local dnsserver=$(echo "$dnsstr" | awk -F ':' '{print $1}')
 	local dnsport=$(echo "$dnsstr" | awk -F ':' '{print $2}')
 	start_pdnsd() {
@@ -204,12 +204,12 @@ start_dns() {
 		case "$ssrplus_dns" in
 		1)
 			start_pdnsd $dnsserver $dnsport
-			pdnsd_enable_flag=1
+			dns_mode_flag=1
 			;;
 		2)
 			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_dns_port ssrplus-dns
 			ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_dns_port $dnsserver:$dnsport 127.0.0.1:$dns_port -q
-			pdnsd_enable_flag=2
+			dns_mode_flag=2
 			;;
 		esac
 	fi
@@ -400,7 +400,7 @@ start_shunt() {
 			local tmp_port=$tmp_shunt_local_port
 			ln_start_bin $(first_type ${type}local ${type}-local) ${type}-local -c $shunt_dns_config_file
 		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
+		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
 		echolog "分流服务器 $(get_name $type) 已启动"
 		;;
 	v2ray)
@@ -411,7 +411,7 @@ start_shunt() {
 			gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port $tmp_port
 			ln_start_bin $(first_type xray v2ray) v2ray -config $shunt_config_file
 		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
+		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
 		echolog "分流服务器 $(get_name $type) 已启动"
 		;;
 	trojan)
@@ -423,7 +423,7 @@ start_shunt() {
 			local tmp_port=$tmp_shunt_local_port
 			ln_start_bin $(first_type trojan) $type --config $shunt_dns_config_file
 		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
+		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
 		echolog "分流服务器 $(get_name $type) 已启动"
 		;;
 	naiveproxy)
@@ -435,7 +435,7 @@ start_shunt() {
 			local tmp_port=$tmp_shunt_local_port
 			ln_start_bin $(first_type naive) naive --config $shunt_dns_config_file
 		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
+		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
 		echolog "分流服务器 $(get_name $type) 已启动"
 		redir_udp=0
 		;;
@@ -448,7 +448,7 @@ start_shunt() {
 			local tmp_port=$tmp_shunt_local_port
 			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_port shunt-dns-ssr-plus
 		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 8.8.8.8:53 127.0.0.1:$tmp_shunt_dns_port -q
+		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
 		echolog "分流服务器 $(get_name $type) 已启动"
 		;;
 	esac
@@ -718,9 +718,9 @@ start_switch() {
 
 start_monitor() {
 	if [ $(uci_get_by_type global monitor_enable 1) == "1" ]; then
-		let total_count=server_count+redir_tcp+redir_udp+kcp_enable_flag+local_enable+pdnsd_enable_flag
+		let total_count=server_count+redir_tcp+redir_udp+kcp_enable_flag+local_enable+dns_mode_flag
 		if [ $total_count -gt 0 ]; then
-			service_start /usr/bin/ssr-monitor $server_count $redir_tcp $redir_udp $kcp_enable_flag $local_enable $pdnsd_enable_flag
+			service_start /usr/bin/ssr-monitor $server_count $redir_tcp $redir_udp $kcp_enable_flag $local_enable $dns_mode_flag
 		fi
 	fi
 }
@@ -863,8 +863,8 @@ reset() {
 		set shadowsocksr.@global[0].threads='0'
 		set shadowsocksr.@global[0].run_mode='gfw'
 		set shadowsocksr.@global[0].dports='2'
-		set shadowsocksr.@global[0].pdnsd_enable='1'
-		set shadowsocksr.@global[0].tunnel_forward='8.8.8.8:53'
+		set shadowsocksr.@global[0].dns_mode='1'
+		set shadowsocksr.@global[0].tunnel_forward='1.1.1.1:53'
 		set shadowsocksr.@global[0].monitor_enable='1'
 		set shadowsocksr.@global[0].enable_switch='1'
 		set shadowsocksr.@global[0].switch_time='60'

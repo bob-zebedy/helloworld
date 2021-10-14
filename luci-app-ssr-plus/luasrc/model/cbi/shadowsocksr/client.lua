@@ -80,7 +80,7 @@ o:value("1", translate("All Ports"))
 o:value("2", translate("Only Common Ports"))
 o.default = 1
 
-o = s:option(ListValue, "pdnsd_enable", translate("Resolve Dns Mode"))
+o = s:option(ListValue, "dns_mode", translate("Resolve Dns Mode"))
 o:value("1", translate("Use pdnsd query and cache"))
 o:value("2", translate("Use dns2socks query and cache"))
 o:value("0", translate("Use Local DNS Service listen port 5335"))
@@ -92,8 +92,8 @@ o:value("208.67.222.222:53", translate("OpenDNS (208.67.222.222)"))
 o:value("208.67.220.220:53", translate("OpenDNS (208.67.220.220)"))
 o:value("8.8.8.8:53", translate("Google Public DNS (8.8.8.8)"))
 o:value("8.8.4.4:53", translate("Google Public DNS (8.8.4.4)"))
-o:depends("pdnsd_enable", "1")
-o:depends("pdnsd_enable", "2")
+o:depends("dns_mode", "1")
+o:depends("dns_mode", "2")
 o.description = translate("Custom DNS Server format as IP:PORT")
 o.datatype = "hostport"
 

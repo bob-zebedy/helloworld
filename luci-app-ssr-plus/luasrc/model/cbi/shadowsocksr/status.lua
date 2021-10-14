@@ -109,7 +109,7 @@ else
 	s.value = translate("Not Running")
 end
 
-if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') ~= '0' then
+if uci:get_first("shadowsocksr", 'global', 'dns_mode', '0') ~= '0' then
 	s = m:field(DummyValue, "pdnsd_run", translate("DNS Anti-pollution"))
 	s.rawhtml = true
 	if pdnsd_run == 1 then
@@ -180,7 +180,7 @@ if uci:get_first("shadowsocksr", 'global', 'adblock', '0') == '1' then
 	s.value = ad_count .. " " .. translate("Records")
 end
 
-if uci:get_first("shadowsocksr", 'global', 'pdnsd_enable', '0') == '1' then
+if uci:get_first("shadowsocksr", 'global', 'dns_mode', '0') == '1' then
 	s = m:field(DummyValue, "cache", translate("Reset pdnsd cache"))
 	s.template = "shadowsocksr/cache"
 end
