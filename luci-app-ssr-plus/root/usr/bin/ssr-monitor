@@ -96,7 +96,7 @@ while [ "1" == "1" ]; do #死循环
 		if [ "$icount" -lt 2 ]; then #如果进程挂掉就重启它
 			logger -t "$NAME" "dns2socks $dnsstr 错误, 重新启动"
 			echolog "dns2socks $dnsstr 错误, 重新启动"
-			dnsstr=$(uci_get_by_type global tunnel_forward 8.8.4.4:53)
+			dnsstr=$(uci_get_by_type global tunnel_forward 1.1.1.1:53)
 			dnsserver=$(echo "$dnsstr" | awk -F ':' '{print $1}')
 			dnsport=$(echo "$dnsstr" | awk -F ':' '{print $2}')
 			kill -9 $(busybox ps -w | grep ssrplus-dns | grep -v grep | awk '{print $1}') >/dev/null 2>&1
