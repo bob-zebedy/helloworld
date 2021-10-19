@@ -22,7 +22,7 @@ o = s:option(ListValue, "auto_update_time", translate("Update time (every day)")
 for t = 0, 23 do
 	o:value(t, t .. ":00")
 end
-o.default = 3
+o.default = 1
 o.rmempty = false
 
 o = s:option(DynamicList, "subscribe_url", translate("Subscribe URL"))
