@@ -61,8 +61,10 @@ o = s:option(Flag, "adblock", translate("Enable adblock"))
 o.rmempty = false
 
 o = s:option(Value, "adblock_url", translate("adblock_url"))
+o:value("https://raw.githubusercontent.com/neodevpro/neodevhost/master/host_dnsmasq.conf", translate("NeoHost-Full"))
+o:value("https://raw.githubusercontent.com/neodevpro/neodevhost/master/lite_host_dnsmasq.conf", translate("NeoHost-Lite"))
 o:value("https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf", translate("anti-AD"))
-o.default = "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf"
+o.default = "https://raw.githubusercontent.com/neodevpro/neodevhost/master/host_dnsmasq.conf"
 o:depends("adblock", "1")
 
 o = s:option(Button, "reset", translate("Reset all"))
