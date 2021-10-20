@@ -401,7 +401,7 @@ start_shunt() {
 			ln_start_bin $(first_type ${type}local ${type}-local) ${type}-local -c $shunt_dns_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(get_name $type) 已启动"
+		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
 		;;
 	v2ray)
 		if [ -n "$tmp_local_port" ]; then
@@ -412,7 +412,7 @@ start_shunt() {
 			ln_start_bin $(first_type xray v2ray) v2ray -config $shunt_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(get_name $type) 已启动"
+		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
 		;;
 	trojan)
 		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
@@ -424,7 +424,7 @@ start_shunt() {
 			ln_start_bin $(first_type trojan) $type --config $shunt_dns_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(get_name $type) 已启动"
+		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
 		;;
 	naiveproxy)
 		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
@@ -436,7 +436,7 @@ start_shunt() {
 			ln_start_bin $(first_type naive) naive --config $shunt_dns_config_file
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(get_name $type) 已启动"
+		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
 		redir_udp=0
 		;;
 	*)
@@ -449,7 +449,7 @@ start_shunt() {
 			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_port shunt-dns-ssr-plus
 		fi
 		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(get_name $type) 已启动"
+		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
 		;;
 	esac
 	return 0
@@ -528,38 +528,38 @@ Start_Run() {
 		for i in $(seq 1 $threads); do
 			ln_start_bin "$ss_program" ${type}-redir -c $tcp_config_file
 		done
-		echolog "主服务器 $(get_name $type) 已启动 $threads 线程"
+		echolog "主服务器 $(uci_get_by_name $GLOBAL_SERVER alias) 已启动 $threads 线程"
 		;;
 	v2ray)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port $socks_port
 		ln_start_bin $(first_type xray v2ray) v2ray -config $tcp_config_file
-		echolog "主服务器 $(get_name $type) 已启动 $threads 线程"
+		echolog "主服务器 $(uci_get_by_name $GLOBAL_SERVER alias) 已启动 $threads 线程"
 		;;
 	trojan)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port
 		for i in $(seq 1 $threads); do
 			ln_start_bin $(first_type $type) $type --config $tcp_config_file
 		done
-		echolog "主服务器 $(get_name $type) 已启动 $threads 线程"
+		echolog "主服务器 $(uci_get_by_name $GLOBAL_SERVER alias) 已启动 $threads 线程"
 		;;
 	naiveproxy)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port
 		ln_start_bin $(first_type naive) naive $tcp_config_file
-		echolog "主服务器 $(get_name $type) 已启动 $threads 线程"
+		echolog "主服务器 $(uci_get_by_name $GLOBAL_SERVER alias) 已启动 $threads 线程"
 		;;
 	socks5)
 		if [ "$(uci_get_by_name $GLOBAL_SERVER auth_enable 0)" == "1" ]; then
 			local auth="-a $(uci_get_by_name $GLOBAL_SERVER username) -k $(uci_get_by_name $GLOBAL_SERVER password)"
 		fi
 		ln_start_bin $(first_type ipt2socks) ipt2socks $tcp_config_file -R -4 -j $threads -s $(uci_get_by_name $GLOBAL_SERVER server) -p $(uci_get_by_name $GLOBAL_SERVER server_port) -l $tcp_port $auth
-		echolog "主服务器 $(get_name $type) 已启动 $threads 线程"
+		echolog "主服务器 $(uci_get_by_name $GLOBAL_SERVER alias) 已启动 $threads 线程"
 		;;
 	tun)
 		gen_config_file $GLOBAL_SERVER $type 1 $tcp_port
 		for i in $(seq 1 $threads); do
 			ln_start_bin $(first_type redsocks2) redsocks2 -c $tcp_config_file
 		done
-		echolog "主服务器 $(get_name $type) 已启动 $threads 线程"
+		echolog "主服务器 $(uci_get_by_name $GLOBAL_SERVER alias) 已启动 $threads 线程"
 		;;
 	esac
 	redir_tcp=1
