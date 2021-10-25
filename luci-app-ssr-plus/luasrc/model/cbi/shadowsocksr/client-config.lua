@@ -357,16 +357,12 @@ o.rmempty = true
 -- WS域名
 o = s:option(Value, "ws_host", translate("WebSocket Host"))
 o:depends({transport = "ws", tls = false})
-o:depends("trojan_transport", "h2+ws")
-o:depends("trojan_transport", "ws")
 o.datatype = "hostname"
 o.rmempty = true
 
 -- WS路径
 o = s:option(Value, "ws_path", translate("WebSocket Path"))
 o:depends("transport", "ws")
-o:depends("trojan_transport", "h2+ws")
-o:depends("trojan_transport", "ws")
 o.rmempty = true
 
 -- [[ H2部分 ]]--
@@ -468,7 +464,7 @@ o:value("plaintext", translate("Plain Text"))
 o:value("shadowsocks", translate("ShadowSocks"))
 o:value("other", translate("Other"))
 o.default = "plaintext"
-o:depends({tls = false, trojan_transport = "original"})
+o:depends("tls", true)
 
 o = s:option(Value, "plugin_cmd", translate("Plugin Binary Path"))
 o.placeholder = "eg. /usr/bin/v2ray-plugin"
