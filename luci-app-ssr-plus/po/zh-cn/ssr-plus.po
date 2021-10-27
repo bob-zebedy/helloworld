@@ -26,7 +26,7 @@ msgid "Main Server"
 msgstr "主服务器"
 
 msgid "Game Mode UDP Server"
-msgstr "游戏UDP节点"
+msgstr "游戏 UDP 节点"
 
 msgid "Netflix Node"
 msgstr "Netflix 节点"
@@ -71,7 +71,7 @@ msgid "Running Mode"
 msgstr "运行模式"
 
 msgid "GFW List Mode"
-msgstr "GFW模式"
+msgstr "GFW 模式"
 
 msgid "IP Route Mode"
 msgstr "绕过大陆模式"
@@ -92,7 +92,7 @@ msgid "Only Common Ports"
 msgstr "常用端口"
 
 msgid "Resolve Dns Mode"
-msgstr "DNS解析方式"
+msgstr "DNS 解析方式"
 
 msgid "Use pdnsd query and cache"
 msgstr "使用 PDNSD 查询并缓存"
@@ -101,16 +101,16 @@ msgid "Use dns2socks query and cache"
 msgstr "使用 DNS2SOCKS 查询并缓存"
 
 msgid "Use Local DNS Service listen port 5335"
-msgstr "使用本地DNS服务器(端口5335)"
+msgstr "使用本地 DNS 服务器 (端口5335)"
 
 msgid "DNS Server IP:Port"
-msgstr "DNS服务器 IP:Port"
+msgstr "DNS 服务器 IP:Port"
 
 msgid "Anti-pollution DNS Server"
-msgstr "国外域名DNS服务器"
+msgstr "防污染 DNS"
 
 msgid "Custom DNS Server format as IP:PORT"
-msgstr "自定义DNS(IP:Port)"
+msgstr "自定义 DNS (IP:Port)"
 
 msgid "Servers subscription and manage"
 msgstr "服务器节点与订阅管理"
@@ -119,13 +119,13 @@ msgid "Auto Update"
 msgstr "自动更新"
 
 msgid "Auto Update Server subscription, GFW list and CHN route"
-msgstr "自动更新服务器节点, GFW列表, CHN路由表"
+msgstr "自动更新服务器节点, GFW 列表, CHN 路由表"
 
 msgid "Update time (every day)"
-msgstr "更新时间(每天)"
+msgstr "更新时间 (每天)"
 
 msgid "Subscribe URL"
-msgstr "订阅URL"
+msgstr "订阅 URL"
 
 msgid "Subscribe Filter Words"
 msgstr "关键字过滤"
@@ -191,7 +191,7 @@ msgid "Server Node Type"
 msgstr "节点类型"
 
 msgid "Alias(optional)"
-msgstr "别名(可选)"
+msgstr "别名 (可选)"
 
 msgid "Network interface to use"
 msgstr "使用此网络接口"
@@ -239,10 +239,10 @@ msgid "Camouflage Type"
 msgstr "伪装类型"
 
 msgid "VideoCall(SRTP)"
-msgstr "视频通话(SRTP)"
+msgstr "视频通话 (SRTP)"
 
 msgid "BitTorrent(uTP)"
-msgstr "BT下载(uTP)"
+msgstr "BT下载 (uTP)"
 
 msgid "WechatVideo"
 msgstr "微信视频通话"
@@ -254,10 +254,10 @@ msgid "WireGuard"
 msgstr "WireGuard 数据包"
 
 msgid "MTU"
-msgstr "最大传输单元(MTU)"
+msgstr "最大传输单元 (MTU)"
 
 msgid "TTI"
-msgstr "传输时间间隔(TTI)"
+msgstr "传输时间间隔 (TTI)"
 
 msgid "Uplink Capacity"
 msgstr "上行链路容量"
@@ -272,13 +272,13 @@ msgid "Write Buffer Size"
 msgstr "写入缓冲区大小"
 
 msgid "obfuscate password(optional)"
-msgstr "混淆密码(可选)"
+msgstr "混淆密码 (可选)"
 
 msgid "Congestion"
 msgstr "拥塞控制"
 
 msgid "Flow"
-msgstr "流控(Flow)"
+msgstr "流控 (Flow)"
 
 msgid "Finger Print"
 msgstr "指纹伪造"
@@ -311,7 +311,7 @@ msgid "Please confirm the current certificate path"
 msgstr "请确认证书路径"
 
 msgid "TCP Fast Open"
-msgstr "TCP快速打开(TFO)"
+msgstr "TCP快速打开 (TFO)"
 
 msgid "KcpTun Enable"
 msgstr "启用 KcpTun"
@@ -350,13 +350,13 @@ msgid "Interface"
 msgstr "接口"
 
 msgid "WAN White List IP"
-msgstr "不走代理的WAN"
+msgstr "不走代理的 WAN"
 
 msgid "WAN Force Proxy IP"
-msgstr "全局代理的WAN"
+msgstr "全局代理的 WAN"
 
 msgid "LAN Access Control"
-msgstr "LAN客户端控制模式"
+msgstr "LAN 客户端控制模式"
 
 msgid "Allow listed only"
 msgstr "白名单模式"
@@ -368,22 +368,22 @@ msgid "LAN Host List"
 msgstr "LAN 设备"
 
 msgid "LAN Bypassed Host List"
-msgstr "不走代理的LAN设备"
+msgstr "不走代理的 LAN 设备"
 
 msgid "LAN Force Proxy Host List"
-msgstr "全局代理的LAN设备"
+msgstr "全局代理的 LAN 设备"
 
 msgid "Game Mode Host List"
-msgstr "LAN游戏设备"
+msgstr "LAN 游戏设备"
 
 msgid "Enable auto switch"
 msgstr "故障自动切换"
 
 msgid "Inspection cycle"
-msgstr "故障检查周期(秒)"
+msgstr "故障检查周期 (秒)"
 
 msgid "Check timout"
-msgstr "故障超时时间(秒)"
+msgstr "故障超时时间 (秒)"
 
 msgid "Check Try Count"
 msgstr "重试次数"
@@ -485,7 +485,7 @@ msgid "KcpTun Version"
 msgstr "KcpTun 版本"
 
 msgid "Reset pdnsd cache"
-msgstr "重置pdnsd缓存"
+msgstr "重置 PDNSD 缓存"
 
 msgid "Google Connectivity"
 msgstr "Google 连通性检查"
@@ -497,7 +497,7 @@ msgid "GFW List Data"
 msgstr "GFW 数据库"
 
 msgid "China IP Data"
-msgstr "国内IP 数据库"
+msgstr "国内 IP 数据库"
 
 msgid "Netflix IP Data"
 msgstr "Netflix IP 数据库"
