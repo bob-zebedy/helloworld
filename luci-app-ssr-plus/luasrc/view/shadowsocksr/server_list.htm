@@ -30,8 +30,8 @@
 				(x, result) => {
 					let col = '#ff0000';
 					if (result.ping) {
-						if (result.ping < 300) col = '#ff3300';
-						if (result.ping < 200) col = '#ff7700';
+						if (result.ping < 500) col = '#ff3300';
+						if (result.ping < 300) col = '#ff7700';
 						if (result.ping < 100) col = '#249400';
 					}
 					dom.innerHTML = `<font color="${col}">${(result.ping ? result.ping : "--") + " ms"}</font>`
