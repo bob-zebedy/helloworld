@@ -259,7 +259,7 @@ o:depends({type = "v2ray", v2ray_protocol = "shadowsocks"})
 o = s:option(Value, "plugin", translate("obfs"))
 o:value("none", translate("None"))
 if is_finded("obfs-local") then
-	o:value("obfs-local", translate("simple-obfs"))
+	o:value("obfs-local", translate("obfs-local"))
 end
 if is_finded("v2ray-plugin") then
 	o:value("v2ray-plugin", translate("v2ray-plugin"))
@@ -458,28 +458,6 @@ o.rmempty = true
 o = s:option(Flag, "congestion", translate("Congestion"))
 o:depends("transport", "kcp")
 o.rmempty = true
-
-o = s:option(ListValue, "plugin_type", translate("Plugin Type"))
-o:value("plaintext", translate("Plain Text"))
-o:value("shadowsocks", translate("ShadowSocks"))
-o:value("other", translate("Other"))
-o.default = "plaintext"
-o:depends("tls", true)
-
-o = s:option(Value, "plugin_cmd", translate("Plugin Binary Path"))
-o.placeholder = "eg. /usr/bin/v2ray-plugin"
-o:depends({plugin_type = "shadowsocks"})
-o:depends({plugin_type = "other"})
-
-o = s:option(Value, "plugin_option", translate("Plugin Option"))
-o.placeholder = "eg: obfs=http;obfs-host=www.baidu.com"
-o:depends({plugin_type = "shadowsocks"})
-o:depends({plugin_type = "other"})
-
-o = s:option(DynamicList, "plugin_arg", translate("Plugin Option Args"))
-o.placeholder = "eg: [\"-config\", \"test.json\"]"
-o:depends({plugin_type = "shadowsocks"})
-o:depends({plugin_type = "other"})
 
 -- [[ TLS ]]--
 o = s:option(Flag, "tls", translate("TLS"))

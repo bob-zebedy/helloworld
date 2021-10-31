@@ -197,7 +197,7 @@ msgid "Network interface to use"
 msgstr "使用此网络接口"
 
 msgid "Redirect traffic to this network interface"
-msgstr "分流到网络接口"
+msgstr "分流到此网络接口"
 
 msgid "V2Ray/XRay protocol"
 msgstr "V2Ray/XRay 协议"
@@ -311,7 +311,7 @@ msgid "Please confirm the current certificate path"
 msgstr "请确认证书路径"
 
 msgid "TCP Fast Open"
-msgstr "TCP快速打开 (TFO)"
+msgstr "TCP 快速打开 (TFO)"
 
 msgid "KcpTun Enable"
 msgstr "启用 KcpTun"
