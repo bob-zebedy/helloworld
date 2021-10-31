@@ -166,31 +166,31 @@ start_dns() {
 			chown -R nobody:nogroup $TMP_PATH/pdnsd
 		fi
 		cat <<-EOF >$TMP_PATH/pdnsd.conf
-			global{
-			perm_cache=1024;
-			cache_dir="$TMP_PATH/pdnsd";
-			pid_file="/var/run/pdnsd.pid";
-			run_as="nobody";
-			server_ip=127.0.0.1;
-			server_port=$dns_port;
-			status_ctl=on;
-			query_method=tcp_only;
-			min_ttl=1h;
-			max_ttl=1w;
-			timeout=10;
-			neg_domain_pol=on;
-			proc_limit=2;
-			procq_limit=8;
-			par_queries=1;
+			global {
+			    perm_cache=10240;
+			    cache_dir="$TMP_PATH/pdnsd";
+			    pid_file="/var/run/pdnsd.pid";
+			    run_as="nobody";
+			    server_ip=127.0.0.1;
+			    server_port=$dns_port;
+			    status_ctl=on;
+			    query_method=tcp_only;
+			    min_ttl=1h;
+			    max_ttl=1w;
+			    timeout=10;
+			    neg_domain_pol=on;
+			    proc_limit=2;
+			    procq_limit=8;
+			    par_queries=1;
 			}
-			server{
-			label="ssr-usrdns";
-			ip=$usr_dns;
-			port=$usr_port;
-			timeout=6;
-			uptest=none;
-			interval=10m;
-			purge_cache=off;
+			server {
+			    label="ssr-usrdns";
+			    ip=$usr_dns;
+			    port=$usr_port;
+			    timeout=6;
+			    uptest=none;
+			    interval=10m;
+			    purge_cache=off;
 			}
 		EOF
 		ln_start_bin $(first_type pdnsd) pdnsd -c $TMP_PATH/pdnsd.conf
@@ -224,32 +224,32 @@ gen_service_file() {
 	if [ $1 == "ssr" ]; then
 		cat <<-EOF >$3
 			{
-			  "server": "0.0.0.0",
-			  "server_ipv6": "::",
-			  "server_port": $(uci_get_by_name $2 server_port),
-			  "mode": "tcp_and_udp",
-			  "password": "$(uci_get_by_name $2 password)",
-			  "timeout": $(uci_get_by_name $2 timeout 60),
-			  "method": "$(uci_get_by_name $2 encrypt_method)",
-			  "protocol": "$(uci_get_by_name $2 protocol)",
-			  "protocol_param": "$(uci_get_by_name $2 protocol_param)",
-			  "obfs": "$(uci_get_by_name $2 obfs)",
-			  "obfs_param": "$(uci_get_by_name $2 obfs_param)",
-			  "fast_open": $fastopen
+				"server": "0.0.0.0",
+				"server_ipv6": "::",
+				"server_port": $(uci_get_by_name $2 server_port),
+				"mode": "tcp_and_udp",
+				"password": "$(uci_get_by_name $2 password)",
+				"timeout": $(uci_get_by_name $2 timeout 60),
+				"method": "$(uci_get_by_name $2 encrypt_method)",
+				"protocol": "$(uci_get_by_name $2 protocol)",
+				"protocol_param": "$(uci_get_by_name $2 protocol_param)",
+				"obfs": "$(uci_get_by_name $2 obfs)",
+				"obfs_param": "$(uci_get_by_name $2 obfs_param)",
+				"fast_open": $fastopen
 			}
 		EOF
 	else
 		cat <<-EOF >$3
 			{
-			  "server": "0.0.0.0",
-			  "server_ipv6": "::",
-			  "server_port": $(uci_get_by_name $2 server_port),
-			  "mode": "tcp_and_udp",
-			  "password": "$(uci_get_by_name $2 password)",
-			  "timeout": $(uci_get_by_name $2 timeout 60),
-			  "method": "$(uci_get_by_name $2 encrypt_method_ss)",
-			  "protocol": "socks",
-			  "fast_open": $fastopen
+				"server": "0.0.0.0",
+				"server_ipv6": "::",
+				"server_port": $(uci_get_by_name $2 server_port),
+				"mode": "tcp_and_udp",
+				"password": "$(uci_get_by_name $2 password)",
+				"timeout": $(uci_get_by_name $2 timeout 60),
+				"method": "$(uci_get_by_name $2 encrypt_method_ss)",
+				"protocol": "socks",
+				"fast_open": $fastopen
 			}
 		EOF
 	fi
