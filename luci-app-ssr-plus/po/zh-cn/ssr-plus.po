@@ -280,6 +280,12 @@ msgstr "拥塞控制"
 msgid "Flow"
 msgstr "流控 (Flow)"
 
+msgid "Session Ticket"
+msgstr "会话记录单"
+
+msgid "TLS Host"
+msgstr "TLS 主机"
+
 msgid "Finger Print"
 msgstr "指纹伪造"
 
