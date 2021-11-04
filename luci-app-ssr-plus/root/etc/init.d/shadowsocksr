@@ -88,14 +88,14 @@ echolog() {
 
 add_cron() {
 	touch $CRON_FILE
-	sed -i '/ssrplus.log/d' $CRON_FILE
+	sed -i '/ssrplusupdate.sh/d' $CRON_FILE
 	[ $(uci_get_by_type server_subscribe auto_update 0) -eq 1 ] && echo "0 $(uci_get_by_type server_subscribe auto_update_time) * * * /usr/share/shadowsocksr/ssrplusupdate.sh >$LOG_FILE" >>$CRON_FILE
 	crontab $CRON_FILE
 }
 
 del_cron() {
 	touch $CRON_FILE
-	sed -i '/ssrplus.log/d' $CRON_FILE
+	sed -i '/ssrplusupdate.sh/d' $CRON_FILE
 	crontab $CRON_FILE
 	clean_log
 }
@@ -144,7 +144,6 @@ ln_start_bin() {
 		}
 		[ -x "${file_func}" ] || echolog "$(readlink ${file_func}) 无权限执行 ${file_func} $*"
 	fi
-	#echo "${file_func} $*" >&2
 	[ -x "${file_func}" ] || {
 		echolog "启动失败 找不到 ${file_func}"
 		_exit 2
@@ -359,7 +358,7 @@ start_udp() {
 		ln_start_bin $(first_type xray v2ray) v2ray -config $udp_config_file
 		echolog "已启动 $(get_name $type) UDP 透明代理"
 		;;
-	trojan) #client
+	trojan)
 		gen_config_file $UDP_RELAY_SERVER $type 2 $tmp_udp_local_port
 		ln_start_bin $(first_type trojan) $type --config $udp_config_file
 		ln_start_bin $(first_type ipt2socks) ipt2socks -U -b 0.0.0.0 -4 -s 127.0.0.1 -p $tmp_udp_local_port -l $tmp_udp_port
@@ -371,10 +370,6 @@ start_udp() {
 		ARG_UDP=""
 		;;
 	socks5)
-		# if [ "$(uci_get_by_name $UDP_RELAY_SERVER auth_enable 0)" == "1" ]; then
-		# 	local auth="-a $(uci_get_by_name $UDP_RELAY_SERVER username) -k $(uci_get_by_name $UDP_RELAY_SERVER password)"
-		# fi
-		# ln_start_bin $(first_type ipt2socks) ipt2socks $udp_config_file -U -4 -s $(uci_get_by_name $UDP_RELAY_SERVER server) -p $(uci_get_by_name $UDP_RELAY_SERVER server_port) -l $tmp_udp_port $auth
 		gen_config_file $UDP_RELAY_SERVER $type 2 $tmp_udp_port
 		ln_start_bin $(first_type redsocks2) redsocks2 -c $udp_config_file
 		echolog "已启动 $(get_name $type) UDP 透明代理"
