@@ -77,13 +77,13 @@ get_host_ip() {
 clean_log() {
 	local logsnum=$(cat $LOG_FILE 2>/dev/null | wc -l)
 	[ "$logsnum" -gt 1000 ] && {
-		echo "$(date "+%Y-%m-%d %H:%M:%S") 超过1000行限制, 已清空" > $LOG_FILE
+		echo "$(date "+%Y-%m-%d %H:%M:%S") 超过1000行限制, 已清空" >$LOG_FILE
 	}
 }
 
 echolog() {
 	local d="$(date "+%Y-%m-%d %H:%M:%S")"
-	echo -e "[$d]  $*" >> $LOG_FILE
+	echo -e "[$d]  $*" >>$LOG_FILE
 }
 
 add_cron() {
@@ -148,7 +148,7 @@ ln_start_bin() {
 		echolog "启动失败 找不到 ${file_func}"
 		_exit 2
 	}
-	${file_func:-echolog "  - ${ln_name}"} "$@" > /dev/null 2>&1 &
+	${file_func:-echolog "  - ${ln_name}"} "$@" >/dev/null 2>&1 &
 }
 
 start_dns() {
@@ -781,7 +781,7 @@ start_rules() {
 start() {
 	set_lock
 	mkdir -p /var/run /var/lock /var/log /tmp/dnsmasq.d $TMP_BIN_PATH $TMP_DNSMASQ_PATH
-	echo "conf-dir=${TMP_DNSMASQ_PATH}" > "/tmp/dnsmasq.d/dnsmasq-ssrplus.conf"
+	echo "conf-dir=${TMP_DNSMASQ_PATH}" >"/tmp/dnsmasq.d/dnsmasq-ssrplus.conf"
 	if load_config; then
 		Start_Run
 		start_rules
