@@ -6,16 +6,23 @@ m:section(SimpleSection).template = "shadowsocksr/status"
 
 local server_table = {}
 uci:foreach("shadowsocksr", "servers", function(s)
-	if s.alias then
-		server_table[s[".name"]] = "[%s] %s" % {string.upper(s.v2ray_protocol or s.type), s.alias}
-	elseif s.server and s.server_port then
-		server_table[s[".name"]] = "[%s] %s:%s" % {string.upper(s.v2ray_protocol or s.type), s.server, s.server_port}
-	end
+    if s.alias then
+        server_table[s[".name"]] = "[%s] %s" % {
+            string.upper(s.v2ray_protocol or s.type),
+            s.alias
+        }
+    elseif s.server and s.server_port then
+        server_table[s[".name"]] = "[%s] %s:%s" % {
+            string.upper(s.v2ray_protocol or s.type),
+            s.server,
+            s.server_port
+        }
+    end
 end)
 
 local key_table = {}
 for key, _ in pairs(server_table) do
-	table.insert(key_table, key)
+    table.insert(key_table, key)
 end
 
 table.sort(key_table)
@@ -27,7 +34,7 @@ s.anonymous = true
 o = s:option(ListValue, "global_server", translate("Main Server"))
 o:value("nil", translate("Disable"))
 for _, key in pairs(key_table) do
-	o:value(key, server_table[key])
+    o:value(key, server_table[key])
 end
 o.default = "nil"
 o.rmempty = false
@@ -36,23 +43,23 @@ o = s:option(ListValue, "udp_relay_server", translate("Game Mode UDP Server"))
 o:value("", translate("Disable"))
 o:value("same", translate("Same as Global Server"))
 for _, key in pairs(key_table) do
-	o:value(key, server_table[key])
+    o:value(key, server_table[key])
 end
 
 if uci:get_first("shadowsocksr", 'global', 'netflix_enable', '0') ~= '0' then
-o = s:option(ListValue, "netflix_server", translate("Netflix Node"))
-o:value("nil", translate("Disable"))
-o:value("same", translate("Same as Global Server"))
-for _, key in pairs(key_table) do
-	o:value(key, server_table[key])
-end
-o.default = "nil"
-o.rmempty = false
+    o = s:option(ListValue, "netflix_server", translate("Netflix Node"))
+    o:value("nil", translate("Disable"))
+    o:value("same", translate("Same as Global Server"))
+    for _, key in pairs(key_table) do
+        o:value(key, server_table[key])
+    end
+    o.default = "nil"
+    o.rmempty = false
 
-o = s:option(Flag, "netflix_proxy", translate("External Proxy Mode"))
-o.rmempty = false
-o.description = translate("Forward Netflix Proxy through Main Proxy")
-o.default = "0"
+    o = s:option(Flag, "netflix_proxy", translate("External Proxy Mode"))
+    o.rmempty = false
+    o.description = translate("Forward Netflix Proxy through Main Proxy")
+    o.default = "0"
 end
 
 o = s:option(ListValue, "threads", translate("Multi Threads Option"))

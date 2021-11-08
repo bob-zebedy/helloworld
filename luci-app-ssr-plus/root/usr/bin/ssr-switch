@@ -1,6 +1,5 @@
 #!/bin/sh /etc/rc.common
 
-
 . $IPKG_INSTROOT/etc/init.d/shadowsocksr
 LOCK_FILE="/var/lock/ssr-switch.lock"
 [ -f "$LOCK_FILE" ] && exit 2

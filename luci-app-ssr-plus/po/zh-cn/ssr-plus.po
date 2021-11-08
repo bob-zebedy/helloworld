@@ -124,6 +124,9 @@ msgstr "自动更新服务器节点, GFW 列表, CHN 路由表"
 msgid "Update time (every day)"
 msgstr "更新时间 (每天)"
 
+msgid "Linux crontab schedule expressions"
+msgstr "Linux 格式 crontab 表达式"
+
 msgid "Subscribe URL"
 msgstr "订阅 URL"
 
