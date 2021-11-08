@@ -239,7 +239,6 @@ local trojan = {
         reuse_session = true,
         session_ticket = (server.tls_sessionTicket == "1") and true or false
     },
-    udp_timeout = 60,
     tcp = {
         -- tcp
         no_delay = true,
