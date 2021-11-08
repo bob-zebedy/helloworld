@@ -22,71 +22,71 @@ bold_off = [[</strong>]]
 local kcptun_version = translate("Unknown")
 local kcp_file = "/usr/bin/kcptun-client"
 if not nixio.fs.access(kcp_file) then
-	kcptun_version = translate("Not exist")
+    kcptun_version = translate("Not exist")
 else
-	if not nixio.fs.access(kcp_file, "rwx", "rx", "rx") then
-		nixio.fs.chmod(kcp_file, 755)
-	end
-	kcptun_version = luci.sys.exec(kcp_file .. " -v | awk '{printf $3}'")
-	if not kcptun_version or kcptun_version == "" then
-		kcptun_version = translate("Unknown")
-	end
+    if not nixio.fs.access(kcp_file, "rwx", "rx", "rx") then
+        nixio.fs.chmod(kcp_file, 755)
+    end
+    kcptun_version = luci.sys.exec(kcp_file .. " -v | awk '{printf $3}'")
+    if not kcptun_version or kcptun_version == "" then
+        kcptun_version = translate("Unknown")
+    end
 end
 
 if nixio.fs.access("/etc/ssrplus/gfw_list.conf") then
-	gfw_count = tonumber(luci.sys.exec("cat /etc/ssrplus/gfw_list.conf | wc -l")) / 2
+    gfw_count = tonumber(luci.sys.exec("cat /etc/ssrplus/gfw_list.conf | wc -l")) / 2
 end
 
 if nixio.fs.access("/etc/ssrplus/ad.conf") then
-	ad_count = tonumber(luci.sys.exec("cat /etc/ssrplus/ad.conf | wc -l"))
+    ad_count = tonumber(luci.sys.exec("cat /etc/ssrplus/ad.conf | wc -l"))
 end
 
 if nixio.fs.access("/etc/ssrplus/china_ssr.txt") then
-	ip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/china_ssr.txt | wc -l"))
+    ip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/china_ssr.txt | wc -l"))
 end
 
 if nixio.fs.access("/etc/ssrplus/netflixip.list") then
-	nfip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/netflixip.list | wc -l"))
+    nfip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/netflixip.list | wc -l"))
 end
 
 if Process_list:find("udp.only.ssr.reudp") then
-	reudp_run = 1
+    reudp_run = 1
 end
 
 if Process_list:find("tcp.only.ssr.retcp") then
-	redir_run = 1
+    redir_run = 1
 end
 
 if Process_list:find("tcp.udp.ssr.local") then
-	sock5_run = 1
+    sock5_run = 1
 end
 
 if Process_list:find("tcp.udp.ssr.retcp") then
-	redir_run = 1
-	reudp_run = 1
+    redir_run = 1
+    reudp_run = 1
 end
 
 if Process_list:find("local.ssr.retcp") then
-	redir_run = 1
-	sock5_run = 1
+    redir_run = 1
+    sock5_run = 1
 end
 
 if Process_list:find("local.udp.ssr.retcp") then
-	reudp_run = 1
-	redir_run = 1
-	sock5_run = 1
+    reudp_run = 1
+    redir_run = 1
+    sock5_run = 1
 end
 
 if Process_list:find("kcptun.client") then
-	kcptun_run = 1
+    kcptun_run = 1
 end
 
 if Process_list:find("ssr.server") then
-	server_run = 1
+    server_run = 1
 end
 
 if Process_list:find("ssrplus/bin/pdnsd") or (Process_list:find("ssrplus.dns") and Process_list:find("dns2socks.127.0.0.1.*127.0.0.1.5335")) then
-	pdnsd_run = 1
+    pdnsd_run = 1
 end
 
 m = SimpleForm("Version")
@@ -96,56 +96,56 @@ m.submit = false
 s = m:field(DummyValue, "redir_run", translate("Proxy Mode"))
 s.rawhtml = true
 if redir_run == 1 then
-	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
+    s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
-	s.value = translate("Not Running")
+    s.value = translate("Not Running")
 end
 
 s = m:field(DummyValue, "reudp_run", translate("Game Mode UDP Relay"))
 s.rawhtml = true
 if reudp_run == 1 then
-	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
+    s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
-	s.value = translate("Not Running")
+    s.value = translate("Not Running")
 end
 
 if uci:get_first("shadowsocksr", 'global', 'dns_mode', '0') ~= '0' then
-	s = m:field(DummyValue, "pdnsd_run", translate("DNS Anti-pollution"))
-	s.rawhtml = true
-	if pdnsd_run == 1 then
-		s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
-	else
-		s.value = translate("Not Running")
-	end
+    s = m:field(DummyValue, "pdnsd_run", translate("DNS Anti-pollution"))
+    s.rawhtml = true
+    if pdnsd_run == 1 then
+        s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
+    else
+        s.value = translate("Not Running")
+    end
 end
 
 s = m:field(DummyValue, "sock5_run", translate("Global SOCKS5 Proxy Server"))
 s.rawhtml = true
 if sock5_run == 1 then
-	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
+    s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
-	s.value = translate("Not Running")
+    s.value = translate("Not Running")
 end
 
 s = m:field(DummyValue, "server_run", translate("Local Proxy Servers"))
 s.rawhtml = true
 if server_run == 1 then
-	s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
+    s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
 else
-	s.value = translate("Not Running")
+    s.value = translate("Not Running")
 end
 
 if nixio.fs.access("/usr/bin/kcptun-client") then
-	s = m:field(DummyValue, "kcptun_run", translate("KcpTun Run"))
-	s.rawhtml = true
-	if kcptun_run == 1 then
-		s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
-	else
-		s.value = translate("Not Running")
-	end
-	s = m:field(DummyValue, "kcp_version", translate("KcpTun Version"))
-	s.rawhtml = true
-	s.value = kcptun_version
+    s = m:field(DummyValue, "kcptun_run", translate("KcpTun Run"))
+    s.rawhtml = true
+    if kcptun_run == 1 then
+        s.value = font_green .. bold_on .. translate("Running") .. bold_off .. font_off
+    else
+        s.value = translate("Not Running")
+    end
+    s = m:field(DummyValue, "kcp_version", translate("KcpTun Version"))
+    s.rawhtml = true
+    s.value = kcptun_version
 end
 
 s = m:field(DummyValue, "baidu", translate("Baidu Connectivity"))
@@ -167,22 +167,22 @@ s.template = "shadowsocksr/refresh"
 s.value = ip_count .. " " .. translate("Records")
 
 if uci:get_first("shadowsocksr", 'global', 'netflix_enable', '0') ~= '0' then
-s = m:field(DummyValue, "nfip_data", translate("Netflix IP Data"))
-s.rawhtml = true
-s.template = "shadowsocksr/refresh"
-s.value = nfip_count .. " " .. translate("Records")
+    s = m:field(DummyValue, "nfip_data", translate("Netflix IP Data"))
+    s.rawhtml = true
+    s.template = "shadowsocksr/refresh"
+    s.value = nfip_count .. " " .. translate("Records")
 end
 
 if uci:get_first("shadowsocksr", 'global', 'adblock', '0') == '1' then
-	s = m:field(DummyValue, "ad_data", translate("Advertising Data"))
-	s.rawhtml = true
-	s.template = "shadowsocksr/refresh"
-	s.value = ad_count .. " " .. translate("Records")
+    s = m:field(DummyValue, "ad_data", translate("Advertising Data"))
+    s.rawhtml = true
+    s.template = "shadowsocksr/refresh"
+    s.value = ad_count .. " " .. translate("Records")
 end
 
 if uci:get_first("shadowsocksr", 'global', 'dns_mode', '0') == '1' then
-	s = m:field(DummyValue, "cache", translate("Reset pdnsd cache"))
-	s.template = "shadowsocksr/cache"
+    s = m:field(DummyValue, "cache", translate("Reset pdnsd cache"))
+    s.template = "shadowsocksr/cache"
 end
 
 return m

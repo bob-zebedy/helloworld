@@ -2,16 +2,23 @@ local uci = luci.model.uci.cursor()
 local server_table = {}
 
 uci:foreach("shadowsocksr", "servers", function(s)
-	if s.alias then
-		server_table[s[".name"]] = "[%s]:%s" % {string.upper(s.v2ray_protocol or s.type), s.alias}
-	elseif s.server and s.server_port then
-		server_table[s[".name"]] = "[%s]:%s:%s" % {string.upper(s.v2ray_protocol or s.type), s.server, s.server_port}
-	end
+    if s.alias then
+        server_table[s[".name"]] = "[%s]:%s" % {
+            string.upper(s.v2ray_protocol or s.type),
+            s.alias
+        }
+    elseif s.server and s.server_port then
+        server_table[s[".name"]] = "[%s]:%s:%s" % {
+            string.upper(s.v2ray_protocol or s.type),
+            s.server,
+            s.server_port
+        }
+    end
 end)
 
 local key_table = {}
 for key, _ in pairs(server_table) do
-	table.insert(key_table, key)
+    table.insert(key_table, key)
 end
 
 table.sort(key_table)
@@ -79,7 +86,7 @@ o = s:option(ListValue, "server", translate("Server"))
 o:value("nil", translate("Disable"))
 o:value("same", translate("Same as Global Server"))
 for _, key in pairs(key_table) do
-	o:value(key, server_table[key])
+    o:value(key, server_table[key])
 end
 o.default = "nil"
 o.rmempty = false

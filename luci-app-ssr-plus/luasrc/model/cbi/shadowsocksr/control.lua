@@ -35,36 +35,44 @@ o.rmempty = false
 
 o = s:taboption("lan_ac", DynamicList, "lan_ac_ips", translate("LAN Host List"))
 o.datatype = "ipaddr"
-luci.ip.neighbors({family = 4}, function(entry)
-	if entry.reachable then
-		o:value(entry.dest:string())
-	end
+luci.ip.neighbors({
+    family = 4
+}, function(entry)
+    if entry.reachable then
+        o:value(entry.dest:string())
+    end
 end)
 o:depends("lan_ac_mode", "w")
 o:depends("lan_ac_mode", "b")
 
 o = s:taboption("lan_ac", DynamicList, "lan_bp_ips", translate("LAN Bypassed Host List"))
 o.datatype = "ipaddr"
-luci.ip.neighbors({family = 4}, function(entry)
-	if entry.reachable then
-		o:value(entry.dest:string())
-	end
+luci.ip.neighbors({
+    family = 4
+}, function(entry)
+    if entry.reachable then
+        o:value(entry.dest:string())
+    end
 end)
 
 o = s:taboption("lan_ac", DynamicList, "lan_fp_ips", translate("LAN Force Proxy Host List"))
 o.datatype = "ipaddr"
-luci.ip.neighbors({family = 4}, function(entry)
-	if entry.reachable then
-		o:value(entry.dest:string())
-	end
+luci.ip.neighbors({
+    family = 4
+}, function(entry)
+    if entry.reachable then
+        o:value(entry.dest:string())
+    end
 end)
 
 o = s:taboption("lan_ac", DynamicList, "lan_gm_ips", translate("Game Mode Host List"))
 o.datatype = "ipaddr"
-luci.ip.neighbors({family = 4}, function(entry)
-	if entry.reachable then
-		o:value(entry.dest:string())
-	end
+luci.ip.neighbors({
+    family = 4
+}, function(entry)
+    if entry.reachable then
+        o:value(entry.dest:string())
+    end
 end)
 
 s:tab("esc", translate("Bypass Domain List"))
@@ -74,13 +82,13 @@ o.rows = 30
 o.wrap = "off"
 o.rmempty = true
 o.cfgvalue = function(self, section)
-	return nixio.fs.readfile(escconf) or ""
+    return nixio.fs.readfile(escconf) or ""
 end
 o.write = function(self, section, value)
-	nixio.fs.writefile(escconf, value:gsub("\r\n", "\n"))
+    nixio.fs.writefile(escconf, value:gsub("\r\n", "\n"))
 end
 o.remove = function(self, section, value)
-	nixio.fs.writefile(escconf, "")
+    nixio.fs.writefile(escconf, "")
 end
 
 s:tab("block", translate("Black Domain List"))
@@ -90,13 +98,13 @@ o.rows = 30
 o.wrap = "off"
 o.rmempty = true
 o.cfgvalue = function(self, section)
-	return nixio.fs.readfile(blockconf) or " "
+    return nixio.fs.readfile(blockconf) or " "
 end
 o.write = function(self, section, value)
-	nixio.fs.writefile(blockconf, value:gsub("\r\n", "\n"))
+    nixio.fs.writefile(blockconf, value:gsub("\r\n", "\n"))
 end
 o.remove = function(self, section, value)
-	nixio.fs.writefile(blockconf, "")
+    nixio.fs.writefile(blockconf, "")
 end
 
 s:tab("denydomain", translate("Deny Domain List"))
@@ -106,13 +114,13 @@ o.rows = 30
 o.wrap = "off"
 o.rmempty = true
 o.cfgvalue = function(self, section)
-	return nixio.fs.readfile(denydomainconf) or " "
+    return nixio.fs.readfile(denydomainconf) or " "
 end
 o.write = function(self, section, value)
-	nixio.fs.writefile(denydomainconf, value:gsub("\r\n", "\n"))
+    nixio.fs.writefile(denydomainconf, value:gsub("\r\n", "\n"))
 end
 o.remove = function(self, section, value)
-	nixio.fs.writefile(denydomainconf, "")
+    nixio.fs.writefile(denydomainconf, "")
 end
 
 s:tab("netflix", translate("Netflix Domain List"))
@@ -122,13 +130,13 @@ o.rows = 30
 o.wrap = "off"
 o.rmempty = true
 o.cfgvalue = function(self, section)
-	return nixio.fs.readfile(netflixconf) or " "
+    return nixio.fs.readfile(netflixconf) or " "
 end
 o.write = function(self, section, value)
-	nixio.fs.writefile(netflixconf, value:gsub("\r\n", "\n"))
+    nixio.fs.writefile(netflixconf, value:gsub("\r\n", "\n"))
 end
 o.remove = function(self, section, value)
-	nixio.fs.writefile(netflixconf, "")
+    nixio.fs.writefile(netflixconf, "")
 end
 
 return m
