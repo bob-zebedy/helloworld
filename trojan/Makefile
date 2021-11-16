@@ -1,9 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-only
 #
-# Copyright (C) 2018-2019 wongsyrone
-#
-# This is free software, licensed under the GNU General Public License v3.
-# See /LICENSE for more information.
-#
+# Copyright (C) 2021
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=trojan
