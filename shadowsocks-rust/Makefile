@@ -1,12 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-only
 #
-# Copyright (C) 2017-2020 Yousong Zhou <yszhou4tech@gmail.com>
-#
-# Copyright (C) 2021 ImmortalWrt
-# <https://immortalwrt.org>
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
+# Copyright (C) 2021
 
 include $(TOPDIR)/rules.mk
 

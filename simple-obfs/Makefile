@@ -1,7 +1,6 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: GPL-3.0-only
 #
-# Copyright (C) 2017-2019 Jian Chang <aa65535@live.com>
-# Copyright (C) 2021 ImmortalWrt.org
+# Copyright (C) 2021
 
 include $(TOPDIR)/rules.mk
 

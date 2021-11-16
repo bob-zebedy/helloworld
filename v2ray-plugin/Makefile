@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Copyright (C) 2021
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=v2ray-plugin
@@ -36,25 +40,20 @@ config V2RAY_PLUGIN_COMPRESS_UPX
 	bool "Compress executable files with UPX"
 	depends on !mips64
 	default y
-
 endef
 
 ifeq ($(CONFIG_V2RAY_PLUGIN_COMPRESS_GOPROXY),y)
 	export GO111MODULE=on
-	export GOPROXY=https://goproxy.baidu.com
+	export GOPROXY=https://goproxy.io
 endif
 
 define Package/v2ray-plugin
-	SECTION:=net
-	CATEGORY:=Network
-	SUBMENU:=Web Servers/Proxies
-	TITLE:=SIP003 plugin for shadowsocks, based on v2ray
-	URL:=https://github.com/teddysun/v2ray-plugin
-	DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
-endef
-
-define Package/$(PKG_NAME)/description
-	Yet another SIP003 plugin for shadowsocks, based on v2ray
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
+  TITLE:=SIP003 plugin for shadowsocks, based on v2ray
+  URL:=https://github.com/teddysun/v2ray-plugin
+  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
 define Build/Compile
@@ -64,5 +63,5 @@ ifeq ($(CONFIG_V2RAY_PLUGIN_COMPRESS_UPX),y)
 endif
 endef
 
-$(eval $(call GoBinPackage,$(PKG_NAME)))
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call GoBinPackage,v2ray-plugin))
+$(eval $(call BuildPackage,v2ray-plugin))

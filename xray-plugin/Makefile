@@ -1,12 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Copyright (C) 2021
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xray-plugin
-PKG_VERSION:=1.5.0
+PKG_VERSION:=1.4.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/teddysun/xray-plugin/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=c7c9833f868560d8d141a9a3a73679feab754ce4a97b6622c88322a5b83caa0f
+PKG_HASH:=a4483fa0e3071935da8b8bd19a9a6b349fc2c221ba2fe777ff2131915debb607
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
@@ -26,8 +30,7 @@ GO_PKG_LDFLAGS:=-s -w
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
-define Package/$(PKG_NAME)/config
-
+define Package/xray-plugin/config
 config XRAY_PLUGIN_COMPRESS_GOPROXY
 	bool "Compiling with GOPROXY proxy"
 	default n
@@ -40,16 +43,16 @@ endef
 
 ifneq ($(CONFIG_XRAY_PLUGIN_COMPRESS_GOPROXY),)
 	export GO111MODULE=on
-	export GOPROXY=https://goproxy.baidu.com
+	export GOPROXY=https://goproxy.io
 endif
 
-define Package/$(PKG_NAME)
-	SECTION:=net
-	CATEGORY:=Network
-	SUBMENU:=Web Servers/Proxies
-	TITLE:=SIP003 plugin for Shadowsocks, based on Xray
-	URL:=https://github.com/teddysun/xray-plugin
-	DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
+define Package/xray-plugin
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
+  TITLE:=SIP003 plugin for Shadowsocks, based on Xray
+  URL:=https://github.com/teddysun/xray-plugin
+  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
 define Build/Compile
@@ -59,5 +62,5 @@ ifneq ($(CONFIG_XRAY_PLUGIN_COMPRESS_UPX),)
 endif
 endef
 
-$(eval $(call GoBinPackage,$(PKG_NAME)))
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call GoBinPackage,xray-plugin))
+$(eval $(call BuildPackage,xray-plugin))
