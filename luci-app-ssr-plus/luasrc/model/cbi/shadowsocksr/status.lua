@@ -11,7 +11,6 @@ local tunnel_run = 0
 local gfw_count = 0
 local ad_count = 0
 local ip_count = 0
-local nfip_count = 0
 local Process_list = luci.sys.exec("busybox ps -w")
 local uci = luci.model.uci.cursor()
 -- html constants
@@ -33,20 +32,16 @@ else
     end
 end
 
-if nixio.fs.access("/etc/ssrplus/gfw_list.conf") then
-    gfw_count = tonumber(luci.sys.exec("cat /etc/ssrplus/gfw_list.conf | wc -l")) / 2
+if nixio.fs.access("/etc/ssrplus/gfw.conf") then
+    gfw_count = tonumber(luci.sys.exec("cat /etc/ssrplus/gfw.conf | wc -l")) / 2
 end
 
 if nixio.fs.access("/etc/ssrplus/ad.conf") then
     ad_count = tonumber(luci.sys.exec("cat /etc/ssrplus/ad.conf | wc -l"))
 end
 
-if nixio.fs.access("/etc/ssrplus/china_ssr.txt") then
-    ip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/china_ssr.txt | wc -l"))
-end
-
-if nixio.fs.access("/etc/ssrplus/netflixip.list") then
-    nfip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/netflixip.list | wc -l"))
+if nixio.fs.access("/etc/ssrplus/china_ip.list") then
+    ip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/china_ip.list | wc -l"))
 end
 
 if Process_list:find("udp.only.ssr.reudp") then
@@ -165,13 +160,6 @@ s = m:field(DummyValue, "ip_data", translate("China IP Data"))
 s.rawhtml = true
 s.template = "shadowsocksr/refresh"
 s.value = ip_count .. " " .. translate("Records")
-
-if uci:get_first("shadowsocksr", 'global', 'netflix_enable', '0') ~= '0' then
-    s = m:field(DummyValue, "nfip_data", translate("Netflix IP Data"))
-    s.rawhtml = true
-    s.template = "shadowsocksr/refresh"
-    s.value = nfip_count .. " " .. translate("Records")
-end
 
 if uci:get_first("shadowsocksr", 'global', 'adblock', '0') == '1' then
     s = m:field(DummyValue, "ad_data", translate("Advertising Data"))
