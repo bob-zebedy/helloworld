@@ -70,7 +70,6 @@ flush_r() {
 	ipset -X oversea 2>/dev/null
 	ipset -X whitelist 2>/dev/null
 	ipset -X blacklist 2>/dev/null
-	ipset -X netflix 2>/dev/null
 	[ -n "$FWI" ] && echo '#!/bin/sh' >$FWI
 	return 0
 }
@@ -123,24 +122,6 @@ ipset_r() {
 	fi
 	for ip in $WAN_BP_IP; do ipset -! add whitelist $ip; done
 	for ip in $WAN_FW_IP; do ipset -! add blacklist $ip; done
-	if [ "$SHUNT_PORT" != "0" ]; then
-		ipset -N netflix hash:net 2>/dev/null
-		for ip in $(cat ${SHUNT_LIST:=/dev/null} 2>/dev/null); do ipset -! add netflix $ip; done
-		case "$SHUNT_PORT" in
-		0) ;;
-		1)
-			$IPT -I SS_SPEC_WAN_AC -p tcp -m set --match-set netflix dst -j REDIRECT --to-ports $local_port
-			;;
-		*)
-			$IPT -I SS_SPEC_WAN_AC -p tcp -m set --match-set netflix dst -j REDIRECT --to-ports $SHUNT_PORT
-			if [ "$SHUNT_PROXY" == "1" ]; then
-				$IPT -I SS_SPEC_WAN_AC -p tcp -d $SHUNT_IP -j REDIRECT --to-ports $local_port
-			else
-				ipset -! add whitelist $SHUNT_IP
-			fi
-			;;
-		esac
-	fi
 	return $?
 }
 
@@ -354,18 +335,6 @@ while getopts ":m:s:l:S:L:i:e:a:B:b:w:p:G:D:F:N:M:I:oOuUfgrczh" arg; do
 		;;
 	D)
 		PROXY_PORTS=$OPTARG
-		;;
-	F)
-		SHUNT_PORT=$OPTARG
-		;;
-	N)
-		SHUNT_IP=$OPTARG
-		;;
-	M)
-		SHUNT_PROXY=$OPTARG
-		;;
-	I)
-		SHUNT_LIST=$OPTARG
 		;;
 	o)
 		OUTPUT=1

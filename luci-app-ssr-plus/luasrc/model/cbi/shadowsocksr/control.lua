@@ -76,7 +76,7 @@ luci.ip.neighbors({
 end)
 
 s:tab("esc", translate("Bypass Domain List"))
-local escconf = "/etc/ssrplus/white.list"
+local escconf = "/etc/ssrplus/white_domain.list"
 o = s:taboption("esc", TextValue, "escconf")
 o.rows = 30
 o.wrap = "off"
@@ -92,7 +92,7 @@ o.remove = function(self, section, value)
 end
 
 s:tab("block", translate("Black Domain List"))
-local blockconf = "/etc/ssrplus/black.list"
+local blockconf = "/etc/ssrplus/black_domain.list"
 o = s:taboption("block", TextValue, "blockconf")
 o.rows = 30
 o.wrap = "off"
@@ -108,7 +108,7 @@ o.remove = function(self, section, value)
 end
 
 s:tab("denydomain", translate("Deny Domain List"))
-local denydomainconf = "/etc/ssrplus/deny.list"
+local denydomainconf = "/etc/ssrplus/deny_domain.list"
 o = s:taboption("denydomain", TextValue, "denydomainconf")
 o.rows = 30
 o.wrap = "off"
@@ -121,22 +121,6 @@ o.write = function(self, section, value)
 end
 o.remove = function(self, section, value)
     nixio.fs.writefile(denydomainconf, "")
-end
-
-s:tab("netflix", translate("Netflix Domain List"))
-local netflixconf = "/etc/ssrplus/netflix.list"
-o = s:taboption("netflix", TextValue, "netflixconf")
-o.rows = 30
-o.wrap = "off"
-o.rmempty = true
-o.cfgvalue = function(self, section)
-    return nixio.fs.readfile(netflixconf) or " "
-end
-o.write = function(self, section, value)
-    nixio.fs.writefile(netflixconf, value:gsub("\r\n", "\n"))
-end
-o.remove = function(self, section, value)
-    nixio.fs.writefile(netflixconf, "")
 end
 
 return m

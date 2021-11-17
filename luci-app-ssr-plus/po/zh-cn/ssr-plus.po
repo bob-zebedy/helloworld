@@ -28,15 +28,6 @@ msgstr "主服务器"
 msgid "Game Mode UDP Server"
 msgstr "游戏 UDP 节点"
 
-msgid "Netflix Node"
-msgstr "Netflix 节点"
-
-msgid "External Proxy Mode"
-msgstr "Netflix 前置代理"
-
-msgid "Forward Netflix Proxy through Main Proxy"
-msgstr "通过主服务器连接 Netflix 节点"
-
 msgid "Multi Threads Option"
 msgstr "多线程并发"
 
@@ -352,9 +343,6 @@ msgstr "强制代理"
 msgid "Deny Domain List"
 msgstr "域名黑名单"
 
-msgid "Netflix Domain List"
-msgstr "Netflix 域名"
-
 msgid "Interface"
 msgstr "接口"
 
@@ -408,12 +396,6 @@ msgstr "GFWList 订阅URL"
 
 msgid "chn_ip_url"
 msgstr "China IP 订阅URL"
-
-msgid "Enable Netflix Mode"
-msgstr "开启 Netflix 分流"
-
-msgid "netflix_ip_url"
-msgstr "Netflix IP 订阅URL"
 
 msgid "Reset all"
 msgstr "恢复默认设置"
@@ -507,9 +489,6 @@ msgstr "GFW 数据库"
 
 msgid "China IP Data"
 msgstr "国内 IP 数据库"
-
-msgid "Netflix IP Data"
-msgstr "Netflix IP 数据库"
 
 msgid "Advertising Data"
 msgstr "广告屏蔽 数据库"

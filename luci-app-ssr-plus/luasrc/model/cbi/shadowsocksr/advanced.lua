@@ -56,14 +56,6 @@ o:value("https://ispip.clang.cn/all_cn.txt", translate("CN"))
 o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("CN-CIDR"))
 o.default = "https://ispip.clang.cn/all_cn.txt"
 
-o = s:option(Flag, "netflix_enable", translate("Enable Netflix Mode"))
-o.rmempty = false
-
-o = s:option(Value, "nfip_url", translate("netflix_ip_url"))
-o:value("https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt", translate("Netflix-IP"))
-o.default = "https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt"
-o:depends("netflix_enable", "1")
-
 o = s:option(Flag, "adblock", translate("Enable adblock"))
 o.rmempty = false
 

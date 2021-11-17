@@ -11,18 +11,13 @@ TMP_BIN_PATH=$TMP_PATH/bin
 TMP_DNSMASQ_PATH=/tmp/dnsmasq.d/dnsmasq-ssrplus.d
 tcp_config_file=
 udp_config_file=
-shunt_config_file=
 local_config_file=
-shunt_dns_config_file=
 tmp_local_port=
 ARG_UDP=
 dns_port="5335"            #dns port
 tmp_dns_port="300"         #dns2socks temporary port
 tmp_udp_port="301"         #udp temporary port
 tmp_udp_local_port="302"   #udp socks temporary port
-tmp_shunt_port="303"       #shunt temporary port
-tmp_shunt_local_port="304" #shunt socks temporary port
-tmp_shunt_dns_port="305"   #shunt dns2socks temporary port
 server_count=0
 redir_tcp=0
 redir_udp=0
@@ -274,14 +269,6 @@ gen_config_file() { #server1 type2 code3 local_port4 socks_port5 threads5
 	2)
 		config_file=$udp_config_file
 		;;
-	3)
-		if [ -n "$tmp_local_port" ]; then
-			local tmp_port=$tmp_local_port
-		else
-			local tmp_port=$tmp_shunt_local_port
-		fi
-		config_file=$shunt_config_file
-		;;
 	4)
 		local ss_protocol="socks"
 		config_file=$local_config_file
@@ -290,9 +277,6 @@ gen_config_file() { #server1 type2 code3 local_port4 socks_port5 threads5
 	case "$2" in
 	ss | ssr)
 		lua /usr/share/shadowsocksr/gen_config.lua $1 $mode $4 ${ss_protocol:-redir} >$config_file
-		if [ "$3" == "3" ]; then
-			lua /usr/share/shadowsocksr/gen_config.lua $1 $mode $tmp_port socks >$shunt_dns_config_file
-		fi
 		;;
 	v2ray)
 		lua /usr/share/shadowsocksr/gen_config.lua $1 $mode $4 $5 >$config_file
@@ -305,10 +289,6 @@ gen_config_file() { #server1 type2 code3 local_port4 socks_port5 threads5
 		2)
 			lua /usr/share/shadowsocksr/gen_config.lua $1 client $4 >$config_file
 			;;
-		3)
-			lua /usr/share/shadowsocksr/gen_config.lua $1 nat $4 >$config_file
-			lua /usr/share/shadowsocksr/gen_config.lua $1 client $tmp_port >$shunt_dns_config_file
-			;;
 		4)
 			lua /usr/share/shadowsocksr/gen_config.lua $1 client $4 >$config_file
 			;;
@@ -318,10 +298,6 @@ gen_config_file() { #server1 type2 code3 local_port4 socks_port5 threads5
 		case "$3" in
 		1)
 			lua /usr/share/shadowsocksr/gen_config.lua $1 redir $4 $5 >$config_file
-			;;
-		3)
-			lua /usr/share/shadowsocksr/gen_config.lua $1 redir $4 >$config_file
-			lua /usr/share/shadowsocksr/gen_config.lua $1 socks $tmp_port >$shunt_dns_config_file
 			;;
 		4)
 			lua /usr/share/shadowsocksr/gen_config.lua $1 socks $4 >$config_file
@@ -382,78 +358,10 @@ start_udp() {
 	esac
 }
 
-start_shunt() {
-	local type=$(uci_get_by_name $SHUNT_SERVER type)
-	case "$type" in
-	ss | ssr)
-		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
-		ss_program="$(first_type ${type}local ${type}-redir)"
-		ln_start_bin $ss_program ${type}-redir -c $shunt_config_file
-		if [ -n "$tmp_local_port" ]; then
-			local tmp_port=$tmp_local_port
-		else
-			local tmp_port=$tmp_shunt_local_port
-			ln_start_bin $(first_type ${type}local ${type}-local) ${type}-local -c $shunt_dns_config_file
-		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
-		;;
-	v2ray)
-		if [ -n "$tmp_local_port" ]; then
-			local tmp_port=$tmp_local_port
-		else
-			local tmp_port=$tmp_shunt_local_port
-			gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port $tmp_port
-			ln_start_bin $(first_type xray v2ray) v2ray -config $shunt_config_file
-		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
-		;;
-	trojan)
-		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
-		ln_start_bin $(first_type trojan) $type --config $shunt_config_file
-		if [ -n "$tmp_local_port" ]; then
-			local tmp_port=$tmp_local_port
-		else
-			local tmp_port=$tmp_shunt_local_port
-			ln_start_bin $(first_type trojan) $type --config $shunt_dns_config_file
-		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
-		;;
-	naiveproxy)
-		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
-		ln_start_bin $(first_type naive) naive --config $shunt_config_file
-		if [ -n "$tmp_local_port" ]; then
-			local tmp_port=$tmp_local_port
-		else
-			local tmp_port=$tmp_shunt_local_port
-			ln_start_bin $(first_type naive) naive --config $shunt_dns_config_file
-		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
-		redir_udp=0
-		;;
-	*)
-		gen_config_file $SHUNT_SERVER $type 3 $tmp_shunt_port
-		ln_start_bin $(first_type redsocks2) redsocks2 -c $shunt_config_file
-		if [ -n "$tmp_local_port" ]; then
-			local tmp_port=$tmp_local_port
-		else
-			local tmp_port=$tmp_shunt_local_port
-			ln_start_bin $(first_type microsocks) microsocks -i 127.0.0.1 -p $tmp_port shunt-dns-ssr-plus
-		fi
-		ln_start_bin $(first_type dns2socks) dns2socks 127.0.0.1:$tmp_port 1.1.1.1:53 127.0.0.1:$tmp_shunt_dns_port -q
-		echolog "分流服务器 $(uci_get_by_name $SHUNT_SERVER alias) 已启动"
-		;;
-	esac
-	return 0
-}
-
 start_local() {
 	[ "$LOCAL_SERVER" = "nil" ] && return 1
 	local local_port=$(uci_get_by_type socks5_proxy local_port)
-	[ "$LOCAL_SERVER" == "$SHUNT_SERVER" ] && tmp_local_port=$local_port
+	# [ "$LOCAL_SERVER" == "$SHUNT_SERVER" ] && tmp_local_port=$local_port
 	local type=$(uci_get_by_name $LOCAL_SERVER type)
 	case "$type" in
 	ss | ssr)
@@ -577,7 +485,6 @@ load_config() {
 		return 1
 	fi
 	UDP_RELAY_SERVER=$(uci_get_by_type global udp_relay_server nil)
-	SHUNT_SERVER=$(uci_get_by_type global netflix_server nil)
 	tcp_config_file=$TMP_PATH/tcp-only-ssr-retcp.json
 	case "$UDP_RELAY_SERVER" in
 	nil)
@@ -612,21 +519,6 @@ load_config() {
 		_local="2"
 		local_config_file=$TMP_PATH/tcp-udp-ssr-local.json
 		start_local
-		;;
-	esac
-	case "$SHUNT_SERVER" in
-	nil)
-		shunt="0"
-		;;
-	$GLOBAL_SERVER | same)
-		shunt="1"
-		SHUNT_SERVER=$GLOBAL_SERVER
-		;;
-	*)
-		shunt="$tmp_shunt_port"
-		shunt_config_file=$TMP_PATH/shunt-ssr-retcp.json
-		shunt_dns_config_file=$TMP_PATH/shunt-dns-ssr-plus.json
-		start_shunt
 		;;
 	esac
 	return 0
@@ -730,9 +622,6 @@ start_rules() {
 		local udp_server=$(get_host_ip $UDP_RELAY_SERVER)
 		local udp_local_port=$tmp_udp_port
 	fi
-	if [ "$shunt" != "0" ]; then
-		local shunt_ip=$(get_host_ip $SHUNT_SERVER)
-	fi
 	if [ -n "$lan_ac_ips" ]; then
 		case "$lan_ac_mode" in
 		w | W | b | B) local ac_ips="$lan_ac_mode$lan_ac_ips" ;;
@@ -762,7 +651,7 @@ start_rules() {
 		-S "$udp_server" \
 		-L "$udp_local_port" \
 		-a "$ac_ips" \
-		-i "/etc/ssrplus/china_ssr.txt" \
+		-i "/etc/ssrplus/china_ip.list" \
 		-b "$(uci_get_by_type access_control wan_bp_ips)" \
 		-w "$(uci_get_by_type access_control wan_fw_ips)" \
 		-B "$(uci_get_by_type access_control lan_bp_ips)" \
@@ -770,10 +659,6 @@ start_rules() {
 		-G "$(uci_get_by_type access_control lan_gm_ips)" \
 		-m "$(uci_get_by_type access_control Interface)" \
 		-D "$proxyport" \
-		-F "$shunt" \
-		-N "$shunt_ip" \
-		-M "$(uci_get_by_type global netflix_proxy 0)" \
-		-I "/etc/ssrplus/netflixip.list" \
 		$(get_arg_out) $(gfwmode) $ARG_UDP
 	return $?
 }
@@ -790,15 +675,15 @@ start() {
 		start_switch
 	else
 		echolog "正在加载 [域名黑名单]"
-		cat /etc/ssrplus/deny.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/address=\/&\//" >$TMP_DNSMASQ_PATH/denylist.conf
+		cat /etc/ssrplus/deny_domain.list | sed '/^$/d' | sed '/#/d' | sed "/.*/s/.*/address=\/&\//" >$TMP_DNSMASQ_PATH/denylist.conf
 		echolog "已加载 [域名黑名单]"
 		if [ "$(uci_get_by_type global adblock 0)" == "1" ]; then
 			echolog "正在加载 [广告过滤]"
 			cp -f /etc/ssrplus/ad.conf $TMP_DNSMASQ_PATH/
 			if [ -f "$TMP_DNSMASQ_PATH/ad.conf" ]; then
-				for line in $(cat /etc/ssrplus/black.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
-				for line in $(cat /etc/ssrplus/white.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
-				for line in $(cat /etc/ssrplus/deny.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
+				for line in $(cat /etc/ssrplus/black_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
+				for line in $(cat /etc/ssrplus/white_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
+				for line in $(cat /etc/ssrplus/deny_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
 			fi
 			echolog "已加载 [广告过滤]"
 		fi
@@ -854,8 +739,6 @@ reset() {
 	uci -q batch <<-EOF >/dev/null
 		add shadowsocksr global
 		set shadowsocksr.@global[0].global_server='nil'
-		set shadowsocksr.@global[0].netflix_server='nil'
-		set shadowsocksr.@global[0].netflix_proxy='0'
 		set shadowsocksr.@global[0].threads='0'
 		set shadowsocksr.@global[0].run_mode='gfw'
 		set shadowsocksr.@global[0].dports='2'
