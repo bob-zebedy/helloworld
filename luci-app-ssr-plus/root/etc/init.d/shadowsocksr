@@ -746,7 +746,7 @@ reset() {
 		set shadowsocksr.@global[0].tunnel_forward='1.1.1.1:53'
 		set shadowsocksr.@global[0].monitor_enable='1'
 		set shadowsocksr.@global[0].enable_switch='1'
-		set shadowsocksr.@global[0].switch_time='60'
+		set shadowsocksr.@global[0].switch_time='30'
 		set shadowsocksr.@global[0].switch_timeout='5'
 		set shadowsocksr.@global[0].switch_try_count='3'
 		set shadowsocksr.@global[0].gfwlist_url='https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'

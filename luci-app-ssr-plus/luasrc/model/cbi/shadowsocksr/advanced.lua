@@ -35,7 +35,7 @@ o.default = "1"
 o = s:option(Value, "switch_time", translate("Inspection cycle"))
 o.datatype = "uinteger"
 o:depends("enable_switch", "1")
-o.default = 60
+o.default = 30
 
 o = s:option(Value, "switch_timeout", translate("Check timout"))
 o.datatype = "uinteger"
