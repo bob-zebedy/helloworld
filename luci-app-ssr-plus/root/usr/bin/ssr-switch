@@ -6,14 +6,14 @@ LOCK_FILE="/var/lock/ssr-switch.lock"
 touch "$LOCK_FILE"
 LOG_FILE=/var/log/ssrplus.log
 
-cycle_time=60
-switch_time=3
+cycle_time=30
+retry_time=3
 normal_flag=0
 server_locate=0
 server_count=0
 ENABLE_SERVER=nil
 [ -n "$1" ] && cycle_time=$1
-[ -n "$2" ] && switch_time=$2
+[ -n "$2" ] && retry_time=$2
 DEFAULT_SERVER=$(uci_get_by_type global global_server)
 CURRENT_SERVER=$DEFAULT_SERVER
 
@@ -22,12 +22,12 @@ check_proxy() {
 	local result=0
 	local try_count=$(uci_get_by_type global switch_try_count 3)
 	for i in $(seq 1 $try_count); do
-		/usr/bin/ssr-check www.google.com 80 $switch_time 1
+		/usr/bin/ssr-check www.google.com 80 $retry_time 1
 		if [ "$?" == "0" ]; then
 			result=0
 			break
 		else
-			/usr/bin/ssr-check www.baidu.com 80 $switch_time 1
+			/usr/bin/ssr-check www.baidu.com 80 $retry_time 1
 			if [ "$?" == "0" ]; then
 				result=1
 			else
@@ -48,7 +48,7 @@ test_proxy() {
 		ipset del whitelist $servername 2>/dev/null
 		return 1
 	fi
-	/usr/bin/ssr-check $servername $serverport $switch_time
+	/usr/bin/ssr-check $servername $serverport $retry_time
 	local ret=$?
 	ipset del whitelist $servername 2>/dev/null
 	if [ "$ret" == "0" ]; then
@@ -67,7 +67,7 @@ search_proxy() {
 	local servername=$(uci_get_by_name $1 server)
 	local serverport=$(uci_get_by_name $1 server_port)
 	ipset add whitelist $servername 2>/dev/null
-	/usr/bin/ssr-check $servername $serverport $switch_time
+	/usr/bin/ssr-check $servername $serverport $retry_time
 	local ret=$?
 	ipset del whitelist $servername 2>/dev/null
 	if [ "$ret" == "0" ]; then
