@@ -751,7 +751,6 @@ reset() {
 		set shadowsocksr.@global[0].switch_try_count='3'
 		set shadowsocksr.@global[0].gfwlist_url='https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
 		set shadowsocksr.@global[0].chnroute_url='https://ispip.clang.cn/all_cn.txt'
-		set shadowsocksr.@global[0].nfip_url='https://raw.githubusercontent.com/deplives/Surge/master/Provider/List/Netflix/ip.txt'
 		set shadowsocksr.@global[0].adblock_url='https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/adblock-for-dnsmasq.conf'
 		add shadowsocksr server_subscribe
 		set shadowsocksr.@server_subscribe[0].proxy='0'
