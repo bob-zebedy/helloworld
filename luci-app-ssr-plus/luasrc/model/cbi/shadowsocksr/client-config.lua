@@ -509,7 +509,7 @@ o = s:option(Value, "quic_key", translate("QUIC Key"))
 o:depends("transport", "quic")
 o.rmempty = true
 
-o = s:option(ListValue, "quic_guise", translate("QUIC Header"))
+o = s:option(ListValue, "quic_guise", translate("QUIC Guise"))
 o:depends("transport", "quic")
 o.rmempty = true
 o:value("none", translate("None"))

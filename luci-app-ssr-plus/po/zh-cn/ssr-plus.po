@@ -272,7 +272,7 @@ msgid "Health Check Timeout"
 msgstr "健康检查超时"
 
 msgid "Permit Without Stream"
-msgstr "允许无流"
+msgstr "允许无流量"
 
 msgid "QUIC Security"
 msgstr "QUIC 加密方式"
@@ -280,8 +280,8 @@ msgstr "QUIC 加密方式"
 msgid "QUIC Key"
 msgstr "QUIC 密钥"
 
-msgid "QUIC Header"
-msgstr "QUIC 头类型"
+msgid "QUIC Guise"
+msgstr "QUIC 伪装"
 
 msgid "VideoCall(SRTP)"
 msgstr "视频通话 (SRTP)"
