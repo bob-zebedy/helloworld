@@ -1,5 +1,3 @@
-# SPDX-License-Identifier: GPL-3.0-only
-#
 # Copyright (C) 2021
 
 include $(TOPDIR)/rules.mk
@@ -16,7 +14,7 @@ PKG_MIRROR_HASH:=b1ae62a6826616b35b6aea0c6b2d55b5f36da96be0cd1c229c263b508d1aeef
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Jian Chang <aa65535@live.com>
+PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 
 PKG_BUILD_DEPENDS:=libev
 PKG_FIXUP:=autoreconf

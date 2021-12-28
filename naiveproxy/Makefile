@@ -1,5 +1,3 @@
-# SPDX-License-Identifier: GPL-3.0-only
-#
 # Copyright (C) 2021
 
 include $(TOPDIR)/rules.mk
@@ -14,7 +12,7 @@ PKG_HASH:=b7ec325ac48d85063137a9efa3cbee7184052d7f4b4c469d88f4e5223235ca1f
 
 PKG_LICENSE:=BSD 3-Clause
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
+PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 
 PKG_BUILD_DEPENDS:=python3/host
 ifneq ($(wildcard $(TOPDIR)/feeds/packages/devel/ninja/ninja.mk),)

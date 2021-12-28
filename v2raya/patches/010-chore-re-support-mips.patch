@@ -12,7 +12,7 @@ Subject: [PATCH] chore: re-support mips
 +++ b/go.mod
 @@ -3,7 +3,6 @@ module github.com/v2rayA/v2rayA
  go 1.16
-
+ 
  require (
 -	github.com/StackExchange/wmi v1.2.1 // indirect
  	github.com/beevik/ntp v0.3.0
@@ -40,7 +40,7 @@ Subject: [PATCH] chore: re-support mips
 @@ -44,7 +42,4 @@ require (
  //replace github.com/mzz2017/go-engine => ../../go-engine
  //replace github.com/v2rayA/beego/v2 => ../../beego
-
+ 
 -// windows/arm64 support
 -replace github.com/go-ole/go-ole => github.com/go-ole/go-ole v0.0.0-20210915003542-8b1f7f90f6b1
 -
