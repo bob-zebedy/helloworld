@@ -292,6 +292,14 @@ o:depends({
     v2ray_protocol = "shadowsocks"
 })
 
+o = s:option(Flag, "ivCheck", translate("Bloom Filter"))
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "shadowsocks"
+})
+o.default = "1"
+o.rmempty = false
+
 -- Shadowsocks Plugin
 o = s:option(Value, "plugin", translate("obfs"))
 o:value("none", translate("None"))
