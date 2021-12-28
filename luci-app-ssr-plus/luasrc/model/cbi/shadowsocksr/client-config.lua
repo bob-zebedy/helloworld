@@ -293,7 +293,7 @@ o:depends({
 })
 
 o = s:option(Flag, "ivCheck", translate("Bloom Filter"))
-o.rmempty = false
+o.rmempty = true
 o:depends({
     type = "v2ray",
     v2ray_protocol = "shadowsocks"
@@ -438,7 +438,6 @@ o:depends("transport", "ws")
 o.rmempty = true
 
 -- [[ H2部分 ]]--
-
 -- H2域名
 o = s:option(Value, "h2_host", translate("HTTP/2 Host"))
 o:depends("transport", "h2")
