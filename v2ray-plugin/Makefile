@@ -1,5 +1,3 @@
-# SPDX-License-Identifier: GPL-3.0-only
-#
 # Copyright (C) 2021
 
 include $(TOPDIR)/rules.mk
@@ -44,7 +42,7 @@ endef
 
 ifeq ($(CONFIG_V2RAY_PLUGIN_COMPRESS_GOPROXY),y)
 	export GO111MODULE=on
-	export GOPROXY=https://goproxy.io
+	export GOPROXY=https://goproxy.baidu.com
 endif
 
 define Package/v2ray-plugin

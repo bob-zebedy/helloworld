@@ -1,4 +1,4 @@
-# Copyright (C) 2021 ImmortalWrt.org
+# Copyright (C) 2021
 
 include $(TOPDIR)/rules.mk
 

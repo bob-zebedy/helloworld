@@ -1,9 +1,5 @@
 #!/bin/bash
-# SPDX-License-Identifier: GPL-3.0-only
-#
-# Copyright (C) 2021 ImmortalWrt.org
-# --------------------------------------------------------
-# Init build dependencies for naiveproxy
+# Copyright (C) 2021
 
 # Read args from shell
 target_arch="$1"
@@ -28,7 +24,10 @@ case "${target_arch}" in
 esac
 
 # OS detection
-[ "$(uname)" != "Linux" -o "$(uname -m)" != "x86_64" ] && { echo -e "Support Linux AMD64 only."; exit 1; }
+[ "$(uname)" != "Linux" -o "$(uname -m)" != "x86_64" ] && {
+	echo -e "Support Linux AMD64 only."
+	exit 1
+}
 
 # Create TMP dir
 mkdir -p "$PWD/tmp"
@@ -74,9 +73,9 @@ target_sysroot=\"${toolchain_dir}\""
 case "${target_arch}" in
 "arm")
 	naive_flags+=" arm_version=0 arm_cpu=\"${cpu_type}\""
-	case "${cpu_type}" in "arm1176jzf-s"|"arm926ej-s"|"mpcore"|"xscale") naive_flags+=" arm_use_thumb=false" ;; esac
+	case "${cpu_type}" in "arm1176jzf-s" | "arm926ej-s" | "mpcore" | "xscale") naive_flags+=" arm_use_thumb=false" ;; esac
 	if [ -n "${cpu_subtype}" ]; then
-		if grep -q "neon" <<< "${cpu_subtype}"; then
+		if grep -q "neon" <<<"${cpu_subtype}"; then
 			neon_flag="arm_use_neon=true"
 		else
 			neon_flag="arm_use_neon=false"
@@ -89,7 +88,7 @@ case "${target_arch}" in
 "arm64")
 	[ -n "${cpu_type}" ] && naive_flags+=" arm_cpu=\"${cpu_type}\""
 	;;
-"mipsel"|"mips64el")
+"mipsel" | "mips64el")
 	naive_flags+=" use_gold=false use_thin_lto=false use_lld=false chrome_pgo_phase=0 mips_arch_variant=\"r2\""
 	[ "${target_arch}" == "mipsel" ] && naive_flags+=" mips_float_abi=\"soft\" mips_tune=\"${cpu_type}\""
 	;;
