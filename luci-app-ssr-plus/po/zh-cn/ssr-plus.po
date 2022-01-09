@@ -211,6 +211,9 @@ msgstr "密码"
 msgid "Encrypt Method"
 msgstr "加密方式"
 
+msgid "Bloom Filter"
+msgstr "布隆过滤器"
+
 msgid "Plugin opts"
 msgstr "插件参数"
 
@@ -231,6 +234,54 @@ msgstr "传输协议"
 
 msgid "Camouflage Type"
 msgstr "伪装类型"
+
+msgid "HTTP Host"
+msgstr "HTTP 域名"
+
+msgid "HTTP Path"
+msgstr "HTTP 路径"
+
+msgid "WebSocket Host"
+msgstr "WebSocket 域名"
+
+msgid "WebSocket Path"
+msgstr "WebSocket 路径"
+
+msgid "HTTP/2 Host"
+msgstr "HTTP/2 域名"
+
+msgid "HTTP/2 Path"
+msgstr "HTTP/2 路径"
+
+msgid "serviceName"
+msgstr "服务名称"
+
+msgid "Initial Windows Size"
+msgstr "初始窗口大小"
+
+msgid "H2/gRPC Health Check"
+msgstr "H2/gRPC 健康检查"
+
+msgid "H2 Read Idle Timeout"
+msgstr "H2 读取空闲超时"
+
+msgid "gRPC Idle Timeout"
+msgstr "gRPC 空闲超时"
+
+msgid "Health Check Timeout"
+msgstr "健康检查超时"
+
+msgid "Permit Without Stream"
+msgstr "允许无流量"
+
+msgid "QUIC Security"
+msgstr "QUIC 加密方式"
+
+msgid "QUIC Key"
+msgstr "QUIC 密钥"
+
+msgid "QUIC Guise"
+msgstr "QUIC 伪装"
 
 msgid "VideoCall(SRTP)"
 msgstr "视频通话 (SRTP)"
