@@ -85,7 +85,6 @@ o:value("8.8.8.8:53", translate("Google Public DNS (8.8.8.8)"))
 o:value("8.8.4.4:53", translate("Google Public DNS (8.8.4.4)"))
 o:depends("dns_mode", "1")
 o:depends("dns_mode", "2")
-o.default = "1.1.1.1:53"
 o.description = translate("Custom DNS Server format as IP:PORT")
 o.datatype = "hostport"
 
