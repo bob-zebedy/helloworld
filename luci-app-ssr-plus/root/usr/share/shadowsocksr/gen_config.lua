@@ -1,3 +1,5 @@
+#!/usr/bin/lua
+
 local ucursor = require"luci.model.uci".cursor()
 local json = require "luci.jsonc"
 local server_section = arg[1]
