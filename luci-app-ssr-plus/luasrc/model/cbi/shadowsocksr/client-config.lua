@@ -663,8 +663,9 @@ o:depends({
 o = s:option(Value, "concurrency", translate("Concurrency"))
 o.datatype = "uinteger"
 o.rmempty = true
-o.default = "8"
+o.default = "4"
 o:depends("mux", "1")
+o:depends("type", "naiveproxy")
 
 -- [[ Cert ]]--
 o = s:option(Flag, "certificate", translate("Self-signed Certificate"))
