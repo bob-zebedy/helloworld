@@ -178,7 +178,7 @@ local function update(url, file, type, file2)
         if args then
             log(-1)
         else
-            log("更新失败" .. "(" .. sret .. ")")
+            log("更新失败 " .. "(" .. sret .. ")")
         end
     end
     os.remove("/tmp/ssr-update." .. type)
