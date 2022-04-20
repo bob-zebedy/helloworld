@@ -100,18 +100,15 @@ start() {
 	while [ "1" == "1" ]; do #死循环
 		sleep $cycle_time
 		LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
-		#判断当前代理是否为缺省服务器
+		#判断当前代理是否为默认服务器
 		if [ "$CURRENT_SERVER" != "$DEFAULT_SERVER" ]; then
-			#echo "not default proxy"
-			echolog "当前服务器不是主服务器, 尝试切换为主服务器"
-			#检查缺省服务器是否正常
+			#检查默认服务器是否正常
 			if test_proxy $DEFAULT_SERVER; then
-				echolog "主服务器可用"
 				CURRENT_SERVER=$DEFAULT_SERVER
 				switch_proxy $CURRENT_SERVER
-				echolog "切换到 "$(uci_get_by_name $CURRENT_SERVER alias)""
+				echolog "主服务器 "$(uci_get_by_name $DEFAULT_SERVER alias)" 已可用"
 			else
-				echolog "主服务器不可用"
+				echolog "主服务器 "$(uci_get_by_name $DEFAULT_SERVER alias)" 不可用"
 			fi
 		fi
 		#判断当前代理是否正常
@@ -119,18 +116,17 @@ start() {
 		current_ret=$?
 		if [ "$current_ret" == "1" ]; then
 			#当前代理错误，判断有无可用的服务器
-			echolog "当前代理服务器错误, 尝试切换其他服务器"
+			echolog "当前服务器不可用"
 			select_proxy
 			if [ "$ENABLE_SERVER" != nil ]; then
-				echolog "找到可用的服务器"
 				CURRENT_SERVER=$ENABLE_SERVER
 				switch_proxy $CURRENT_SERVER
 				normal_flag=1
-				echolog "切换到 "$(uci_get_by_name $CURRENT_SERVER alias)""
+				echolog "尝试切换到 "$(uci_get_by_name $CURRENT_SERVER alias)""
 			else
 				switch_proxy $CURRENT_SERVER
 				normal_flag=1
-				echolog "尝试重启服务"
+				echolog "没有找到可用服务器, 尝试重启服务"
 			fi
 		else
 			normal_flag=0
