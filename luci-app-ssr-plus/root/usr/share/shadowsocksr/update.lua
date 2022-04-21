@@ -155,7 +155,7 @@ local function update(url, file, type, file2)
             if args then
                 log(1)
             else
-                log("无可用更新")
+                log("无更新")
             end
         else
             icount = luci.sys.exec("cat /tmp/ssr-update." .. type .. " | wc -l")
@@ -171,7 +171,7 @@ local function update(url, file, type, file2)
             if args then
                 log(0, tonumber(icount) / Num)
             else
-                log("更新成功! 新的纪录总数: " .. tostring(tonumber(icount) / Num))
+                log("更新成功!")
             end
         end
     else

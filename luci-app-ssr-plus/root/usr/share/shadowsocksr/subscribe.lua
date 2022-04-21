@@ -478,10 +478,10 @@ end
 local execute = function()
     -- exec
     do
-        if proxy == '0' then -- 不使用代理更新的话先暂停
-            log('不使用代理更新')
+        if proxy == '0' then
             luci.sys.init.stop(name)
         end
+        log('正在更新订阅信息')
         for k, url in ipairs(subscribe_url) do
             local raw = wget(url)
             if #raw > 0 then
@@ -549,7 +549,7 @@ local execute = function()
                         end
                     end
                 end
-                log('成功解析节点数量: ' .. #nodes)
+                log('解析成功, 节点数量: ' .. #nodes)
             else
                 log(url .. ': 获取内容为空')
             end
