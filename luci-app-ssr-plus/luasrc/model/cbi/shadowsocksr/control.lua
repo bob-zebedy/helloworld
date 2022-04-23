@@ -65,7 +65,7 @@ luci.ip.neighbors({
     end
 end)
 
-o = s:taboption("lan_ac", DynamicList, "lan_gm_ips", translate("Game Mode Host List"))
+o = s:taboption("lan_ac", DynamicList, "lan_udp_ips", translate("UDP Host List"))
 o.datatype = "ipaddr"
 luci.ip.neighbors({
     family = 4

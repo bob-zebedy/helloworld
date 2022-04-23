@@ -62,7 +62,7 @@ flush_r() {
 	ipset -X ssr_gen_router 2>/dev/null
 	ipset -X fplan 2>/dev/null
 	ipset -X bplan 2>/dev/null
-	ipset -X gmlan 2>/dev/null
+	ipset -X udplan 2>/dev/null
 	ipset -X oversea 2>/dev/null
 	ipset -X whitelist 2>/dev/null
 	ipset -X blacklist 2>/dev/null
@@ -74,8 +74,8 @@ ipset_r() {
 	[ -f "$IGNORE_LIST" ] && /usr/share/shadowsocksr/chinaipset.sh $IGNORE_LIST
 	$IPT -N SS_SPEC_WAN_AC
 	$IPT -I SS_SPEC_WAN_AC -p tcp ! --dport 53 -d $server -j RETURN
-	ipset -N gmlan hash:net 2>/dev/null
-	for ip in $LAN_GM_IP; do ipset -! add gmlan $ip; done
+	ipset -N udplan hash:net 2>/dev/null
+	for ip in $LAN_GM_IP; do ipset -! add udplan $ip; done
 	case "$RUNMODE" in
 	router)
 		ipset -! -R <<-EOF || return 1
@@ -84,19 +84,19 @@ ipset_r() {
 		EOF
 		$IPT -A SS_SPEC_WAN_AC -m set --match-set ss_spec_wan_ac dst -j RETURN
 		$IPT -A SS_SPEC_WAN_AC -m set --match-set china dst -j RETURN
-		$IPT -A SS_SPEC_WAN_AC -m set --match-set gmlan src -m set ! --match-set china dst -j SS_SPEC_WAN_FW
+		$IPT -A SS_SPEC_WAN_AC -m set --match-set udplan src -m set ! --match-set china dst -j SS_SPEC_WAN_FW
 		$IPT -A SS_SPEC_WAN_AC -j SS_SPEC_WAN_FW
 		;;
 	gfw)
 		ipset -N gfwlist hash:net 2>/dev/null
 		$IPT -A SS_SPEC_WAN_AC -m set --match-set china dst -j RETURN
 		$IPT -A SS_SPEC_WAN_AC -m set --match-set gfwlist dst -j SS_SPEC_WAN_FW
-		$IPT -A SS_SPEC_WAN_AC -m set --match-set gmlan src -m set ! --match-set china dst -j SS_SPEC_WAN_FW
+		$IPT -A SS_SPEC_WAN_AC -m set --match-set udplan src -m set ! --match-set china dst -j SS_SPEC_WAN_FW
 		;;
 	oversea)
 		ipset -N oversea hash:net 2>/dev/null
 		$IPT -I SS_SPEC_WAN_AC -m set --match-set oversea dst -j SS_SPEC_WAN_FW
-		$IPT -A SS_SPEC_WAN_AC -m set --match-set gmlan src -j SS_SPEC_WAN_FW
+		$IPT -A SS_SPEC_WAN_AC -m set --match-set udplan src -j SS_SPEC_WAN_FW
 		$IPT -A SS_SPEC_WAN_AC -m set --match-set china dst -j SS_SPEC_WAN_FW
 		;;
 	all)
@@ -211,7 +211,7 @@ tp_rule() {
 		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set china dst -j RETURN
 		$ipt -A SS_SPEC_TPROXY -p udp --dport 443 -j DROP
 		$ipt -A SS_SPEC_TPROXY -p udp --dport 80 -j DROP
-		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set gmlan src -m set ! --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set udplan src -m set ! --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
 		$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set ! --match-set ss_spec_wan_ac dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
 		;;
 	gfw)
@@ -219,11 +219,11 @@ tp_rule() {
 		$ipt -A SS_SPEC_TPROXY -p udp --dport 443 -j DROP
 		$ipt -A SS_SPEC_TPROXY -p udp --dport 80 -j DROP
 		$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set --match-set gfwlist dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
-		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set gmlan src -m set ! --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set udplan src -m set ! --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
 		;;
 	oversea)
 		$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set --match-set oversea src -m dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
-		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set gmlan src -m set -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
+		$ipt -A SS_SPEC_TPROXY -p udp -m set --match-set udplan src -m set -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
 		$ipt -A SS_SPEC_TPROXY -p udp $PROXY_PORTS -m set --match-set china dst -j TPROXY --on-port "$LOCAL_PORT" --tproxy-mark 0x01/0x01
 		;;
 	all)

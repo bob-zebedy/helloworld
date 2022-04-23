@@ -25,8 +25,8 @@ msgstr "日志"
 msgid "Main Server"
 msgstr "主服务器"
 
-msgid "Game Mode UDP Server"
-msgstr "游戏 UDP 节点"
+msgid "UDP Server"
+msgstr "UDP 优化节点"
 
 msgid "Multi Threads Option"
 msgstr "多线程并发"
@@ -421,8 +421,8 @@ msgstr "不走代理的 LAN 设备"
 msgid "LAN Force Proxy Host List"
 msgstr "全局代理的 LAN 设备"
 
-msgid "Game Mode Host List"
-msgstr "LAN 游戏设备"
+msgid "UDP Host List"
+msgstr "LAN UDP优化 设备"
 
 msgid "Enable auto switch"
 msgstr "故障自动切换"
