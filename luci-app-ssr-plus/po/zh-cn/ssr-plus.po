@@ -421,7 +421,7 @@ msgstr "不走代理的 LAN 设备"
 msgid "LAN Force Proxy Host List"
 msgstr "全局代理的 LAN 设备"
 
-msgid "UDP Host List"
+msgid "LAN UDP Host List"
 msgstr "LAN UDP优化 设备"
 
 msgid "Enable auto switch"

@@ -38,9 +38,7 @@ o.datatype = "ipaddr"
 luci.ip.neighbors({
     family = 4
 }, function(entry)
-    if entry.reachable then
-        o:value(entry.dest:string())
-    end
+    o:value(entry.dest:string())
 end)
 o:depends("lan_ac_mode", "w")
 o:depends("lan_ac_mode", "b")
@@ -50,9 +48,7 @@ o.datatype = "ipaddr"
 luci.ip.neighbors({
     family = 4
 }, function(entry)
-    if entry.reachable then
-        o:value(entry.dest:string())
-    end
+    o:value(entry.dest:string())
 end)
 
 o = s:taboption("lan_ac", DynamicList, "lan_fp_ips", translate("LAN Force Proxy Host List"))
@@ -60,19 +56,15 @@ o.datatype = "ipaddr"
 luci.ip.neighbors({
     family = 4
 }, function(entry)
-    if entry.reachable then
-        o:value(entry.dest:string())
-    end
+    o:value(entry.dest:string())
 end)
 
-o = s:taboption("lan_ac", DynamicList, "lan_udp_ips", translate("UDP Host List"))
+o = s:taboption("lan_ac", DynamicList, "lan_udp_ips", translate("LAN UDP Host List"))
 o.datatype = "ipaddr"
 luci.ip.neighbors({
     family = 4
 }, function(entry)
-    if entry.reachable then
-        o:value(entry.dest:string())
-    end
+    o:value(entry.dest:string())
 end)
 
 s:tab("esc", translate("Bypass Domain List"))
