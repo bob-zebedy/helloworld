@@ -52,9 +52,8 @@ o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", 
 o.default = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
 
 o = s:option(Value, "chnroute_url", translate("chn_ip_url"))
-o:value("https://ispip.clang.cn/all_cn.txt", translate("CN"))
-o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("CN-CIDR"))
-o.default = "https://ispip.clang.cn/all_cn.txt"
+o:value("https://github.com/deplives/cnip/releases/download/CNIP/cnip", translate("CNIP"))
+o.default = "https://github.com/deplives/cnip/releases/download/CNIP/cnip"
 
 o = s:option(Flag, "adblock", translate("Enable adblock"))
 o.rmempty = false
