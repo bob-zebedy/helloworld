@@ -52,7 +52,7 @@ o:value("https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt", 
 o.default = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt"
 
 o = s:option(Value, "chnroute_url", translate("chn_ip_url"))
-o:value("https://ispip.clang.cn/all_cn.txt", translate("CN"))
+o:value("https://ispip.clang.cn/all_cn.txt", translate("CN-IP"))
 o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("CN-CIDR"))
 o.default = "https://ispip.clang.cn/all_cn.txt"
 
