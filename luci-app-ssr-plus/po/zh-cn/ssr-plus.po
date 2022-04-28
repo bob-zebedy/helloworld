@@ -440,13 +440,13 @@ msgid "Enable adblock"
 msgstr "开启广告屏蔽"
 
 msgid "adblock_url"
-msgstr "广告屏蔽 订阅URL"
+msgstr "广告屏蔽 源URL"
 
 msgid "gfwlist_url"
-msgstr "GFWList 订阅URL"
+msgstr "GFWList 源URL"
 
 msgid "chn_ip_url"
-msgstr "China IP 订阅URL"
+msgstr "China IP 源URL"
 
 msgid "Reset all"
 msgstr "恢复默认设置"
