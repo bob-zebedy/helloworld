@@ -65,7 +65,7 @@ flush_r() {
 	ipset -X udplan 2>/dev/null
 	ipset -X oversea 2>/dev/null
 	ipset -X whitelist 2>/dev/null
-	ipset -X blacklist 2>/dev/null
+	ipset -X blocklist 2>/dev/null
 	[ -n "$FWI" ] && echo '#!/bin/sh' >$FWI
 	return 0
 }
@@ -110,14 +110,14 @@ ipset_r() {
 	for ip in $LAN_BP_IP; do ipset -! add bplan $ip; done
 	$IPT -I SS_SPEC_WAN_AC -m set --match-set bplan src -j RETURN
 	ipset -N whitelist hash:net 2>/dev/null
-	ipset -N blacklist hash:net 2>/dev/null
-	$IPT -I SS_SPEC_WAN_AC -m set --match-set blacklist dst -j SS_SPEC_WAN_FW
+	ipset -N blocklist hash:net 2>/dev/null
+	$IPT -I SS_SPEC_WAN_AC -m set --match-set blocklist dst -j SS_SPEC_WAN_FW
 	$IPT -I SS_SPEC_WAN_AC -m set --match-set whitelist dst -j RETURN
 	if [ $(ipset list music -name -quiet | grep music) ]; then
 		$IPT -I SS_SPEC_WAN_AC -m set --match-set music dst -j RETURN 2>/dev/null
 	fi
 	for ip in $WAN_BP_IP; do ipset -! add whitelist $ip; done
-	for ip in $WAN_FW_IP; do ipset -! add blacklist $ip; done
+	for ip in $WAN_FW_IP; do ipset -! add blocklist $ip; done
 	return $?
 }
 

@@ -16,7 +16,7 @@ rm -rf /etc/config/shadowsocksr-opkg /etc/ssrplus/*opkg
 touch /etc/ssrplus/china_ip.list
 touch /etc/ssrplus/deny_domain.list
 touch /etc/ssrplus/white_domain.list
-touch /etc/ssrplus/black_domain.list
+touch /etc/ssrplus/block_domain.list
 touch /etc/ssrplus/gfw.conf
 touch /etc/ssrplus/oversea.conf
 touch /etc/ssrplus/ad.conf

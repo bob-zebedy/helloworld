@@ -388,7 +388,7 @@ msgstr "LAN 访问控制"
 msgid "Bypass Domain List"
 msgstr "强制绕过代理"
 
-msgid "Black Domain List"
+msgid "Block Domain List"
 msgstr "强制代理"
 
 msgid "Deny Domain List"

@@ -83,8 +83,8 @@ o.remove = function(self, section, value)
     nixio.fs.writefile(escconf, "")
 end
 
-s:tab("block", translate("Black Domain List"))
-local blockconf = "/etc/ssrplus/black_domain.list"
+s:tab("block", translate("Block Domain List"))
+local blockconf = "/etc/ssrplus/block_domain.list"
 o = s:taboption("block", TextValue, "blockconf")
 o.rows = 30
 o.wrap = "off"

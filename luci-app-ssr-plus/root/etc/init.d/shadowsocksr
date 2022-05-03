@@ -680,7 +680,7 @@ start() {
 			echolog "正在加载 [广告过滤]"
 			cp -f /etc/ssrplus/ad.conf $TMP_DNSMASQ_PATH/
 			if [ -f "$TMP_DNSMASQ_PATH/ad.conf" ]; then
-				for line in $(cat /etc/ssrplus/black_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
+				for line in $(cat /etc/ssrplus/block_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
 				for line in $(cat /etc/ssrplus/white_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
 				for line in $(cat /etc/ssrplus/deny_domain.list); do sed -i "/$line/d" $TMP_DNSMASQ_PATH/ad.conf; done
 			fi
