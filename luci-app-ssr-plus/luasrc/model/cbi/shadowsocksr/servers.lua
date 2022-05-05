@@ -37,19 +37,19 @@ o = s:option(Value, "save_words", translate("Subscribe Save Words"))
 o.rmempty = true
 o.description = translate("Save Words splited by |")
 
-o = s:option(Button, "update_Sub", translate("Update Subscribe List"))
-o.inputstyle = "reload"
-o.write = function()
-    uci:commit("shadowsocksr")
-    luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
-end
-
 o = s:option(Flag, "switch", translate("Subscribe Default Auto-Switch"))
 o.rmempty = false
 o.default = "0"
 
 o = s:option(Flag, "proxy", translate("Through proxy update"))
 o.rmempty = false
+
+o = s:option(Button, "update_Sub", translate("Update Subscribe List"))
+o.inputstyle = "reload"
+o.write = function()
+    uci:commit("shadowsocksr")
+    luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
+end
 
 o = s:option(Button, "subscribe", translate("Update All Subscribe Severs"))
 o.rawhtml = true
