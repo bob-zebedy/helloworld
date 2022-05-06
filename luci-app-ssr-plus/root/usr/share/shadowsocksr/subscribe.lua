@@ -209,10 +209,10 @@ local function processData(szType, content)
         if info.tls == "tls" or info.tls == "1" then
             result.tls = "1"
             if info.host then
-				result.tls_host = info.host
+                result.tls_host = info.host
             elseif info.sni then
                 result.tls_host = info.sni
-			end
+            end
             result.insecure = 1
         else
             result.tls = "0"
@@ -540,7 +540,7 @@ local execute = function()
                         end
                         if result then
                             if not result.server or not result.server_port or result.alias == "NULL" or check_filer(result) or result.server:match("[^0-9a-zA-Z%-%.%s]") or cache[groupHash][result.hashkey] then
-                                log('丢弃无效 ' .. result.type .. ' 节点: ' .. result.alias)
+                                log('丢弃无效节点: ' .. result.alias .. ' (' .. result.type .. ')')
                             else
                                 result.grouphashkey = groupHash
                                 tinsert(nodeResult[index], result)
@@ -549,9 +549,9 @@ local execute = function()
                         end
                     end
                 end
-                log('解析成功, 节点数量: ' .. #nodes)
+                log('解析节点数量: ' .. #nodes)
             else
-                log(url .. ': 获取内容为空')
+                log('获取内容为空: ' .. url)
             end
         end
     end
