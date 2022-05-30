@@ -21,56 +21,56 @@ PKG_USE_MIPS16:=0
 PKG_BUILD_PARALLEL:=1
 
 ifneq ($(CONFIG_CPU_TYPE)," ")
-  CPU_TYPE:=$(word 1, $(subst +," ,$(CONFIG_CPU_TYPE)))
-  CPU_SUBTYPE:=$(word 2, $(subst +, ",$(CONFIG_CPU_TYPE)))
-  ifeq ($(CPU_SUBTYPE),)
-    CPU_SUBTYPE:=""
-  endif
+	CPU_TYPE:=$(word 1, $(subst +," ,$(CONFIG_CPU_TYPE)))
+	CPU_SUBTYPE:=$(word 2, $(subst +, ",$(CONFIG_CPU_TYPE)))
+		ifeq ($(CPU_SUBTYPE),)
+	CPU_SUBTYPE:=""
+	endif
 else
-  CPU_TYPE:=""
-  CPU_SUBTYPE:=""
+	CPU_TYPE:=""
+	CPU_SUBTYPE:=""
 endif
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/naiveproxy/Default
-  URL:=https://github.com/klzgrad/naiveproxy
-  DEPENDS:=@!(arc||armeb||mips||mips64||powerpc||TARGET_gemini) +libatomic
+	URL:=https://github.com/klzgrad/naiveproxy
+	DEPENDS:=@!(arc||armeb||mips||mips64||powerpc||TARGET_gemini) +libatomic
 endef
 
 define Package/naiveproxy
-  $(call Package/naiveproxy/Default)
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Web Servers/Proxies
-  TITLE:=Make a fortune quietly
+	$(call Package/naiveproxy/Default)
+	SECTION:=net
+	CATEGORY:=Network
+	SUBMENU:=Web Servers/Proxies
+	TITLE:=Make a fortune quietly
 endef
 
 define Package/libcronet
-  $(call Package/naiveproxy/Default)
-  SECTION:=libs
-  CATEGORY:=Libraries
-  TITLE:=The Chromium network stack library
+	$(call Package/naiveproxy/Default)
+	SECTION:=libs
+	CATEGORY:=Libraries
+	TITLE:=The Chromium network stack library
 endef
 
 define Package/naiveproxy/description
-  NaïveProxy uses Chrome's network stack to camouflage traffic with strong
-  censorship resistance and low detectability. Reusing Chrome's stack also
-  ensures best practices in performance and security.
+	NaïveProxy uses Chrome's network stack to camouflage traffic with strong
+	censorship resistance and low detectability. Reusing Chrome's stack also
+	ensures best practices in performance and security.
 endef
 
 define Package/libcronet/description
-  Cronet is the Chromium network stack made available to Android apps as a library.
+	Cronet is the Chromium network stack made available to Android apps as a library.
 
-  Cronet takes advantage of multiple technologies that reduce the latency and
-  increase the throughput of the network requests that your app needs to work.
+	Cronet takes advantage of multiple technologies that reduce the latency and
+	increase the throughput of the network requests that your app needs to work.
 endef
 
 ifneq ($(CONFIG_CCACHE),)
-  export CCACHE_SLOPPINESS=time_macros
-  export CCACHE_BASEDIR=$(PKG_BUILD_DIR)/src
-  export CCACHE_CPP2=yes
-  export naive_ccache_flags=cc_wrapper="$(CCACHE)"
+	export CCACHE_SLOPPINESS=time_macros
+	export CCACHE_BASEDIR=$(PKG_BUILD_DIR)/src
+	export CCACHE_CPP2=yes
+	export naive_ccache_flags=cc_wrapper="$(CCACHE)"
 endif
 
 CLANG_VER:=15-init-7570-gba4537b2-1
@@ -130,6 +130,16 @@ define Build/Compile
 		ninja -C "$(PKG_BUILD_DIR)/src/out/Release" naive)
 	$(if $(CONFIG_PACKAGE_libcronet), \
 		ninja -C "$(PKG_BUILD_DIR)/src/out/Release" cronet)
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) \
+		$(PKG_BUILD_DIR)/src/components/grpc_support/include/bidirectional_stream_c.h \
+		$(PKG_BUILD_DIR)/src/components/cronet/native/generated/cronet.idl_c.h \
+		$(PKG_BUILD_DIR)/src/components/cronet/native/include/cronet_c.h \
+		$(PKG_BUILD_DIR)/src/components/cronet/native/include/cronet_export.h \
+		$(1)/usr/include/
 endef
 
 define Package/naiveproxy/install
