@@ -23,8 +23,8 @@ PKG_BUILD_PARALLEL:=1
 ifneq ($(CONFIG_CPU_TYPE)," ")
 	CPU_TYPE:=$(word 1, $(subst +," ,$(CONFIG_CPU_TYPE)))
 	CPU_SUBTYPE:=$(word 2, $(subst +, ",$(CONFIG_CPU_TYPE)))
-		ifeq ($(CPU_SUBTYPE),)
-	CPU_SUBTYPE:=""
+	ifeq ($(CPU_SUBTYPE),)
+		CPU_SUBTYPE:=""
 	endif
 else
 	CPU_TYPE:=""
