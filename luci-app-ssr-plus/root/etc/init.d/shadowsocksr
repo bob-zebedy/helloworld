@@ -191,9 +191,15 @@ start_dns() {
 	}
 	if [ "$ssrplus_dns" != "0" ]; then
 		case "$(uci_get_by_type global run_mode)" in
-		gfw) ipset add gfwlist $dnsserver 2>/dev/null ;;
-		oversea) ipset add oversea $dnsserver 2>/dev/null ;;
-		*) ipset add ss_spec_wan_ac $dnsserver nomatch 2>/dev/null ;;
+		gfw)
+			ipset add gfwlist $dnsserver 2>/dev/null
+			;;
+		oversea)
+			ipset add oversea $dnsserver 2>/dev/null
+			;;
+		*)
+			ipset add ss_spec_wan_ac $dnsserver nomatch 2>/dev/null
+			;;
 		esac
 		case "$ssrplus_dns" in
 		1)
