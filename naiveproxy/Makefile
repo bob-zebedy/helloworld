@@ -91,7 +91,7 @@ define Download/GN_TOOL
 	HASH:=8c75d5371934b9bde92f17ab41e83f9c2a7817c4c527b0093e68d609821200c4
 endef
 
-PGO_VER:=4951-1650389737-545882ae3e5c9e7f75e0781c8dc0d1eafb667efd
+PGO_VER:=5005-1652783756-51c73d0c010d6007ebdf3ca8150e9544cb705cc6
 PGO_FILE:=chrome-linux-$(PGO_VER).profdata
 define Download/PGO_PROF
 	URL:=https://storage.googleapis.com/chromium-optimization-profiles/pgo_profiles
