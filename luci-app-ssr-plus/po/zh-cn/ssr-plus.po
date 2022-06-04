@@ -91,6 +91,9 @@ msgstr "使用 PDNSD 查询并缓存"
 msgid "Use dns2socks query and cache"
 msgstr "使用 DNS2SOCKS 查询并缓存"
 
+msgid "Use dns2tcp query"
+msgstr "使用 DNS2TCP 查询"
+
 msgid "Use Local DNS Service listen port 5335"
 msgstr "使用本地 DNS 服务器 (端口5335)"
 

@@ -74,6 +74,9 @@ o.default = "1"
 o = s:option(ListValue, "dns_mode", translate("Resolve Dns Mode"))
 o:value("1", translate("Use pdnsd query and cache"))
 o:value("2", translate("Use dns2socks query and cache"))
+if nixio.fs.access('/usr/bin/dns2tcp') then
+    o:value("3", translate("Use dns2tcp query"))
+end
 o:value("0", translate("Use Local DNS Service listen port 5335"))
 o.default = "1"
 
@@ -85,6 +88,7 @@ o:value("8.8.8.8:53", translate("Google Public DNS (8.8.8.8)"))
 o:value("8.8.4.4:53", translate("Google Public DNS (8.8.4.4)"))
 o:depends("dns_mode", "1")
 o:depends("dns_mode", "2")
+o:depends("dns_mode", "3")
 o.description = translate("Custom DNS Server format as IP:PORT")
 o.datatype = "hostport"
 
