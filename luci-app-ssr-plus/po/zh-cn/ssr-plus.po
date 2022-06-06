@@ -82,16 +82,16 @@ msgstr "所有端口"
 msgid "Only Common Ports"
 msgstr "常用端口"
 
-msgid "Resolve Dns Mode"
+msgid "Resolve DNS Mode"
 msgstr "DNS 解析方式"
 
-msgid "Use pdnsd query and cache"
+msgid "Use PDNSD query and cache"
 msgstr "使用 PDNSD 查询并缓存"
 
-msgid "Use dns2socks query and cache"
+msgid "Use DNS2SOCKS query and cache"
 msgstr "使用 DNS2SOCKS 查询并缓存"
 
-msgid "Use dns2tcp query"
+msgid "Use DNS2TCP query"
 msgstr "使用 DNS2TCP 查询"
 
 msgid "Use Local DNS Service listen port 5335"

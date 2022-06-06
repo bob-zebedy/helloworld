@@ -1,4 +1,4 @@
-local m, s, sec, o, kcp_enable
+local m, s, sec, o
 local uci = luci.model.uci.cursor()
 m = Map("shadowsocksr")
 
@@ -71,11 +71,11 @@ o:value("1", translate("All Ports"))
 o:value("2", translate("Only Common Ports"))
 o.default = "1"
 
-o = s:option(ListValue, "dns_mode", translate("Resolve Dns Mode"))
-o:value("1", translate("Use pdnsd query and cache"))
-o:value("2", translate("Use dns2socks query and cache"))
-if nixio.fs.access('/usr/bin/dns2tcp') then
-    o:value("3", translate("Use dns2tcp query"))
+o = s:option(ListValue, "dns_mode", translate("Resolve DNS Mode"))
+o:value("1", translate("Use DNS2TCP query"))
+o:value("2", translate("Use DNS2SOCKS query and cache"))
+if nixio.fs.access('/usr/sbin/pdnsd') then
+    o:value("3", translate("Use PDNSD query and cache"))
 end
 o:value("0", translate("Use Local DNS Service listen port 5335"))
 o.default = "1"
