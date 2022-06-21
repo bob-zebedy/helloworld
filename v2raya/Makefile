@@ -3,19 +3,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=v2rayA
-PKG_VERSION:=1.5.7
+PKG_VERSION:=1.5.8.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/v2rayA/v2rayA/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=6d203ef95ac2a48f6f1808b93fc1cd1a4f32a0419710d0c7a74169f27c38ed9c
+PKG_HASH:=822ec4a93933d93aed1bda6f9a3c08915135c0fc33bebe5e69b293cf30fe35c2
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/service
 
 PKG_LICENSE:=AGPL-3.0-only
 PKG_LICENSE_FILES:=LICENSE
 PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 
-PKG_BUILD_DEPENDS:=golang/host node/host node-yarn/host
+PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
 PKG_USE_MIPS16:=0
 
@@ -29,38 +29,44 @@ TAR_OPTIONS+= --strip-components 1
 TAR_CMD=$(HOST_TAR) -C $(1)/.. $(TAR_OPTIONS)
 
 define Package/v2raya
-  TITLE:=A Linux web GUI client of Project V
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Web Servers/Proxies
-  DEPENDS:=$(GO_ARCH_DEPENDS) \
-    +ca-bundle \
-    +iptables-mod-conntrack-extra \
-    +iptables-mod-extra \
-    +iptables-mod-filter \
-    +iptables-mod-tproxy \
-    +kmod-ipt-nat6 \
-    +xray-core
-  URL:=https://v2raya.org
+    TITLE:=A Linux web GUI client of Project V
+    SECTION:=net
+    CATEGORY:=Network
+    SUBMENU:=Web Servers/Proxies
+    DEPENDS:=$(GO_ARCH_DEPENDS) \
+        +ca-bundle \
+        +iptables-mod-conntrack-extra \
+        +iptables-mod-extra \
+        +iptables-mod-filter \
+        +iptables-mod-tproxy \
+        +kmod-ipt-nat6 \
+        +xray-core
+    URL:=https://v2raya.org
 endef
 
 define Package/v2raya/description
-  v2rayA is a V2Ray Linux client supporting global transparent proxy,
-  compatible with SS, SSR, Trojan(trojan-go), PingTunnel protocols.
+    v2rayA is a V2Ray Linux client supporting global transparent proxy,
+    compatible with SS, SSR, Trojan(trojan-go), PingTunnel protocols.
 endef
 
 define Package/v2raya/conffiles
-/etc/v2raya/
-/etc/config/v2raya
+    /etc/v2raya/
+    /etc/config/v2raya
 endef
 
-define Build/Compile
+WEB_FILE:=$(PKG_NAME)-web-$(PKG_VERSION).tar.gz
+define Download/v2raya-web
+    URL:=https://codeload.github.com/v2rayA/v2raya-web/tar.gz/v$(PKG_VERSION)?
+    URL_FILE:=$(WEB_FILE)
+	FILE:=$(WEB_FILE)
+	HASH:=b13beac91d75c64af4ca6d7365716968702ce1be3f0c3e94d26e01daa07f223b
+endef
+
+define Build/Prepare
+	$(call Build/Prepare/Default)
 	( \
-		pushd $(PKG_BUILD_DIR)/../gui ; \
-		yarn ; \
-		OUTPUT_DIR=../service/server/router/web yarn build ; \
-		popd ; \
-		$(call GoPackage/Build/Compile) ; \
+        mkdir -p $(PKG_BUILD_DIR)/server/router/web ; \
+		gzip -dc $(DL_DIR)/$(WEB_FILE) | $(HOST_TAR) -C $(PKG_BUILD_DIR)/server/router/web $(TAR_OPTIONS) ; \
 	)
 endef
 
@@ -75,5 +81,6 @@ define Package/v2raya/install
 	$(INSTALL_BIN) $(CURDIR)/files/v2raya.init $(1)/etc/init.d/v2raya
 endef
 
+$(eval $(call Download,v2raya-web))
 $(eval $(call GoBinPackage,v2raya))
 $(eval $(call BuildPackage,v2raya))
