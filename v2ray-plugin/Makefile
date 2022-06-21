@@ -3,12 +3,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=v2ray-plugin
-PKG_VERSION:=5.0.6
+PKG_VERSION:=5.0.7
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/teddysun/v2ray-plugin/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=b7ee86a16e27a14d6ad8102a5e5eb940909b84111045d6844a1effd9ca4b701f
+PKG_HASH:=b14b8e9bc5c70103255d20f623c04d53ff6bbb702d1e69b328f735f9c8378376
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
@@ -25,12 +25,12 @@ include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
 define Package/v2ray-plugin
-  SECTION:=net
-  CATEGORY:=Network
-  SUBMENU:=Web Servers/Proxies
-  TITLE:=SIP003 plugin for shadowsocks, based on v2ray
-  URL:=https://github.com/teddysun/v2ray-plugin
-  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
+    SECTION:=net
+    CATEGORY:=Network
+    SUBMENU:=Web Servers/Proxies
+    TITLE:=SIP003 plugin for shadowsocks, based on v2ray
+    URL:=https://github.com/teddysun/v2ray-plugin
+    DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
 $(eval $(call GoBinPackage,v2ray-plugin))
