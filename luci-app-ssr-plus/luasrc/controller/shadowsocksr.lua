@@ -112,12 +112,6 @@ function index()
         "shadowsocksr",
         "delete"
     }, call("act_delete"))
-    entry({
-        "admin",
-        "services",
-        "shadowsocksr",
-        "cache"
-    }, call("act_cache"))
 end
 
 function subscribe()
@@ -230,9 +224,3 @@ function act_delete()
     luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
 end
 
-function act_cache()
-    local e = {}
-    e.ret = luci.sys.call("pdnsd-ctl -c /var/etc/ssrplus/pdnsd empty-cache >/dev/null")
-    luci.http.prepare_content("application/json")
-    luci.http.write_json(e)
-end

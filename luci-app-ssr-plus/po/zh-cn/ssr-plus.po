@@ -85,14 +85,11 @@ msgstr "常用端口"
 msgid "Resolve DNS Mode"
 msgstr "DNS 解析方式"
 
-msgid "Use PDNSD query and cache"
-msgstr "使用 PDNSD 查询并缓存"
+msgid "Use DNS2TCP query"
+msgstr "使用 DNS2TCP 查询"
 
 msgid "Use DNS2SOCKS query and cache"
 msgstr "使用 DNS2SOCKS 查询并缓存"
-
-msgid "Use DNS2TCP query"
-msgstr "使用 DNS2TCP 查询"
 
 msgid "Use Local DNS Service listen port 5335"
 msgstr "使用本地 DNS 服务器 (端口5335)"
@@ -528,9 +525,6 @@ msgstr "KcpTun 状态"
 
 msgid "KcpTun Version"
 msgstr "KcpTun 版本"
-
-msgid "Reset pdnsd cache"
-msgstr "重置 PDNSD 缓存"
 
 msgid "Google Connectivity"
 msgstr "Google 连通性检查"
