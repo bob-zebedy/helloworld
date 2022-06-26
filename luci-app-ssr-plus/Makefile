@@ -59,10 +59,6 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_NaiveProxy
 	depends on !(arc||armeb||mips||mips64||powerpc||TARGET_gemini)
 	default y if x86_64
 
-config PACKAGE_$(PKG_NAME)_INCLUDE_PDNSD
-	bool "Include PDNSD"
-	default y if x86_64
-
 config PACKAGE_$(PKG_NAME)_INCLUDE_Redsocks2
 	bool "Include Redsocks2"
 	default y if x86_64
