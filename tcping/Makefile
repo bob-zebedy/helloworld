@@ -18,15 +18,15 @@ PKG_BUILD_PARALLEL:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tcping
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE:=tcping measures the latency of a tcp-connection
-  URL:=https://github.com/jlyo/tcping
+    SECTION:=net
+    CATEGORY:=Network
+    TITLE:=tcping measures the latency of a tcp-connection
+    URL:=https://github.com/jlyo/tcping
 endef
 
 define Package/tcping/install
-	$(INSTALL_DIR) $(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tcping $(1)/usr/sbin
+    $(INSTALL_DIR) $(1)/usr/sbin
+    $(INSTALL_BIN) $(PKG_BUILD_DIR)/tcping $(1)/usr/sbin
 endef
 
 $(eval $(call BuildPackage,tcping))

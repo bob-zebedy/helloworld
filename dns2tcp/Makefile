@@ -22,21 +22,21 @@ PKG_USE_MIPS16:=0
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dns2tcp
-	SECTION:=net
-	CATEGORY:=Network
-	SUBMENU:=IP Addresses and Names
-	TITLE:=utility to convert dns query from udp to tcp
-	URL:=https://github.com/zfl9/dns2tcp
+    SECTION:=net
+    CATEGORY:=Network
+    SUBMENU:=IP Addresses and Names
+    TITLE:=utility to convert dns query from udp to tcp
+    URL:=https://github.com/zfl9/dns2tcp
 endef
 
 TARGET_CFLAGS+= $(FPIC) -flto
 MAKE_FLAGS+= \
-	CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
-	EVCFLAGS="$(TARGET_CFLAGS)"
+    CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
+    EVCFLAGS="$(TARGET_CFLAGS)"
 
 define Package/dns2tcp/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dns2tcp $(1)/usr/bin/
+    $(INSTALL_DIR) $(1)/usr/bin
+    $(INSTALL_BIN) $(PKG_BUILD_DIR)/dns2tcp $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,dns2tcp))
