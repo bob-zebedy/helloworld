@@ -34,31 +34,31 @@ TARGET_CXXFLAGS += -ffunction-sections -fdata-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
 
 CMAKE_OPTIONS += \
-    -DENABLE_MYSQL=OFF \
-    -DENABLE_NAT=ON \
-    -DENABLE_REUSE_PORT=ON \
-    -DENABLE_SSL_KEYLOG=ON \
-    -DENABLE_TLS13_CIPHERSUITES=ON \
-    -DFORCE_TCP_FASTOPEN=OFF \
-    -DSYSTEMD_SERVICE=OFF \
-    -DOPENSSL_USE_STATIC_LIBS=FALSE \
-    -DBoost_DEBUG=ON \
-    -DBoost_NO_BOOST_CMAKE=ON
+	-DENABLE_MYSQL=OFF \
+	-DENABLE_NAT=ON \
+	-DENABLE_REUSE_PORT=ON \
+	-DENABLE_SSL_KEYLOG=ON \
+	-DENABLE_TLS13_CIPHERSUITES=ON \
+	-DFORCE_TCP_FASTOPEN=OFF \
+	-DSYSTEMD_SERVICE=OFF \
+	-DOPENSSL_USE_STATIC_LIBS=FALSE \
+	-DBoost_DEBUG=ON \
+	-DBoost_NO_BOOST_CMAKE=ON
 
 define Package/trojan
-    SECTION:=net
-    CATEGORY:=Network
-    SUBMENU:=Web Servers/Proxies
-    TITLE:=An unidentifiable mechanism that helps you bypass GFW
-    URL:=https://github.com/trojan-gfw/trojan
-    DEPENDS:= \
-        +libpthread +libstdcpp +libopenssl \
-        +boost +boost-system +boost-program_options +boost-date_time
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=Web Servers/Proxies
+  TITLE:=An unidentifiable mechanism that helps you bypass GFW
+  URL:=https://github.com/trojan-gfw/trojan
+  DEPENDS:= \
+    +libpthread +libstdcpp +libopenssl \
+    +boost +boost-system +boost-program_options +boost-date_time
 endef
 
 define Package/trojan/install
-    $(INSTALL_DIR) $(1)/usr/sbin
-    $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/trojan $(1)/usr/sbin/trojan
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/trojan $(1)/usr/sbin/trojan
 endef
 
 $(eval $(call BuildPackage,trojan))

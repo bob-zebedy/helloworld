@@ -22,34 +22,34 @@ GO_PKG:=github.com/v2fly/v2ray-core/v5
 GO_PKG_BUILD_PKG:=$(GO_PKG)/main
 
 GO_PKG_LDFLAGS_X:= \
-    $(GO_PKG).build=OpenWrt \
-    $(GO_PKG).version=$(PKG_VERSION)
+	$(GO_PKG).build=OpenWrt \
+	$(GO_PKG).version=$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
 define Package/v2ray/template
-    TITLE:=A platform for building proxies to bypass network restrictions
-    SECTION:=net
-    CATEGORY:=Network
-    URL:=https://www.v2fly.org
+  TITLE:=A platform for building proxies to bypass network restrictions
+  SECTION:=net
+  CATEGORY:=Network
+  URL:=https://www.v2fly.org
 endef
 
 define Package/v2ray-core
-    $(call Package/v2ray/template)
-    DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
+  $(call Package/v2ray/template)
+  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
 define Package/v2ray-extra
-    $(call Package/v2ray/template)
-    TITLE+= (extra resources)
-    DEPENDS:=v2ray-core
-    PKGARCH:=all
+  $(call Package/v2ray/template)
+  TITLE+= (extra resources)
+  DEPENDS:=v2ray-core
+  PKGARCH:=all
 endef
 
 define Package/v2ray/description
-    Project V is a set of network tools that help you to build your own computer network.
-    It secures your network connections and thus protects your privacy.
+  Project V is a set of network tools that help you to build your own computer network.
+  It secures your network connections and thus protects your privacy.
 endef
 
 define Package/v2ray-core/description
@@ -63,14 +63,14 @@ define Package/v2ray-extra/description
 endef
 
 define Package/v2ray-core/install
-    $(call GoPackage/Package/Install/Bin,$(PKG_INSTALL_DIR))
-    $(INSTALL_DIR) $(1)/usr/bin/
-    $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/main $(1)/usr/bin/v2ray
+	$(call GoPackage/Package/Install/Bin,$(PKG_INSTALL_DIR))
+	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/main $(1)/usr/bin/v2ray
 endef
 
 define Package/v2ray-extra/install
-    $(INSTALL_DIR) $(1)/usr/share/v2ray/
-    $(CP) $(PKG_BUILD_DIR)/release/extra/* $(1)/usr/share/v2ray/
+	$(INSTALL_DIR) $(1)/usr/share/v2ray/
+	$(CP) $(PKG_BUILD_DIR)/release/extra/* $(1)/usr/share/v2ray/
 endef
 
 $(eval $(call BuildPackage,v2ray-core))
