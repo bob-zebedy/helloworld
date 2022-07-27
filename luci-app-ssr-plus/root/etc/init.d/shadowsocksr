@@ -143,6 +143,7 @@ ln_start_bin() {
 		echolog "启动失败 找不到 ${file_func}"
 		_exit 2
 	}
+	ulimit -n 1000000
 	${file_func:-echolog "  - ${ln_name}"} "$@" >/dev/null 2>&1 &
 }
 
@@ -667,7 +668,6 @@ start() {
 boot() {
 	echolog "正在启动 [国际互联网服务]"
 	mkdir -p /var/run /var/lock /var/log /tmp/dnsmasq.d $TMP_BIN_PATH $TMP_DNSMASQ_PATH
-	ulimit -n 65535
 	start
 }
 
