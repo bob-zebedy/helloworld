@@ -25,8 +25,8 @@ LUCI_PKGARCH:=all
 LUCI_DEPENDS:= \
 	@(PACKAGE_libustream-mbedtls||PACKAGE_libustream-openssl||PACKAGE_libustream-wolfssl) \
 	+coreutils +coreutils-base64 +dns2socks +dns2tcp +dnsmasq-full +ipset +kmod-ipt-nat \
-	+ip-full +iptables +iptables-mod-tproxy +lua +libuci-lua +microsocks +tcping \
-	+resolveip +shadowsocksr-libev-ssr-check +wget-ssl \
+	+ip-full +iptables +iptables-mod-tproxy +lua +lua-neturl +libuci-lua +microsocks \
+	+tcping +resolveip +shadowsocksr-libev-ssr-check +wget-ssl \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_Kcptun:kcptun-client \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_IPT2Socks:ipt2socks \
 	+PACKAGE_$(PKG_NAME)_INCLUDE_NaiveProxy:naiveproxy \
