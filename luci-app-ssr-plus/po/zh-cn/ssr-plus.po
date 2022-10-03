@@ -244,6 +244,15 @@ msgstr "HTTP 路径"
 msgid "WebSocket Host"
 msgstr "WebSocket 域名"
 
+msgid "Enable Early Data"
+msgstr "启用前置数据"
+
+msgid "Max Early Data"
+msgstr "最大前置数据"
+
+msgid "Early Data Header Name"
+msgstr "前置数据标头"
+
 msgid "WebSocket Path"
 msgstr "WebSocket 路径"
 

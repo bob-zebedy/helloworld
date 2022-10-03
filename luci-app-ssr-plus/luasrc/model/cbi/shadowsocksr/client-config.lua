@@ -422,6 +422,25 @@ o:depends({
 o.datatype = "hostname"
 o.rmempty = true
 
+if is_finded("v2ray") then
+    -- 启用WS前置数据
+    o = s:option(Flag, "ws_ed_enable", translate("Enable Early Data"))
+    o:depends("transport", "ws")
+
+    -- WS前置数据
+    o = s:option(Value, "ws_ed", translate("Max Early Data"))
+    o:depends("ws_ed_enable", true)
+    o.datatype = "uinteger"
+    o.default = 2048
+    o.rmempty = true
+
+    -- WS前置数据标头
+    o = s:option(Value, "ws_ed_header", translate("Early Data Header Name"))
+    o:depends("ws_ed_enable", true)
+    o.default = "Sec-WebSocket-Protocol"
+    o.rmempty = true
+end
+
 -- WS路径
 o = s:option(Value, "ws_path", translate("WebSocket Path"))
 o:depends("transport", "ws")
