@@ -647,14 +647,18 @@ o.default = "0"
 
 -- [[ uTLS ]]--
 o = s:option(ListValue, "fingerprint", translate("Finger Print"))
-o:value("disable", translate("disable"))
-o:value("firefox", translate("firefox"))
-o:value("chrome", translate("chrome"))
-o:value("safari", translate("safari"))
-o:value("randomized", translate("randomized"))
+o:value("disable", translate("Disable"))
+o:value("firefox", translate("Firefox"))
+o:value("chrome", translate("Chrome"))
+o:value("safari", translate("Safari"))
+o:value("randomized", translate("Randomized"))
 o:depends({
     type = "v2ray",
     tls = true
+})
+o:depends({
+    type = "v2ray",
+    xtls = true
 })
 o.default = "disable"
 

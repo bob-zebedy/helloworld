@@ -469,6 +469,9 @@ msgstr "服务器"
 msgid "Disable"
 msgstr "停用"
 
+msgid "Randomized"
+msgstr "随机"
+
 msgid "Same as Global Server"
 msgstr "使用主服务器"
 
