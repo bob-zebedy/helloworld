@@ -609,7 +609,37 @@ o:depends({
     type = "v2ray",
     xtls = false
 })
--- o:depends({type = "v2ray", v2ray_protocol = "vless", xtls = false})
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "vless",
+    xtls = false
+})
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "vmess",
+    xtls = false
+})
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "trojan",
+    xtls = false
+})
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "shadowsocks",
+    xtls = false
+})
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "socks",
+    socks_ver = "5",
+    xtls = false
+})
+o:depends({
+    type = "v2ray",
+    v2ray_protocol = "http",
+    xtls = false
+})
 o:depends("type", "trojan")
 
 -- XTLS
@@ -641,29 +671,28 @@ if is_finded("xray") then
         transport = "kcp",
         tls = false
     })
-end
 
--- Flow
-o = s:option(Value, "vless_flow", translate("Flow"))
-for _, v in ipairs(flows) do
-    o:value(v, translate(v))
-end
-o.rmempty = true
-o.default = "xtls-rprx-splice"
-o:depends("xtls", true)
+    -- Flow
+    o = s:option(Value, "vless_flow", translate("Flow"))
+    for _, v in ipairs(flows) do
+        o:value(v, translate(v))
+    end
+    o.rmempty = true
+    o.default = "xtls-rprx-splice"
+    o:depends("xtls", true)
 
--- [[ TLS部分 ]] --
--- Flow
-o = s:option(Value, "tls_flow", translate("Flow"))
-for _, v in ipairs(tls_flows) do
-    o:value(v, translate(v))
+    o = s:option(Value, "tls_flow", translate("Flow"))
+    for _, v in ipairs(tls_flows) do
+        o:value(v, translate(v))
+    end
+    o.rmempty = true
+    o:depends({
+        type = "v2ray",
+        v2ray_protocol = "vless",
+        tls = true
+    })
+
 end
-o.rmempty = true
-o:depends({
-    type = "v2ray",
-    v2ray_protocol = "vless",
-    tls = true
-})
 
 o = s:option(Flag, "tls_sessionTicket", translate("Session Ticket"))
 o:depends({
