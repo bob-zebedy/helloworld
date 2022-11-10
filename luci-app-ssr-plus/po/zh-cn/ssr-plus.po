@@ -211,6 +211,9 @@ msgstr "密码"
 msgid "Encrypt Method"
 msgstr "加密方式"
 
+msgid "Enable the SUoT protocol"
+msgstr "启用 SUoT 协议"
+
 msgid "Bloom Filter"
 msgstr "布隆过滤器"
 

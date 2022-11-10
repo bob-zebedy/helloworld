@@ -8,6 +8,7 @@ local local_port = arg[3] or "0"
 local socks_port = arg[4] or "0"
 local server = ucursor:get_all("shadowsocksr", server_section)
 local outbound_settings = nil
+
 function vmess_vless()
     outbound_settings = {
         vnext = {
@@ -19,13 +20,14 @@ function vmess_vless()
                         id = server.vmess_id,
                         security = (server.v2ray_protocol == "vmess" or not server.v2ray_protocol) and server.security or nil,
                         encryption = (server.v2ray_protocol == "vless") and server.vless_encryption or nil,
-                        flow = (server.xtls == '1') and (server.vless_flow and server.vless_flow or "xtls-rprx-splice") or nil
+                        flow = (server.xtls == '1') and (server.vless_flow or "xtls-rprx-splice") or (server.tls == '1') and server.tls_flow or nil
                     }
                 }
             }
         }
     }
 end
+
 function trojan_shadowsocks()
     outbound_settings = {
         servers = {
@@ -34,7 +36,8 @@ function trojan_shadowsocks()
                 port = tonumber(server.server_port),
                 password = server.password,
                 method = (server.v2ray_protocol == "shadowsocks") and server.encrypt_method_v2ray_ss or nil,
-                flow = (server.v2ray_protocol == "trojan") and (server.xtls == '1') and (server.vless_flow and server.vless_flow or "xtls-rprx-splice") or nil,
+                uot = (server.v2ray_protocol == "shadowsocks") and (server.uot == '1') or nil,
+                flow = (server.v2ray_protocol == "trojan") and (server.xtls == '1') and (server.vless_flow or "xtls-rprx-splice") or nil,
                 ivCheck = (server.v2ray_protocol == "shadowsocks") and (server.ivCheck == '1') or nil
             }
         }
