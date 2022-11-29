@@ -350,7 +350,7 @@ msgid "allowInsecure"
 msgstr "允许不安全连接"
 
 msgid "If true, allowss insecure connection at TLS client, e.g., TLS server uses unverifiable certificates"
-msgstr "是否检查远端主机所提供的 TLS 证书的有效性。"
+msgstr "是否检查远端主机所提供的 TLS 证书的有效性"
 
 msgid "Concurrency"
 msgstr "最大连接数"
