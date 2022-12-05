@@ -689,6 +689,7 @@ if is_finded("xray") then
     o:depends({
         type = "v2ray",
         v2ray_protocol = "vless",
+        transport = "tcp",
         tls = true
     })
 
