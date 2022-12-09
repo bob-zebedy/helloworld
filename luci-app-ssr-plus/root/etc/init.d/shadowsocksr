@@ -324,7 +324,7 @@ start_udp() {
 		# ln_start_bin $(first_type tuic-client) tuic-client --config $udp_config_file
 		# ln_start_bin $(first_type ipt2socks) ipt2socks -U -b 0.0.0.0 -4 -s 127.0.0.1 -p $tmp_udp_local_port -l $tmp_udp_port
 		# echolog "已启动 $(get_name $type) UDP 透明代理"
-		echolog "不支持 TUIC UDP 代理"
+		echolog "不支持 TUIC UDP 透明代理"
 		redir_udp=0
 		ARG_UDP=""
 		;;
