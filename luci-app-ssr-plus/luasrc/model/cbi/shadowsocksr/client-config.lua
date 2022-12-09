@@ -725,6 +725,11 @@ o:depends("tls", true)
 o:depends("xtls", true)
 o.rmempty = true
 
+o = s:option(DynamicList, "tls_alpn", translate("TLS ALPN"))
+o:depends("tls", true)
+o:depends("xtls", true)
+o.rmempty = true
+
 -- [[ allowInsecure ]]--
 o = s:option(Flag, "insecure", translate("allowInsecure"))
 o.rmempty = false
