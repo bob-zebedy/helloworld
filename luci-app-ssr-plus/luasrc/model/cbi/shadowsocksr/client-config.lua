@@ -163,6 +163,9 @@ end
 if is_finded("xray") or is_finded("v2ray") then
     o:value("v2ray", translate("V2Ray/XRay"))
 end
+if is_finded("tuic-client") then
+    o:value("tuic", translate("TUIC"))
+end
 if is_finded("ipt2socks") then
     o:value("socks5", translate("Socks5"))
 end
@@ -201,6 +204,7 @@ o:depends("type", "ss")
 o:depends("type", "v2ray")
 o:depends("type", "trojan")
 o:depends("type", "naiveproxy")
+o:depends("type", "tuic")
 o:depends("type", "socks5")
 
 o = s:option(Value, "server_port", translate("Server Port"))
@@ -211,6 +215,7 @@ o:depends("type", "ss")
 o:depends("type", "v2ray")
 o:depends("type", "trojan")
 o:depends("type", "naiveproxy")
+o:depends("type", "tuic")
 o:depends("type", "socks5")
 
 o = s:option(Flag, "auth_enable", translate("Enable Authentication"))
@@ -251,6 +256,7 @@ o:depends("type", "ssr")
 o:depends("type", "ss")
 o:depends("type", "trojan")
 o:depends("type", "naiveproxy")
+o:depends("type", "tuic")
 o:depends({
     type = "socks5",
     auth_enable = true
@@ -364,6 +370,43 @@ o:depends("type", "ssr")
 
 o = s:option(Value, "obfs_param", translate("obfs param"))
 o:depends("type", "ssr")
+
+o = s:option(ListValue, "udp_relay_mode", translate("UDP relay mode"))
+o:depends("type", "tuic")
+o:value("native", translate("native"))
+o:value("quic", translate("QUIC"))
+o.default = "native"
+o.rmempty = true
+
+o = s:option(ListValue, "congestion_controller", translate("Congestion control algorithm"))
+o:depends("type", "tuic")
+o:value("bbr", translate("BBR"))
+o:value("cubic", translate("CUBIC"))
+o:value("new_reno", translate("New Reno"))
+o.default = "cubic"
+o.rmempty = true
+
+o = s:option(Value, "heartbeat_interval", translate("Heartbeat interval"))
+o:depends("type", "tuic")
+o.datatype = "uinteger"
+o.default = "10000"
+o.rmempty = true
+
+o = s:option(Flag, "disable_sni", translate("Disable SNI"))
+o:depends("type", "tuic")
+o.default = 0
+o.rmempty = true
+
+o = s:option(Flag, "reduce_rtt", translate("Enable 0-RTT QUIC handshake"))
+o:depends("type", "tuic")
+o.default = 0
+o.rmempty = true
+
+o = s:option(Value, "max_udp_relay_packet_size", translate("Max UDP relay packet size"))
+o:depends("type", "tuic")
+o.datatype = "uinteger"
+o.default = "1500"
+o.rmempty = true
 
 -- VmessId
 o = s:option(Value, "vmess_id", translate("Vmess/VLESS ID (UUID)"))
@@ -728,6 +771,7 @@ o.rmempty = true
 o = s:option(DynamicList, "tls_alpn", translate("TLS ALPN"))
 o:depends("tls", true)
 o:depends("xtls", true)
+o:depends("type", "tuic")
 o.rmempty = true
 
 -- [[ allowInsecure ]]--
@@ -756,6 +800,7 @@ o:depends("type", "naiveproxy")
 o = s:option(Flag, "certificate", translate("Self-signed Certificate"))
 o.rmempty = true
 o.default = "0"
+o:depends("type", "tuic")
 o:depends({
     type = "trojan",
     tls = true,
