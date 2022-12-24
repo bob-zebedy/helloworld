@@ -27,7 +27,7 @@ function index()
         "servers"
     }, arcombine(cbi("shadowsocksr/servers", {
         autoapply = true
-    }), cbi("shadowsocksr/client-config")), _("Severs Nodes"), 20).leaf = true
+    }), cbi("shadowsocksr/client-config")), _("Servers Nodes"), 20).leaf = true
     entry({
         "admin",
         "services",

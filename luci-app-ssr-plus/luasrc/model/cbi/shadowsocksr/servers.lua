@@ -51,11 +51,11 @@ o.write = function()
     luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
 end
 
-o = s:option(Button, "subscribe", translate("Update All Subscribe Severs"))
+o = s:option(Button, "subscribe", translate("Update All Subscribe Servers"))
 o.rawhtml = true
 o.template = "shadowsocksr/subscribe"
 
-o = s:option(Button, "delete", translate("Delete All Subscribe Severs"))
+o = s:option(Button, "delete", translate("Delete All Subscribe Servers"))
 o.inputstyle = "reset"
 o.description = string.format(translate("Server Count") .. ": %d", server_count)
 o.write = function()

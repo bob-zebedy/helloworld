@@ -4,7 +4,7 @@ msgstr "国际互联网"
 msgid "SSR Client"
 msgstr "基本设置"
 
-msgid "Severs Nodes"
+msgid "Servers Nodes"
 msgstr "节点设置"
 
 msgid "Access Control"
@@ -142,10 +142,10 @@ msgstr "新节点自动切换"
 msgid "Through proxy update"
 msgstr "通过代理更新"
 
-msgid "Update All Subscribe Severs"
+msgid "Update All Subscribe Servers"
 msgstr "更新所有服务器节点"
 
-msgid "Delete All Subscribe Severs"
+msgid "Delete All Subscribe Servers"
 msgstr "删除所有服务器节点"
 
 msgid "Server Count"
