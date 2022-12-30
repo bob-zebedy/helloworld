@@ -518,7 +518,7 @@ local execute = function()
                             log('跳过未知类型: ' .. szType)
                         end
                         if result then
-                            if not result.server or not result.server_port or result.alias == "NULL" or check_filer(result) or result.server:match("[^0-9a-zA-Z%-%.%s]") or cache[groupHash][result.hashkey] then
+                            if not result.server or not result.server_port or result.alias == "NULL" or check_filer(result) or result.server:match("[^0-9a-zA-Z%-_%.%s]") or cache[groupHash][result.hashkey] then
                                 log('丢弃无效节点: ' .. result.alias .. ' (' .. result.type .. ')')
                             else
                                 result.grouphashkey = groupHash
