@@ -150,27 +150,27 @@ o.rawhtml = true
 o.template = "shadowsocksr/ssrurl"
 o.value = sid
 
-o = s:option(Value, "type", translate("Server Node Type"))
-if is_finded("sslocal") or is_finded("ss-redir") then
-    o:value("ss", translate("Shadowsocks"))
+o = s:option(ListValue, "type", translate("Server Node Type"))
+if is_finded("xray") or is_finded("v2ray") then
+    o:value("v2ray", translate("V2Ray/XRay"))
 end
 if is_finded("ssr-redir") then
     o:value("ssr", translate("ShadowsocksR"))
 end
+if is_finded("sslocal") or is_finded("ss-redir") then
+    o:value("ss", translate("Shadowsocks"))
+end
 if is_finded("trojan") then
     o:value("trojan", translate("Trojan"))
 end
-if is_finded("xray") or is_finded("v2ray") then
-    o:value("v2ray", translate("V2Ray/XRay"))
+if is_finded("naive") then
+    o:value("naiveproxy", translate("NaiveProxy"))
 end
 if is_finded("tuic-client") then
     o:value("tuic", translate("TUIC"))
 end
 if is_finded("ipt2socks") then
     o:value("socks5", translate("Socks5"))
-end
-if is_finded("naive") then
-    o:value("naiveproxy", translate("NaiveProxy"))
 end
 if is_finded("redsocks2") then
     o:value("tun", translate("Network Tunnel"))
@@ -747,7 +747,7 @@ o.default = "0"
 
 if is_finded("xray") then
     -- [[ uTLS ]]--
-    o = s:option(ListValue, "fingerprint", translate("Finger Print"))
+    o = s:option(Value, "fingerprint", translate("Finger Print"))
     o:value("disable", translate("Disable"))
     o:value("chrome", translate("Chrome"))
     o:value("safari", translate("Safari"))
