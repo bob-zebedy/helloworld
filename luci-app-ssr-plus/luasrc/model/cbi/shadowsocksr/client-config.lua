@@ -150,7 +150,7 @@ o.rawhtml = true
 o.template = "shadowsocksr/ssrurl"
 o.value = sid
 
-o = s:option(ListValue, "type", translate("Server Node Type"))
+o = s:option(Value, "type", translate("Server Node Type"))
 if is_finded("sslocal") or is_finded("ss-redir") then
     o:value("ss", translate("Shadowsocks"))
 end
@@ -745,22 +745,27 @@ o:depends({
 })
 o.default = "0"
 
--- [[ uTLS ]]--
-o = s:option(ListValue, "fingerprint", translate("Finger Print"))
-o:value("disable", translate("Disable"))
-o:value("firefox", translate("Firefox"))
-o:value("chrome", translate("Chrome"))
-o:value("safari", translate("Safari"))
-o:value("randomized", translate("Randomized"))
-o:depends({
-    type = "v2ray",
-    tls = true
-})
-o:depends({
-    type = "v2ray",
-    xtls = true
-})
-o.default = "disable"
+if is_finded("xray") then
+    -- [[ uTLS ]]--
+    o = s:option(ListValue, "fingerprint", translate("Finger Print"))
+    o:value("disable", translate("Disable"))
+    o:value("chrome", translate("Chrome"))
+    o:value("safari", translate("Safari"))
+    o:value("firefox", translate("Firefox"))
+    o:value("edge", translate("Edge"))
+    o:value("ios", translate("iOS"))
+    o:value("android", translate("Android"))
+    o:value("randomized", translate("Randomized"))
+    o:depends({
+        type = "v2ray",
+        tls = true
+    })
+    o:depends({
+        type = "v2ray",
+        xtls = true
+    })
+    o.default = "disable"
+end
 
 o = s:option(Value, "tls_host", translate("TLS Host"))
 o.datatype = "hostname"
