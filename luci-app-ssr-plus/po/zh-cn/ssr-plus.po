@@ -86,13 +86,13 @@ msgid "Resolve DNS Mode"
 msgstr "DNS 解析方式"
 
 msgid "Use DNS2TCP query"
-msgstr "使用 DNS2TCP 查询"
+msgstr "使用 DNS2TCP"
 
 msgid "Use DNS2SOCKS query and cache"
-msgstr "使用 DNS2SOCKS 查询并缓存"
+msgstr "使用 DNS2SOCKS"
 
 msgid "Use Local DNS Service listen port 5335"
-msgstr "使用本地 DNS 服务器 (端口5335)"
+msgstr "使用本地 DNS 服务器 (端口 5335)"
 
 msgid "DNS Server IP:Port"
 msgstr "DNS 服务器 IP:Port"
