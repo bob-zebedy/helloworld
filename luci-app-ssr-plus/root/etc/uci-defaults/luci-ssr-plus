@@ -12,6 +12,8 @@ uci -q batch <<-EOF >/dev/null
 	set firewall.shadowsocksr.path=/var/etc/shadowsocksr.include
 	set firewall.shadowsocksr.reload=1
 	commit firewall
+	set uhttpd.main.max_requests=50
+	commit uhttpd
 EOF
 
 rm -rf /etc/config/shadowsocksr-opkg /etc/ssrplus/*opkg
