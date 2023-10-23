@@ -3,12 +3,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=v2ray-core
-PKG_VERSION:=5.5.0
-PKG_RELEASE:=$(AUTORELEASE)
+PKG_VERSION:=5.8.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/v2fly/v2ray-core/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=b9110ff10d87b245efd42b5a93beb4a3e5138fcfe92d09cadfb6a72cc4e1c91c
+PKG_HASH:=340798554d2c7f0e5fb719f9d9dd6a667dfe93ccdd3b1d653c3a3bdb04ed2d00
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
@@ -17,6 +17,7 @@ PKG_MAINTAINER:=Bobby <zhang.deplives@gmail.com>
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
 PKG_USE_MIPS16:=0
+PKG_BUILD_FLAGS:=no-mips16
 
 GO_PKG:=github.com/v2fly/v2ray-core/v5
 GO_PKG_BUILD_PKG:=$(GO_PKG)/main
