@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 
-local ucursor = require"luci.model.uci".cursor()
+local ucursor = require "luci.model.uci".cursor()
 local json = require "luci.jsonc"
 local server_section = arg[1]
 local proto = arg[2]
@@ -43,6 +43,7 @@ function trojan_shadowsocks()
         }
     }
 end
+
 function socks_http()
     outbound_settings = {
         servers = {
@@ -59,6 +60,7 @@ function socks_http()
         }
     }
 end
+
 local outbound = {}
 function outbound:new(o)
     o = o or {}
@@ -66,6 +68,7 @@ function outbound:new(o)
     self.__index = self
     return o
 end
+
 function outbound:handleIndex(index)
     local switch = {
         vmess = function()
@@ -91,6 +94,7 @@ function outbound:handleIndex(index)
         switch[index]()
     end
 end
+
 local settings = outbound:new()
 settings:handleIndex(server.v2ray_protocol)
 local Xray = {
@@ -111,7 +115,8 @@ local Xray = {
             enabled = true,
             destOverride = {
                 "http",
-                "tls"
+                "tls",
+                "quic"
             }
         }
     } or nil,
@@ -225,15 +230,23 @@ local Xray = {
                 health_check_timeout = tonumber(server.health_check_timeout) or nil,
                 permit_without_stream = (server.permit_without_stream == "1") and true or nil,
                 initial_windows_size = tonumber(server.initial_windows_size) or nil
+            } or nil,
+            sockopt = (server.mptcp == "1") and {
+                tcpcongestion = "bbr",
+                tcpMptcp = true,
+                tcpNoDelay = true
             } or nil
         },
-        mux = (server.mux == "1" and server.xtls ~= "1" and server.transport ~= "grpc") and {
+        mux = (server.mux == "1") and {
             -- mux
             enabled = true,
-            concurrency = tonumber(server.concurrency)
+            concurrency = tonumber(server.concurrency),
+            xudpConcurrency = tonumber(server.xudpConcurrency),
+            xudpProxyUDP443 = server.xudpProxyUDP443
         } or nil
     } or nil
 }
+
 local cipher = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:AES128-SHA:AES256-SHA:DES-CBC3-SHA"
 local cipher13 = "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384"
 local trojan = {
@@ -273,11 +286,13 @@ local trojan = {
         fast_open_qlen = 20
     }
 }
+
 local naiveproxy = {
     proxy = (server.username and server.password and server.server and server.server_port) and "https://" .. server.username .. ":" .. server.password .. "@" .. server.server .. ":" .. server.server_port,
     listen = (proto == "redir") and "redir" .. "://0.0.0.0:" .. tonumber(local_port) or "socks" .. "://0.0.0.0:" .. tonumber(local_port),
     ["insecure-concurrency"] = tonumber(server.concurrency) or 1
 }
+
 local ss = {
     server = (server.kcp_enable == "1") and "127.0.0.1" or server.server,
     server_port = tonumber(server.server_port),
@@ -321,6 +336,7 @@ function config:new(o)
     self.__index = self
     return o
 end
+
 function config:handleIndex(index)
     local switch = {
         ss = function()
@@ -356,5 +372,6 @@ function config:handleIndex(index)
         switch[index]()
     end
 end
+
 local f = config:new()
 f:handleIndex(server.type)

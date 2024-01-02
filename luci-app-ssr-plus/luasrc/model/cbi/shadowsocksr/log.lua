@@ -16,5 +16,6 @@ function t.cfgvalue()
         return s
     end
 end
+
 t.readonly = "readonly"
 return f

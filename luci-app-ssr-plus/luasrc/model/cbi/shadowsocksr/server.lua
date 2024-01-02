@@ -96,6 +96,7 @@ o = sec:option(Flag, "enable", translate("Enable"))
 function o.cfgvalue(...)
     return Value.cfgvalue(...) or translate("0")
 end
+
 o.rmempty = false
 
 o = sec:option(DummyValue, "type", translate("Server Type"))

@@ -371,7 +371,22 @@ msgid "If true, allowss insecure connection at TLS client, e.g., TLS server uses
 msgstr "是否检查远端主机所提供的 TLS 证书的有效性"
 
 msgid "Concurrency"
-msgstr "最大连接数"
+msgstr "TCP 最大并发连接数"
+
+msgid "xudpConcurrency"
+msgstr "UDP 最大并发连接数"
+
+msgid "xudpProxyUDP443"
+msgstr "被代理的 UDP/443 流量处理方式"
+
+msgid "Reject"
+msgstr "拒绝"
+
+msgid "Allow"
+msgstr "允许"
+
+msgid "Skip"
+msgstr "跳过"
 
 msgid "Self-signed Certificate"
 msgstr "自签证书"

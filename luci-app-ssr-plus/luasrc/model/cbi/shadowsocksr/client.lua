@@ -86,4 +86,3 @@ o.description = translate("Custom DNS Server format as IP:PORT")
 o.datatype = "hostport"
 
 return m
-
