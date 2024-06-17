@@ -33,15 +33,15 @@ else
 end
 
 if nixio.fs.access("/etc/ssrplus/gfw.conf") then
-    gfw_count = tonumber(luci.sys.exec("cat /etc/ssrplus/gfw.conf | wc -l")) / 2
+    gfw_count = tonumber(luci.sys.exec("grep -v -e '^\\s*$' -e '^\\s*#' /etc/ssrplus/gfw.conf | wc -l")) / 2
 end
 
 if nixio.fs.access("/etc/ssrplus/ad.conf") then
-    ad_count = tonumber(luci.sys.exec("cat /etc/ssrplus/ad.conf | wc -l"))
+    ad_count = tonumber(luci.sys.exec("grep -v -e '^\\s*$' -e '^\\s*#' /etc/ssrplus/ad.conf | wc -l"))
 end
 
 if nixio.fs.access("/etc/ssrplus/china_ip.list") then
-    ip_count = tonumber(luci.sys.exec("cat /etc/ssrplus/china_ip.list | wc -l"))
+    ip_count = tonumber(luci.sys.exec("grep -v -e '^\\s*$' -e '^\\s*#' /etc/ssrplus/china_ip.list | wc -l"))
 end
 
 if Process_list:find("udp.only.ssr.reudp") then
