@@ -21,11 +21,11 @@ PKG_BUILD_FLAGS:=no-mips16 gc-sections lto
 include $(INCLUDE_DIR)/package.mk
 
 define Package/dns2tcp
-	SECTION:=net
-	CATEGORY:=Network
-	SUBMENU:=IP Addresses and Names
-	TITLE:=utility to convert dns query from udp to tcp
-	URL:=https://github.com/zfl9/dns2tcp
+  SECTION:=net
+  CATEGORY:=Network
+  SUBMENU:=IP Addresses and Names
+  TITLE:=utility to convert dns query from udp to tcp
+  URL:=https://github.com/zfl9/dns2tcp
 endef
 
 TARGET_CFLAGS+= $(FPIC)
