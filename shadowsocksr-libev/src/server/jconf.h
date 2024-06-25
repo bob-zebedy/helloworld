@@ -30,24 +30,21 @@
 #define MAX_REQUEST_TIMEOUT 60
 #define MIN_UDP_TIMEOUT 10
 
-#define TCP_ONLY 0
-#define TCP_AND_UDP 1
-#define UDP_ONLY 3
+#define TCP_ONLY     0
+#define TCP_AND_UDP  1
+#define UDP_ONLY     3
 
-typedef struct
-{
+typedef struct {
     char *host;
     char *port;
 } ss_addr_t;
 
-typedef struct
-{
+typedef struct {
     char *port;
     char *password;
 } ss_port_password_t;
 
-typedef struct
-{
+typedef struct {
     int remote_num;
     ss_addr_t remote_addr[MAX_REMOTE_NUM];
     int port_password_num;
@@ -56,10 +53,10 @@ typedef struct
     char *local_addr;
     char *local_port;
     char *password;
-    char *protocol;       // SSR
+    char *protocol; // SSR
     char *protocol_param; // SSR
     char *method;
-    char *obfs;       // SSR
+    char *obfs; // SSR
     char *obfs_param; // SSR
     char *timeout;
     char *user;

@@ -91,8 +91,7 @@ typedef mbedtls_md_info_t digest_type_t;
 #define kCCContextValid 0
 #define kCCContextInvalid -1
 
-typedef struct
-{
+typedef struct {
     CCCryptorRef cryptor;
     int valid;
     CCOperation encrypt;
@@ -107,8 +106,7 @@ typedef struct
 
 #endif
 
-typedef struct
-{
+typedef struct {
     cipher_evp_t *evp;
 #ifdef USE_CRYPTO_APPLECC
     cipher_cc_t cc;
@@ -116,8 +114,7 @@ typedef struct
     uint8_t iv[MAX_IV_LENGTH];
 } cipher_ctx_t;
 
-typedef struct
-{
+typedef struct {
     cipher_kt_t *info;
     size_t iv_len;
     size_t key_len;
@@ -129,10 +126,9 @@ typedef struct
 #include <inttypes.h>
 #endif
 
-#define SODIUM_BLOCK_SIZE 64
+#define SODIUM_BLOCK_SIZE   64
 
-enum crpher_index
-{
+enum crpher_index {
     NONE = -1,
     TABLE = 0,
     RC4,
@@ -171,24 +167,21 @@ enum crpher_index
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-typedef struct buffer
-{
+typedef struct buffer {
     size_t idx;
     size_t len;
     size_t capacity;
-    char *array;
+    char   *array;
 } buffer_t;
 
-typedef struct chunk
-{
+typedef struct chunk {
     uint32_t idx;
     uint32_t len;
     uint32_t counter;
     buffer_t *buf;
 } chunk_t;
 
-typedef struct enc_ctx
-{
+typedef struct enc_ctx {
     uint8_t init;
     uint64_t counter;
     cipher_ctx_t evp;
@@ -204,7 +197,7 @@ int ss_decrypt(buffer_t *ciphertext, enc_ctx_t *ctx, size_t capacity);
 void enc_ctx_init(int method, enc_ctx_t *ctx, int enc);
 int enc_init(const char *pass, const char *method);
 int enc_get_iv_len(void);
-uint8_t *enc_get_key(void);
+uint8_t* enc_get_key(void);
 int enc_get_key_len(void);
 void cipher_context_release(cipher_ctx_t *evp);
 unsigned char *enc_md5(const unsigned char *d, size_t n, unsigned char *md);

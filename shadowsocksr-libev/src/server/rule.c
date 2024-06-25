@@ -47,8 +47,7 @@ new_rule()
     rule_t *rule;
 
     rule = calloc(1, sizeof(rule_t));
-    if (rule == NULL)
-    {
+    if (rule == NULL) {
         ERROR("malloc");
         return NULL;
     }
@@ -56,19 +55,16 @@ new_rule()
     return rule;
 }
 
-int accept_rule_arg(rule_t *rule, const char *arg)
+int
+accept_rule_arg(rule_t *rule, const char *arg)
 {
-    if (rule->pattern == NULL)
-    {
+    if (rule->pattern == NULL) {
         rule->pattern = strdup(arg);
-        if (rule->pattern == NULL)
-        {
+        if (rule->pattern == NULL) {
             ERROR("strdup failed");
             return -1;
         }
-    }
-    else
-    {
+    } else {
         LOGE("Unexpected table rule argument: %s", arg);
         return -1;
     }
@@ -76,24 +72,38 @@ int accept_rule_arg(rule_t *rule, const char *arg)
     return 1;
 }
 
-void add_rule(struct cork_dllist *rules, rule_t *rule)
+void
+add_rule(struct cork_dllist *rules, rule_t *rule)
 {
     cork_dllist_add(rules, &rule->entries);
 }
 
-int init_rule(rule_t *rule)
+int
+init_rule(rule_t *rule)
 {
-    if (rule->pattern_re == NULL)
-    {
-        const char *reerr;
-        int reerroffset;
+    if (rule->pattern_re == NULL) {
+        int errornumber;
+        PCRE2_SIZE erroroffset;
+        rule->pattern_re = pcre2_compile(
+            (PCRE2_SPTR)rule->pattern,   /* the pattern */
+            PCRE2_ZERO_TERMINATED,       /* indicates pattern is zero-terminated */
+            0,                           /* default options */
+            &errornumber,                /* for error number */
+            &erroroffset,                /* for error offset */
+            NULL);                       /* use default compile context */
 
-        rule->pattern_re =
-            pcre_compile(rule->pattern, 0, &reerr, &reerroffset, NULL);
-        if (rule->pattern_re == NULL)
-        {
-            LOGE("Regex compilation of \"%s\" failed: %s, offset %d",
-                 rule->pattern, reerr, reerroffset);
+        if (rule->pattern_re == NULL) {
+            PCRE2_UCHAR errbuffer[512];
+            pcre2_get_error_message(errornumber, errbuffer, sizeof(errbuffer));
+            LOGE("PCRE2 regex compilation failed at offset %d: %s\n", (int)erroroffset,
+                 errbuffer);
+            return 0;
+        }
+
+        rule->pattern_re_match_data = pcre2_match_data_create_from_pattern(rule->pattern_re, NULL);
+
+        if (rule->pattern_re_match_data == NULL) {
+            ERROR("PCRE2: the memory for the block could not be obtained");
             return 0;
         }
     }
@@ -106,24 +116,30 @@ lookup_rule(const struct cork_dllist *rules, const char *name, size_t name_len)
 {
     struct cork_dllist_item *curr, *next;
 
-    if (name == NULL)
-    {
-        name = "";
+    if (name == NULL) {
+        name     = "";
         name_len = 0;
     }
 
-    cork_dllist_foreach_void(rules, curr, next)
-    {
+    cork_dllist_foreach_void(rules, curr, next) {
         rule_t *rule = cork_container_of(curr, rule_t, entries);
-        if (pcre_exec(rule->pattern_re, NULL,
-                      name, name_len, 0, 0, NULL, 0) >= 0)
+        if (pcre2_match(
+                rule->pattern_re,            /* the compiled pattern */
+                (PCRE2_SPTR)name,            /* the subject string */
+                name_len,                    /* the length of the subject */
+                0,                           /* start at offset 0 in the subject */
+                0,                           /* default options */
+                rule->pattern_re_match_data, /* block for storing the result */
+                NULL                         /* use default match context */
+                ) >= 0)
             return rule;
     }
 
     return NULL;
 }
 
-void remove_rule(rule_t *rule)
+void
+remove_rule(rule_t *rule)
 {
     cork_dllist_remove(&rule->entries);
     free_rule(rule);
@@ -136,7 +152,13 @@ free_rule(rule_t *rule)
         return;
 
     ss_free(rule->pattern);
-    if (rule->pattern_re != NULL)
-        pcre_free(rule->pattern_re);
+    if (rule->pattern_re != NULL) {
+        pcre2_code_free(rule->pattern_re);                    /* data and the compiled pattern. */
+        rule->pattern_re            = NULL;
+    }
+    if (rule->pattern_re_match_data != NULL) {
+        pcre2_match_data_free(rule->pattern_re_match_data);   /* Release memory used for the match */
+        rule->pattern_re_match_data = NULL;
+    }
     ss_free(rule);
 }

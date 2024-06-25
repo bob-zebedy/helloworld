@@ -63,7 +63,7 @@ static int parse_extensions(const char *, size_t, char **);
 static int parse_server_name_extension(const char *, size_t, char **);
 
 static const protocol_t tls_protocol_st = {
-    .default_port = 443,
+    .default_port =               443,
     .parse_packet = &parse_tls_header,
 };
 const protocol_t *const tls_protocol = &tls_protocol_st;
@@ -103,16 +103,14 @@ parse_tls_header(const char *data, size_t data_len, char **hostname)
      *
      * See RFC5246 Appendix E.2
      */
-    if (data[0] & 0x80 && data[2] == 1)
-    {
+    if (data[0] & 0x80 && data[2] == 1) {
         if (verbose)
             LOGI("Received SSL 2.0 Client Hello which can not support SNI.");
         return -2;
     }
 
     tls_content_type = data[0];
-    if (tls_content_type != TLS_HANDSHAKE_CONTENT_TYPE)
-    {
+    if (tls_content_type != TLS_HANDSHAKE_CONTENT_TYPE) {
         if (verbose)
             LOGI("Request did not begin with TLS handshake.");
         return -5;
@@ -120,8 +118,7 @@ parse_tls_header(const char *data, size_t data_len, char **hostname)
 
     tls_version_major = data[1];
     tls_version_minor = data[2];
-    if (tls_version_major < 3)
-    {
+    if (tls_version_major < 3) {
         if (verbose)
             LOGI("Received SSL %d.%d handshake which can not support SNI.",
                  tls_version_major, tls_version_minor);
@@ -141,12 +138,10 @@ parse_tls_header(const char *data, size_t data_len, char **hostname)
     /*
      * Handshake
      */
-    if (pos + 1 > data_len)
-    {
+    if (pos + 1 > data_len) {
         return -5;
     }
-    if (data[pos] != TLS_HANDSHAKE_TYPE_CLIENT_HELLO)
-    {
+    if (data[pos] != TLS_HANDSHAKE_TYPE_CLIENT_HELLO) {
         if (verbose)
             LOGI("Not a client hello");
 
@@ -165,23 +160,22 @@ parse_tls_header(const char *data, size_t data_len, char **hostname)
     /* Session ID */
     if (pos + 1 > data_len)
         return -5;
-    len = (unsigned char)data[pos];
+    len  = (unsigned char)data[pos];
     pos += 1 + len;
 
     /* Cipher Suites */
     if (pos + 2 > data_len)
         return -5;
-    len = ((unsigned char)data[pos] << 8) + (unsigned char)data[pos + 1];
+    len  = ((unsigned char)data[pos] << 8) + (unsigned char)data[pos + 1];
     pos += 2 + len;
 
     /* Compression Methods */
     if (pos + 1 > data_len)
         return -5;
-    len = (unsigned char)data[pos];
+    len  = (unsigned char)data[pos];
     pos += 1 + len;
 
-    if (pos == data_len && tls_version_major == 3 && tls_version_minor == 0)
-    {
+    if (pos == data_len && tls_version_major == 3 && tls_version_minor == 0) {
         if (verbose)
             LOGI("Received SSL 3.0 handshake without extensions");
         return -2;
@@ -190,7 +184,7 @@ parse_tls_header(const char *data, size_t data_len, char **hostname)
     /* Extensions */
     if (pos + 2 > data_len)
         return -5;
-    len = ((unsigned char)data[pos] << 8) + (unsigned char)data[pos + 1];
+    len  = ((unsigned char)data[pos] << 8) + (unsigned char)data[pos + 1];
     pos += 2;
 
     if (pos + len > data_len)
@@ -205,15 +199,13 @@ parse_extensions(const char *data, size_t data_len, char **hostname)
     size_t len;
 
     /* Parse each 4 bytes for the extension header */
-    while (pos + 4 <= data_len)
-    {
+    while (pos + 4 <= data_len) {
         /* Extension Length */
         len = ((unsigned char)data[pos + 2] << 8) +
               (unsigned char)data[pos + 3];
 
         /* Check if it's a server name extension */
-        if (data[pos] == 0x00 && data[pos + 1] == 0x00)
-        {
+        if (data[pos] == 0x00 && data[pos + 1] == 0x00) {
             /* There can be only one extension of each type, so we break
              * our state and move p to beinnging of the extension here */
             if (pos + 4 + len > data_len)
@@ -236,20 +228,17 @@ parse_server_name_extension(const char *data, size_t data_len,
     size_t pos = 2; /* skip server name list length */
     size_t len;
 
-    while (pos + 3 < data_len)
-    {
+    while (pos + 3 < data_len) {
         len = ((unsigned char)data[pos + 1] << 8) +
               (unsigned char)data[pos + 2];
 
         if (pos + 3 + len > data_len)
             return -5;
 
-        switch (data[pos])
-        {          /* name type */
-        case 0x00: /* host_name */
+        switch (data[pos]) { /* name type */
+        case 0x00:     /* host_name */
             *hostname = malloc(len + 1);
-            if (*hostname == NULL)
-            {
+            if (*hostname == NULL) {
                 ERROR("malloc() failure");
                 return -4;
             }

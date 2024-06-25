@@ -44,7 +44,7 @@
 #include <sys/resource.h>
 #endif
 
-#define INT_DIGITS 19 /* enough for 64 bit integer */
+#define INT_DIGITS 19           /* enough for 64 bit integer */
 
 #ifdef LIB_ONLY
 FILE *logfile;
@@ -55,7 +55,8 @@ int use_syslog = 0;
 #endif
 
 #ifndef __MINGW32__
-void ERROR(const char *s)
+void
+ERROR(const char *s)
 {
     char *msg = strerror(errno);
     LOGE("%s: %s", s, msg);
@@ -70,30 +71,25 @@ ss_itoa(int i)
 {
     /* Room for INT_DIGITS digits, - and '\0' */
     static char buf[INT_DIGITS + 2];
-    char *p = buf + INT_DIGITS + 1; /* points to terminating '\0' */
-    if (i >= 0)
-    {
-        do
-        {
+    char *p = buf + INT_DIGITS + 1;     /* points to terminating '\0' */
+    if (i >= 0) {
+        do {
             *--p = '0' + (i % 10);
-            i /= 10;
+            i   /= 10;
         } while (i != 0);
         return p;
-    }
-    else
-    { /* i < 0 */
-        do
-        {
+    } else {                     /* i < 0 */
+        do {
             *--p = '0' - (i % 10);
-            i /= 10;
+            i   /= 10;
         } while (i != 0);
         *--p = '-';
     }
     return p;
 }
 
-int ss_isnumeric(const char *s)
-{
+int
+ss_isnumeric(const char *s) {
     if (!s || !*s)
         return 0;
     while (isdigit(*s))
@@ -104,16 +100,15 @@ int ss_isnumeric(const char *s)
 /*
  * setuid() and setgid() for a specified user.
  */
-int run_as(const char *user)
+int
+run_as(const char *user)
 {
 #ifndef __MINGW32__
-    if (user[0])
-    {
+    if (user[0]) {
         /* Convert user to a long integer if it is a non-negative number.
          * -1 means it is a user name. */
         long uid = -1;
-        if (ss_isnumeric(user))
-        {
+        if (ss_isnumeric(user)) {
             errno = 0;
             char *endptr;
             uid = strtol(user, &endptr, 10);
@@ -127,57 +122,45 @@ int run_as(const char *user)
         size_t buflen;
         int err;
 
-        for (buflen = 128;; buflen *= 2)
-        {
-            char buf[buflen]; /* variable length array */
+        for (buflen = 128;; buflen *= 2) {
+            char buf[buflen];  /* variable length array */
 
             /* Note that we use getpwnam_r() instead of getpwnam(),
              * which returns its result in a statically allocated buffer and
              * cannot be considered thread safe. */
             err = uid >= 0 ? getpwuid_r((uid_t)uid, &pwdbuf, buf, buflen, &pwd)
-                           : getpwnam_r(user, &pwdbuf, buf, buflen, &pwd);
+                : getpwnam_r(user, &pwdbuf, buf, buflen, &pwd);
 
-            if (err == 0 && pwd)
-            {
+            if (err == 0 && pwd) {
                 /* setgid first, because we may not be allowed to do it anymore after setuid */
-                if (setgid(pwd->pw_gid) != 0)
-                {
+                if (setgid(pwd->pw_gid) != 0) {
                     LOGE(
                         "Could not change group id to that of run_as user '%s': %s",
                         pwd->pw_name, strerror(errno));
                     return 0;
                 }
 
-                if (initgroups(pwd->pw_name, pwd->pw_gid) == -1)
-                {
+                if (initgroups(pwd->pw_name, pwd->pw_gid) == -1) {
                     LOGE("Could not change supplementary groups for user '%s'.", pwd->pw_name);
                     return 0;
                 }
 
-                if (setuid(pwd->pw_uid) != 0)
-                {
+                if (setuid(pwd->pw_uid) != 0) {
                     LOGE(
                         "Could not change user id to that of run_as user '%s': %s",
                         pwd->pw_name, strerror(errno));
                     return 0;
                 }
                 break;
-            }
-            else if (err != ERANGE)
-            {
-                if (err)
-                {
+            } else if (err != ERANGE) {
+                if (err) {
                     LOGE("run_as user '%s' could not be found: %s", user,
-                         strerror(err));
-                }
-                else
-                {
+                            strerror(err));
+                } else {
                     LOGE("run_as user '%s' could not be found.", user);
                 }
                 return 0;
-            }
-            else if (buflen >= 16 * 1024)
-            {
+            } else if (buflen >= 16 * 1024) {
                 /* If getpwnam_r() seems defective, call it quits rather than
                  * keep on allocating ever larger buffers until we crash. */
                 LOGE(
@@ -191,25 +174,21 @@ int run_as(const char *user)
         /* No getpwnam_r() :-(  We'll use getpwnam() and hope for the best. */
         struct passwd *pwd;
 
-        if (!(pwd = uid >= 0 ? getpwuid((uid_t)uid) : getpwnam(user)))
-        {
+        if (!(pwd = uid >=0 ? getpwuid((uid_t)uid) : getpwnam(user))) {
             LOGE("run_as user %s could not be found.", user);
             return 0;
         }
         /* setgid first, because we may not allowed to do it anymore after setuid */
-        if (setgid(pwd->pw_gid) != 0)
-        {
+        if (setgid(pwd->pw_gid) != 0) {
             LOGE("Could not change group id to that of run_as user '%s': %s",
                  pwd->pw_name, strerror(errno));
             return 0;
         }
-        if (initgroups(pwd->pw_name, pwd->pw_gid) == -1)
-        {
+        if (initgroups(pwd->pw_name, pwd->pw_gid) == -1) {
             LOGE("Could not change supplementary groups for user '%s'.", pwd->pw_name);
             return 0;
         }
-        if (setuid(pwd->pw_uid) != 0)
-        {
+        if (setuid(pwd->pw_uid) != 0) {
             LOGE("Could not change user id to that of run_as user '%s': %s",
                  pwd->pw_name, strerror(errno));
             return 0;
@@ -227,8 +206,7 @@ ss_strndup(const char *s, size_t n)
     size_t len = strlen(s);
     char *ret;
 
-    if (len <= n)
-    {
+    if (len <= n) {
         return strdup(s);
     }
 
@@ -238,7 +216,8 @@ ss_strndup(const char *s, size_t n)
     return ret;
 }
 
-void FATAL(const char *msg)
+void
+FATAL(const char *msg)
 {
     LOGE("%s", msg);
     exit(-1);
@@ -257,8 +236,7 @@ void *
 ss_realloc(void *ptr, size_t new_size)
 {
     void *new = realloc(ptr, new_size);
-    if (new == NULL)
-    {
+    if (new == NULL) {
         free(ptr);
         ptr = NULL;
         exit(EXIT_FAILURE);
@@ -266,7 +244,8 @@ ss_realloc(void *ptr, size_t new_size)
     return new;
 }
 
-void usage()
+void
+usage()
 {
     printf("\n");
     printf("shadowsocks-libev %s with %s\n\n", VERSION, USING_CRYPTO);
@@ -388,7 +367,8 @@ void usage()
     printf("\n");
 }
 
-void daemonize(const char *path)
+void
+daemonize(const char *path)
 {
 #ifndef __MINGW32__
     /* Our process ID and Session ID */
@@ -396,18 +376,15 @@ void daemonize(const char *path)
 
     /* Fork off the parent process */
     pid = fork();
-    if (pid < 0)
-    {
+    if (pid < 0) {
         exit(EXIT_FAILURE);
     }
 
     /* If we got a good PID, then
      * we can exit the parent process. */
-    if (pid > 0)
-    {
+    if (pid > 0) {
         FILE *file = fopen(path, "w");
-        if (file == NULL)
-        {
+        if (file == NULL) {
             FATAL("Invalid pid file\n");
         }
 
@@ -423,15 +400,13 @@ void daemonize(const char *path)
 
     /* Create a new SID for the child process */
     sid = setsid();
-    if (sid < 0)
-    {
+    if (sid < 0) {
         /* Log the failure */
         exit(EXIT_FAILURE);
     }
 
     /* Change the current working directory */
-    if ((chdir("/")) < 0)
-    {
+    if ((chdir("/")) < 0) {
         /* Log the failure */
         exit(EXIT_FAILURE);
     }
@@ -444,30 +419,24 @@ void daemonize(const char *path)
 }
 
 #ifdef HAVE_SETRLIMIT
-int set_nofile(int nofile)
+int
+set_nofile(int nofile)
 {
-    struct rlimit limit = {nofile, nofile}; /* set both soft and hard limit */
+    struct rlimit limit = { nofile, nofile }; /* set both soft and hard limit */
 
-    if (nofile <= 0)
-    {
+    if (nofile <= 0) {
         FATAL("nofile must be greater than 0\n");
     }
 
-    if (setrlimit(RLIMIT_NOFILE, &limit) < 0)
-    {
-        if (errno == EPERM)
-        {
+    if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
+        if (errno == EPERM) {
             LOGE(
                 "insufficient permission to change NOFILE, not starting as root?");
             return -1;
-        }
-        else if (errno == EINVAL)
-        {
+        } else if (errno == EINVAL) {
             LOGE("invalid nofile, decrease nofile and try again");
             return -1;
-        }
-        else
-        {
+        } else {
             LOGE("setrlimit failed: %s", strerror(errno));
             return -1;
         }
