@@ -481,6 +481,12 @@ msgstr "故障超时时间 (秒)"
 msgid "Check Try Count"
 msgstr "重试次数"
 
+msgid "Apple domains optimization"
+msgstr "Apple 域名解析优化"
+
+msgid "For Apple domains equipped with Chinese mainland CDN, always responsive to Chinese CDN IP addresses"
+msgstr "对于具有中国大陆 CDN 的 Apple 域名，始终应答中国大陆 CDN 地址"
+
 msgid "Enable adblock"
 msgstr "开启广告屏蔽"
 

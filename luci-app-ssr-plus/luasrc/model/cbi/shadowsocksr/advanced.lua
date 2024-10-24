@@ -53,6 +53,10 @@ o = s:option(Value, "chnroute_url", translate("chn_ip_url"))
 o:value("https://ispip.clang.cn/all_cn.txt", translate("CN-IP"))
 o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("CN-CIDR"))
 
+o = s:option(Flag, "apple_optimization", translate("Apple domains optimization"), translate("For Apple domains equipped with Chinese mainland CDN, always responsive to Chinese CDN IP addresses"))
+o.rmempty = false
+o.default = "1"
+
 o = s:option(Flag, "adblock", translate("Enable adblock"))
 o.rmempty = false
 
